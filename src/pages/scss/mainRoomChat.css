@@ -1,0 +1,55 @@
+.mainRoom {
+  width: 100%;
+  height: 100vh;
+  background: url(../../images/2.png);
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  -webkit-transition: left 0.4s ease;
+  transition: left 0.4s ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-line-pack: distribute;
+      align-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.mainRoom h1 {
+  text-align: center;
+  color: #222260;
+  font-size: 40px;
+}
+
+.mainRoom .roomChat {
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+          box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+  border-radius: 10px;
+  width: 700px;
+  padding: 10px;
+}
+
+.mainRoom .roomChat .ant-form-inline {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.mainRoom .roomChat .ant-form-item-control-input {
+  text-align: center;
+}
+
+.mainRoom .roomChat .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+/*# sourceMappingURL=mainRoomChat.css.map */
