@@ -39,9 +39,9 @@
 
 .ant-layout .myChat .warpMyChat {
   padding: 5px;
-  text-align: right;
   max-width: 400px;
   max-height: 400px;
+  text-align: right;
 }
 
 .ant-layout .myChat .warpMyChat .chat {
@@ -59,8 +59,8 @@
 
 .ant-layout .memberChat {
   padding: 5px;
-  text-align: left;
   max-width: 400px;
+  text-align: left;
 }
 
 .ant-layout .memberChat .chat {
