@@ -44,7 +44,7 @@ export const Chatapp = () => {
   const queryString = useLocation();
 
   const PORRT = "localhost:5000";
-  const socket = io(PORRT);
+  const socket = io(PORRT,{ transports : ['websocket'] });
 
   useEffect(() => {
     const { room, userName, email } = Qs.parse(queryString.search, {
