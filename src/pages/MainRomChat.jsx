@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Tag } from "antd";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import "./scss/mainRoomChat.css";
-import { useHistory } from "react-router";
-import { Select } from "antd";
 import { useDispatch } from "react-redux";
 
-const { Option } = Select;
 export const MainRomChat = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
 
@@ -19,9 +15,9 @@ export const MainRomChat = () => {
     forceUpdate({});
   }, []);
 
-  const onFinish = ({ room, userName, email }) => {
-    dispatch({ type: "joinRoomSaga", data: { room, userName, email } });
-    history.push(`/chatapp?room=${room}&userName=${userName}&email=${email}`);
+  const onFinish = (values) => {
+    console.log(values);
+    dispatch()
   };
 
   return (
@@ -31,38 +27,42 @@ export const MainRomChat = () => {
         <div className="roomChat">
           <Form form={form} name="horizontal_login" onFinish={onFinish}>
             <Form.Item
-              name="room"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
+              name="account"
+              rules={[{ required: true, message: "Vui lòng nhập tài khoản!" }]}
             >
-              <Select placeholder="Select Room" style={{ width: "100%" }}>
-                <Option value="fe01">FE01</Option>
-                <Option value="fe02">FE02</Option>
-                <Option value="fe03">FE03</Option>
-              </Select>
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Nhập tài khoản"
+              />
+            </Form.Item>
+            <Form.Item
+              name="passWord"
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Nhập mật khẩu"
+              />
+            </Form.Item>
+            <Form.Item
+              name="fullName"
+              rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Nhập họ tên"
+              />
             </Form.Item>
             <Form.Item
               name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
+              rules={[{ required: true, message: "Vui lòng nhập Email!" }]}
             >
               <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="email"
+                prefix={<MailOutlined className="site-form-item-icon" />}
+                placeholder="Nhập Email"
               />
             </Form.Item>
-            <Form.Item
-              name="userName"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-              />
-            </Form.Item>
-
             <Form.Item shouldUpdate>
               {() => (
                 <Button
@@ -76,7 +76,7 @@ export const MainRomChat = () => {
                       .filter(({ errors }) => errors.length).length
                   }
                 >
-                  Join Room
+                  Đăng Ký
                 </Button>
               )}
             </Form.Item>

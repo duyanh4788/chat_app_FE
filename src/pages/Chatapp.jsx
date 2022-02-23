@@ -1,5 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+// import { useSelector } from 'react-redux';
+import io from "socket.io-client";
+import Qs from "qs";
+import Axios from "axios";
 import "./scss/chatapp.css";
 import {
   Layout,
@@ -20,10 +26,7 @@ import {
   SendOutlined,
   HeatMapOutlined,
 } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
-import io from "socket.io-client";
-// import { useSelector } from 'react-redux';
-import Qs from "qs";
+require("dotenv").config({ path: "./.env" });
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -42,9 +45,8 @@ export const Chatapp = () => {
   const [receiverArrayMessage, setReceiverArrayMessage] = useState([]);
 
   const queryString = useLocation();
-
   const PORRT = "localhost:5000";
-  const socket = io(PORRT,{ transports : ['websocket'] });
+  const socket = io(PORRT, { transports: ["websocket"] });
 
   useEffect(() => {
     const { room, userName, email } = Qs.parse(queryString.search, {
@@ -57,7 +59,7 @@ export const Chatapp = () => {
     socket.emit("join room", { room, userName, email });
     // render list member
     socket.on("send list client inside room", (userList) => {
-      console.log(userList)
+      console.log(userList);
       getListUser();
     });
     // send message
@@ -79,18 +81,15 @@ export const Chatapp = () => {
     });
   }, [PORRT, queryString.search, sendMessage, sendLocation]);
 
-  const getListUser = () => {
-    fetch("http://localhost:5000/api/v1/listUser")
-      .then((result) => {
-        if (result.ok) {
-          return result.json();
-        }
-        throw result;
-      })
-      .then((data) => {
-        setUserList(data);
-      })
-      .catch((err) => console.log("err", err));
+  const getListUser = async () => {
+    try {
+      const response = await Axios.get(
+        process.env.REACT_APP_BASE_API_URL + "listUser"
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -200,9 +199,11 @@ export const Chatapp = () => {
             <Link to="/">Come Back</Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
-            {userList.filter(item => item.userName === userName).map((row, idx) => {
-              return <Menu.Item key={idx}>{row.userName}</Menu.Item>;
-            })}
+            {userList
+              .filter((item) => item.userName === userName)
+              .map((row, idx) => {
+                return <Menu.Item key={idx}>{row.userName}</Menu.Item>;
+              })}
           </SubMenu>
         </Menu>
       </Sider>
@@ -237,12 +238,6 @@ export const Chatapp = () => {
             <Form.Item name="message">
               <Input
                 placeholder="Enter Message"
-                prefix={
-                  <SendOutlined
-                    type="user"
-                    style={{ color: "rgba(0,0,0,.25)" }}
-                  />
-                }
                 suffix={
                   <React.Fragment>
                     <Tooltip title="Send Message" htmlType="submit">
@@ -254,7 +249,7 @@ export const Chatapp = () => {
                         }}
                       />
                     </Tooltip>
-                    <Tooltip title="Share Location" htmlType="submit">
+                    <Tooltip title="Share Location" htmlType="button">
                       <HeatMapOutlined
                         type="info-circle"
                         style={{ color: "rgba(0,0,0,.45)" }}
