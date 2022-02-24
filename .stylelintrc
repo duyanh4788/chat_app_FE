@@ -1,0 +1,7 @@
+{
+  "processors": ["stylelint-processor-styled-components"],
+  "extendss": [
+    "stylelint-config-recommended",
+    "stylelint-config-styled-components"
+  ]
+}

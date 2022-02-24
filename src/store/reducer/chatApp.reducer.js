@@ -1,16 +1,16 @@
-import { JOIN_ROOM } from "./chatApp.const"
+import { JOIN_ROOM } from './chatApp.const'
 
 const initialState = {
-    joinRoom: {}
+  joinRoom: {},
 }
 
 export const ChatAppReducer = (state = initialState, { type, payload }) => {
-    switch (type) {
-        case JOIN_ROOM: {
-            state.joinRoom = payload.data
-            return { ...state, ...payload }
-        }
-        default:
-            return state
+  switch (type) {
+    case JOIN_ROOM: {
+      state.joinRoom = payload.data
+      return { ...state, ...payload }
     }
+    default:
+      return state
+  }
 }
