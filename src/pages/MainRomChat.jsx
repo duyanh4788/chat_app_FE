@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { Form, Input, Button, Tag } from 'antd'
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
-import './scss/mainRoomChat.css'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, Tag } from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  UserAddOutlined,
+} from '@ant-design/icons';
+import './scss/mainRoomChat.css';
+import { useDispatch } from 'react-redux';
 
 export const MainRomChat = () => {
-  const dispatch = useDispatch()
-  const [form] = Form.useForm()
-  const [, forceUpdate] = useState({})
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const [, forceUpdate] = useState({});
 
   // To disable submit button at the beginning.
 
   useEffect(() => {
-    forceUpdate({})
-  }, [])
+    forceUpdate({});
+  }, []);
 
   const onFinish = values => {
-    console.log(values)
-    dispatch()
-  }
+    console.log(values);
+    dispatch();
+  };
 
   return (
     <div className="mainRoom">
@@ -31,7 +36,7 @@ export const MainRomChat = () => {
               rules={[{ required: true, message: 'Vui lòng nhập tài khoản!' }]}
             >
               <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<UserAddOutlined className="site-form-item-icon" />}
                 placeholder="Nhập tài khoản"
               />
             </Form.Item>
@@ -84,5 +89,5 @@ export const MainRomChat = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -32,3 +32,4 @@ lerna-debug.log
 /.changelog
 .npm/
 *.zip
+node_modules

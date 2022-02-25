@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
-import io from 'socket.io-client'
-import Qs from 'qs'
-import Axios from 'axios'
-import './scss/chatapp.css'
+import io from 'socket.io-client';
+import Qs from 'qs';
+import Axios from 'axios';
+import './scss/chatapp.css';
 import {
   Layout,
   Menu,
@@ -18,136 +18,136 @@ import {
   Row,
   Col,
   Avatar,
-} from 'antd'
+} from 'antd';
 import {
   RollbackOutlined,
   UserOutlined,
   SmileOutlined,
   SendOutlined,
   HeatMapOutlined,
-} from '@ant-design/icons'
-require('dotenv').config({ path: './.env' })
+} from '@ant-design/icons';
+require('dotenv').config({ path: './.env' });
 
-const { Header, Content, Footer, Sider } = Layout
-const { SubMenu } = Menu
+const { Header, Content, Footer, Sider } = Layout;
+const { SubMenu } = Menu;
 
 export const Chatapp = () => {
-  const [form] = Form.useForm()
-  const [collapsed, setCollapsed] = useState(false)
-  const [userList, setUserList] = useState([])
-  const [errorAcknow, setErrorAcknow] = useState(null)
-  const [rooms, setRoom] = useState(null)
-  const [userName, setUserName] = useState(null)
-  const [email, setEmail] = useState(null)
-  const [sendMessage, setSendMessage] = useState(null)
-  const [sendLocation, setSendLocation] = useState(null)
-  const [receiverMessage, setReceiverMessage] = useState(null)
-  const [receiverArrayMessage, setReceiverArrayMessage] = useState([])
+  const [form] = Form.useForm();
+  const [collapsed, setCollapsed] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [errorAcknow, setErrorAcknow] = useState(null);
+  const [rooms, setRoom] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [sendMessage, setSendMessage] = useState(null);
+  const [sendLocation, setSendLocation] = useState(null);
+  const [receiverMessage, setReceiverMessage] = useState(null);
+  const [receiverArrayMessage, setReceiverArrayMessage] = useState([]);
 
-  const queryString = useLocation()
-  const PORRT = 'localhost:5000'
-  const socket = io(PORRT, { transports: ['websocket'] })
+  const queryString = useLocation();
+  const PORRT = 'localhost:5000';
+  const socket = io(PORRT, { transports: ['websocket'] });
 
   useEffect(() => {
     const { room, userName, email } = Qs.parse(queryString.search, {
       ignoreQueryPrefix: true,
-    })
-    setRoom(room)
-    setUserName(userName)
-    setEmail(email)
+    });
+    setRoom(room);
+    setUserName(userName);
+    setEmail(email);
     // join room
-    socket.emit('join room', { room, userName, email })
+    socket.emit('join room', { room, userName, email });
     // render list member
     socket.on('send list client inside room', userList => {
-      console.log(userList)
-      getListUser()
-    })
+      console.log(userList);
+      getListUser();
+    });
     // send message
-    socket.emit('send message', sendMessage, acknowLedGements)
+    socket.emit('send message', sendMessage, acknowLedGements);
     // reciver message
     socket.on('send message', receiverMessage => {
-      setReceiverMessage(receiverMessage)
-    })
+      setReceiverMessage(receiverMessage);
+    });
     socket.on('send array message', arrayMessage => {
-      setReceiverArrayMessage(arrayMessage)
-    })
+      setReceiverArrayMessage(arrayMessage);
+    });
     // send location
-    socket.emit('send location', sendLocation)
+    socket.emit('send location', sendLocation);
     // disconecet
     socket.on('disconnect', () => {
       return () => {
-        socket.disconnect()
-      }
-    })
-  }, [PORRT, queryString.search, sendMessage, sendLocation])
+        socket.disconnect();
+      };
+    });
+  }, [PORRT, queryString.search, sendMessage, sendLocation]);
 
   const getListUser = async () => {
     try {
       const response = await Axios.get(
-        process.env.REACT_APP_BASE_API_URL + 'listUser'
-      )
-      console.log(response)
+        process.env.REACT_APP_BASE_API_URL + 'listUser',
+      );
+      console.log(response);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     socket.on('send message notify', message => {
-      openNotificationJoin(message)
-    })
-  }, [])
+      openNotificationJoin(message);
+    });
+  }, []);
 
   useEffect(() => {
     if (errorAcknow !== null) {
-      openNotificationAcknow()
+      openNotificationAcknow();
     }
-  })
+  });
 
   useEffect(() => {
     if (receiverMessage && receiverMessage !== null) {
-      setErrorAcknow(null)
+      setErrorAcknow(null);
     }
-  })
+  });
 
   const openNotificationJoin = notify => {
     notification.open({
       message: `${notify}`,
       icon: <SmileOutlined style={{ color: '#108ee9' }} />,
-    })
-  }
+    });
+  };
 
   const openNotificationAcknow = () => {
     notification.open({
       message: `${errorAcknow}`,
       icon: <SmileOutlined style={{ color: '#e91010' }} />,
-    })
-  }
+    });
+  };
 
   const acknowLedGements = error => {
     if (error) {
-      setErrorAcknow(error)
+      setErrorAcknow(error);
     }
-  }
+  };
 
   const onSendMessage = e => {
     if (e.message !== '') {
-      setSendMessage(e.message)
+      setSendMessage(e.message);
     }
-  }
+  };
 
   const shareLocation = () => {
     if (!navigator.geolocation) {
-      return 'Browser Not Support Location'
+      return 'Browser Not Support Location';
     }
     navigator.geolocation.getCurrentPosition(position => {
       const location = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-      }
-      setSendLocation(location)
-    })
-  }
+      };
+      setSendLocation(location);
+    });
+  };
 
   const renderMessage = () => {
     if (receiverArrayMessage) {
@@ -165,7 +165,7 @@ export const Chatapp = () => {
               </div>
               <p className="time">{row.createAt}</p>
             </div>
-          )
+          );
         }
         return (
           <div key={idx} className="myChat">
@@ -181,14 +181,14 @@ export const Chatapp = () => {
               <p className="time">{row.createAt}</p>
             </div>
           </div>
-        )
-      })
+        );
+      });
     }
-  }
+  };
 
   const onCollapse = collapsed => {
-    setCollapsed(collapsed)
-  }
+    setCollapsed(collapsed);
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -202,7 +202,7 @@ export const Chatapp = () => {
             {userList
               .filter(item => item.userName === userName)
               .map((row, idx) => {
-                return <Menu.Item key={idx}>{row.userName}</Menu.Item>
+                return <Menu.Item key={idx}>{row.userName}</Menu.Item>;
               })}
           </SubMenu>
         </Menu>
@@ -267,5 +267,5 @@ export const Chatapp = () => {
         </Footer>
       </Layout>
     </Layout>
-  )
-}
+  );
+};
