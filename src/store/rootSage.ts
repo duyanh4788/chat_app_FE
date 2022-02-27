@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { joinRoomSagaAction } from './chatApp.saga';
+import { joinRoomSagaAction } from './signIn/shared/chatApp.saga';
 
 export function* rootSaga() {
   yield all([joinRoomSagaAction()]);

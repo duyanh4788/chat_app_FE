@@ -1,6 +1,10 @@
-import { JOIN_ROOM } from './chatApp.const';
+import { JOIN_ROOM } from '../constants/chatApp.const';
 
-const initialState = {
+export interface ChatAppState {
+  joinRoom: any;
+}
+
+export const initialState: ChatAppState = {
   joinRoom: {},
 };
 
