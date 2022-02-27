@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import Qs from 'qs';
 import Axios from 'axios';
@@ -33,15 +34,15 @@ const { SubMenu } = Menu;
 export const Chatapp = () => {
   const [form] = Form.useForm();
   const [collapsed, setCollapsed] = useState(false);
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState<any[]>([]);
   const [errorAcknow, setErrorAcknow] = useState(null);
-  const [rooms, setRoom] = useState(null);
+  const [rooms, setRoom] = useState<any>('');
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
-  const [sendLocation, setSendLocation] = useState(null);
+  const [sendLocation, setSendLocation] = useState<any>('');
   const [receiverMessage, setReceiverMessage] = useState(null);
-  const [receiverArrayMessage, setReceiverArrayMessage] = useState([]);
+  const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
 
   const queryString = useLocation();
   const PORRT = 'localhost:5000';
@@ -239,7 +240,7 @@ export const Chatapp = () => {
                 placeholder="Enter Message"
                 suffix={
                   <React.Fragment>
-                    <Tooltip title="Send Message" htmlType="submit">
+                    <Tooltip title="Send Message">
                       <SendOutlined
                         type="info-circle"
                         style={{
@@ -248,7 +249,7 @@ export const Chatapp = () => {
                         }}
                       />
                     </Tooltip>
-                    <Tooltip title="Share Location" htmlType="button">
+                    <Tooltip title="Share Location">
                       <HeatMapOutlined
                         type="info-circle"
                         style={{ color: 'rgba(0,0,0,.45)' }}

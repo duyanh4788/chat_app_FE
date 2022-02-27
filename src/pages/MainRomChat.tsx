@@ -14,15 +14,15 @@ function callback(key) {}
 export const MainRomChat = () => {
   const loading = useSelector(AuthSelector.selectLoading);
   return (
-    <div className="mainRoom">
+    <div className="main_form">
       {loading && <AppLoading loading />}
       <div>
         <h1>Room Chat Lẩu Xanh</h1>
         <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab={<h4>Đăng ký</h4>} key="1">
+          <TabPane tab={<p>Đăng ký</p>} key="1">
             <SignUpUser />
           </TabPane>
-          <TabPane tab={<h4>Đăng nhập</h4>} key="2">
+          <TabPane tab={<p>Đăng nhập</p>} key="2">
             <SignInUser />
           </TabPane>
         </Tabs>

@@ -3,7 +3,6 @@ import { actions } from './slice';
 import * as _ from 'lodash';
 import { AuthHttp } from '../service/auth.http';
 import { configResponse } from 'store/services/request';
-
 const authRequest = new AuthHttp();
 
 export function* sigInUser(api, action) {

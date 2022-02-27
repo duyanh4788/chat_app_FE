@@ -9,13 +9,16 @@ import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Form, Input, Button, Tabs } from 'antd';
+import { Unsubscribe } from 'redux';
+import { Form, Input, Button } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
   MailOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
+import { RootStore } from 'store/configStore';
+import { openNotificationJoin } from 'store/utils/Notification';
 
 export function SignUpUser() {
   useInjectReducer({
@@ -28,11 +31,33 @@ export function SignUpUser() {
   });
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    const storeSub$: Unsubscribe = RootStore.subscribe(() => {
+      const { type, payload } = RootStore.getState().lastAction;
+      const { status, message } = payload;
+      switch (type) {
+        case AuthSlice.actions.signUpUserSuccess.type:
+          openNotificationJoin(status, message);
+          break;
+        case AuthSlice.actions.signUpUserFail.type:
+          openNotificationJoin(status, message);
+          break;
+
+        default:
+          break;
+      }
+    });
+    return () => {
+      storeSub$();
+    };
+  }, []);
+
   const onFinish = values => {
     dispatch(AuthSlice.actions.signUpUser(values));
   };
   return (
-    <div className="roomChat">
+    <div className="form_input">
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
         <Form.Item
           name="account"
