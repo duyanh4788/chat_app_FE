@@ -24,15 +24,15 @@
     width: 420px;
     padding: 20px;
     height: 300px;
-    // .ant-form-inline {
-    //   justify-content: space-around;
-    // }
-    // .ant-form-item-control-input {
-    //   text-align: center;
-    // }
-    // .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
-    //   border-color: rgba(255, 255, 255, 0.18);
-    // }
+    .ant-form-inline {
+      justify-content: space-around;
+    }
+    .ant-form-item-control-input {
+      text-align: center;
+    }
+    .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
   }
   .form_sign_in {
     display: flex;

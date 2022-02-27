@@ -38,16 +38,11 @@ export function configRequest(request: any): any {
 }
 
 export function configResponse(response: ApiResponse<any>): any {
+  console.log(response);
   if (!response.ok) {
-    if (
-      response.status === 404 ||
-      response.status === 401 ||
-      response.status === 400
-    ) {
+    if (response.status === 404 || response.status === 400) {
       throw new Error(
-        get(response.data, 'message')
-          ? get(response.data, 'message')
-          : '404 Not Found',
+        !isEmpty(response.data) ? response.data : '404 Not Found',
       );
     }
     const message = get(response.data, 'message');
@@ -56,5 +51,7 @@ export function configResponse(response: ApiResponse<any>): any {
     }
     throw new Error(message);
   }
+  const { data } = response;
+  if (data) return data;
   return response.data;
 }

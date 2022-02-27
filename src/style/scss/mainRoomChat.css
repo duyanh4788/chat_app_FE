@@ -41,6 +41,19 @@
   height: 300px;
 }
 
+.main_form .form_input .ant-form-inline {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.main_form .form_input .ant-form-item-control-input {
+  text-align: center;
+}
+
+.main_form .form_input .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
 .main_form .form_sign_in {
   display: -webkit-box;
   display: -ms-flexbox;

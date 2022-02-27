@@ -3,7 +3,6 @@ import { notification } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
 export const openNotificationJoin = (status: number, message: string) => {
-  console.log(message);
   notification.open({
     duration: 100,
     message,

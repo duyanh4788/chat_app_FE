@@ -9,7 +9,7 @@ import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Form, Input, Button, Image } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../../images/logo.png';
 import { Unsubscribe } from 'redux';
@@ -31,7 +31,6 @@ export function SignInUser() {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
-      console.log(payload);
       switch (type) {
         case AuthSlice.actions.sigInUserSuccess.type:
           openNotificationJoin(200, payload);
@@ -55,10 +54,10 @@ export function SignInUser() {
 
   return (
     <div className="form_input form_sign_in ">
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <img src={logo} alt={logo} width={50} height={50} />
+      </div>
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
-        <div style={{ textAlign: 'center', marginBottom: '5px' }}>
-          <Image src={logo} alt={logo} width={50} height={50} />
-        </div>
         <Form.Item
           name="account"
           rules={[{ required: true, message: 'Vui lòng nhập tài khoản' }]}
@@ -90,7 +89,7 @@ export function SignInUser() {
                   .length
               }
             >
-              Join Room
+              Đăng nhập
             </Button>
           )}
         </Form.Item>
