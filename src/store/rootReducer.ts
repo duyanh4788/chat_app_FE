@@ -1,6 +1,17 @@
-import { combineReducers } from 'redux';
-import { ChatAppReducer } from './signIn/shared/chatApp.reducer';
+import { combineReducers } from '@reduxjs/toolkit';
+import { InjectedReducersType } from 'store/core/types/injector-typings';
 
-export const rootReducers = combineReducers({
-  ChatAppReducer,
-});
+export function lastAction(state = null, action) {
+  return action;
+}
+
+export function createReducer(injectedReducers: InjectedReducersType = {}) {
+  if (Object.keys(injectedReducers).length === 0) {
+    return state => state;
+  } else {
+    return combineReducers({
+      ...injectedReducers,
+      lastAction,
+    });
+  }
+}

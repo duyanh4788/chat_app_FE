@@ -1,19 +1,43 @@
-import { applyMiddleware, createStore, compose } from 'redux';
-import createMiddleWareSaga from 'redux-saga';
-import { rootReducers } from './rootReducer';
-import { rootSaga } from './rootSage';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
+import createSagaMiddleware from 'redux-saga';
+import { createReducer } from './rootReducer';
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+export function configureAppstore() {
+  const reduxSagaMonitorOptions = {};
+  const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
+  const { run: runSaga } = sagaMiddleware;
+
+  let middlewares = [sagaMiddleware];
+  if (process.env.NODE_ENV === 'development') {
+    middlewares = [...middlewares];
   }
-}
-const middleWareSaga = createMiddleWareSaga();
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const enhancers = [
+    createInjectorsEnhancer({
+      createReducer,
+      runSaga,
+    }),
+  ];
 
-export const store = createStore(
-  rootReducers,
-  composeEnhancers(applyMiddleware(middleWareSaga)),
-);
-// run saga
-middleWareSaga.run(rootSaga);
+  const defaultMiddelWare: any[] = getDefaultMiddleware({
+    serializableCheck: false,
+    immutableCheck: false,
+  });
+  const store = configureStore({
+    reducer: createReducer(),
+    middleware: [...defaultMiddelWare, ...middlewares],
+    devTools:
+      /* istanbul ignore next line */
+      process.env.NODE_ENV !== 'production' ||
+      process.env.PUBLIC_URL.length > 0,
+    enhancers,
+  });
+  if (module.hot) {
+    module.hot.accept('./rootReducer', () => {
+      forceReducerReload(store);
+    });
+  }
+  return store;
+}
+
+export const RootStore = configureAppstore();

@@ -1,4 +1,4 @@
-export const ChatAppApi = {
+export const AuthApi = {
   SIGN_IN: '/signIn',
   SIGN_UP: '/signUp',
 };

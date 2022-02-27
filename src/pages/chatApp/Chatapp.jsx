@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import Qs from 'qs';
 import Axios from 'axios';
-import './scss/chatapp.css';
 import {
   Layout,
   Menu,
