@@ -54,7 +54,7 @@ export class LocalStorageService {
     return this;
   }
 
-  static clear() {
+  static clearLocalStorage() {
     localStorage.clear();
   }
 

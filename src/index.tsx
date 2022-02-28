@@ -15,7 +15,7 @@ const ConnectedApp = () => (
     <Provider store={RootStore}>
       <Switch>
         <Route path="/" exact component={MainRomChat} />
-        <Route path="/chatapp" exact component={Chatapp} />
+        <Route path="/chatApp" exact component={Chatapp} />
       </Switch>
     </Provider>
   </BrowserRouter>

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import * as _ from 'lodash';
+import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Tabs } from 'antd';
 import { AppLoading } from 'store/utils/Apploading';
@@ -19,6 +20,7 @@ const { TabPane } = Tabs;
 function callback(key) {}
 
 export const MainRomChat = () => {
+  const history = useHistory();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
 
@@ -32,6 +34,7 @@ export const MainRomChat = () => {
             _.get(payload, 'code'),
             _.get(payload, 'message'),
           );
+          history.push('/chatApp');
           break;
         case AuthSlice.actions.sigInUserFail.type:
           openNotificationJoin(400, payload);
@@ -60,11 +63,11 @@ export const MainRomChat = () => {
       <div>
         <h1>Room Chat Lẩu Xanh</h1>
         <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab={<p>Đăng ký</p>} key="1">
-            <SignUpUser />
-          </TabPane>
-          <TabPane tab={<p>Đăng nhập</p>} key="2">
+          <TabPane tab={<p>Đăng nhập</p>} key="1">
             <SignInUser />
+          </TabPane>
+          <TabPane tab={<p>Đăng ký</p>} key="2">
+            <SignUpUser />
           </TabPane>
         </Tabs>
       </div>

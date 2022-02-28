@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
-import Qs from 'qs';
 import Axios from 'axios';
 import {
   Layout,
@@ -26,41 +25,38 @@ import {
   SendOutlined,
   HeatMapOutlined,
 } from '@ant-design/icons';
-require('dotenv').config({ path: './.env' });
+import { ApiRouter } from 'store/services/request.constants';
+import { LocalStorageService } from 'store/services/localStorage';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 export const Chatapp = () => {
+  const local = new LocalStorageService();
+  const fullName = local.getItem('_fullName');
+  const account = local.getItem('_account');
+  const uid = local.getItem('_id');
   const [form] = Form.useForm();
   const [collapsed, setCollapsed] = useState(false);
+  // =============================================== //
   const [userList, setUserList] = useState<any[]>([]);
   const [errorAcknow, setErrorAcknow] = useState(null);
-  const [rooms, setRoom] = useState<any>('');
-  const [userName, setUserName] = useState(null);
-  const [email, setEmail] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [sendLocation, setSendLocation] = useState<any>('');
   const [receiverMessage, setReceiverMessage] = useState(null);
   const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
+  // =============================================== //
 
-  const queryString = useLocation();
-  const PORRT = 'localhost:5000';
+  const PORRT: any = ApiRouter.SOCKET_LOCAL;
   const socket = io(PORRT, { transports: ['websocket'] });
+  const room = 'FE01';
 
   useEffect(() => {
-    const { room, userName, email } = Qs.parse(queryString.search, {
-      ignoreQueryPrefix: true,
-    });
-    setRoom(room);
-    setUserName(userName);
-    setEmail(email);
     // join room
-    socket.emit('join room', { room, userName, email });
+    socket.emit('join room', { room, fullName, account, uid });
     // render list member
-    socket.on('send list client inside room', userList => {
-      console.log(userList);
-      getListUser();
+    socket.on('send list client inside room', listUser => {
+      console.log(listUser);
     });
     // send message
     socket.emit('send message', sendMessage, acknowLedGements);
@@ -74,23 +70,14 @@ export const Chatapp = () => {
     // send location
     socket.emit('send location', sendLocation);
     // disconecet
-    socket.on('disconnect', () => {
-      return () => {
-        socket.disconnect();
-      };
-    });
-  }, [PORRT, queryString.search, sendMessage, sendLocation]);
-
-  const getListUser = async () => {
-    try {
-      const response = await Axios.get(
-        process.env.REACT_APP_BASE_API_URL + 'listUser',
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    return () => {
+      socket.on('disconnect', () => {
+        return () => {
+          socket.disconnect();
+        };
+      });
+    };
+  }, [sendMessage, sendLocation]);
 
   useEffect(() => {
     socket.on('send message notify', message => {
@@ -152,14 +139,12 @@ export const Chatapp = () => {
   const renderMessage = () => {
     if (receiverArrayMessage) {
       return receiverArrayMessage.map((row, idx) => {
-        if (row.email !== email) {
+        if (row.account !== account) {
           return (
-            <div key={idx} className="memberChat">
-              <div style={{ display: 'flex' }}>
+            <div key={idx} className="member_chat">
+              <div className="display_flex">
                 <div className="avatar">
-                  <Avatar style={{ backgroundColor: '#87d068' }}>
-                    {row.userName}
-                  </Avatar>
+                  <Avatar className="bg_green">{row.fullName}</Avatar>
                 </div>
                 <div className="chat">{row.message}</div>
               </div>
@@ -168,14 +153,12 @@ export const Chatapp = () => {
           );
         }
         return (
-          <div key={idx} className="myChat">
-            <div className="warpMyChat">
-              <div style={{ display: 'flex' }}>
+          <div key={idx} className="my_chat">
+            <div className="warp_my_chat">
+              <div className="display_flex">
                 <div className="chat">{row.message}</div>
                 <div className="avatar">
-                  <Avatar style={{ backgroundColor: '#87d068' }}>
-                    {row.userRoom}
-                  </Avatar>
+                  <Avatar className="bg_green">{row.fullName}</Avatar>
                 </div>
               </div>
               <p className="time">{row.createAt}</p>
@@ -191,49 +174,40 @@ export const Chatapp = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key={userList.length + 1} icon={<RollbackOutlined />}>
-            <Link to="/">Come Back</Link>
+            <Link to="/" onClick={() => localStorage.clear()}>
+              Come Back
+            </Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
             {userList
-              .filter(item => item.userName === userName)
+              .filter(item => item.account === account)
               .map((row, idx) => {
-                return <Menu.Item key={idx}>{row.userName}</Menu.Item>;
+                return <Menu.Item key={idx}>{row.account}</Menu.Item>;
               })}
           </SubMenu>
         </Menu>
       </Sider>
-      <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
-          Room Chat : {rooms?.toUpperCase()}
-        </Header>
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
+      <Layout>
+        <Header className="site-layout-background">Room Chat : {room}</Header>
+        <Content className="site-layout">
+          <Breadcrumb className="avatar">
             <Breadcrumb.Item>
-              <Avatar
-                style={{ backgroundColor: '#87d068' }}
-                icon={<UserOutlined />}
-              />{' '}
-              <span className="account">{userName}</span>
+              <Avatar className="bg_green" icon={<UserOutlined />} />
+              <span className="account">{fullName}</span>
             </Breadcrumb.Item>
           </Breadcrumb>
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 360, borderRadius: '10px' }}
-          >
-            <Row className="rowChat">
-              <Col span={24}>{renderMessage()}</Col>
-            </Row>
-          </div>
+          <Row className="row_chat">
+            <Col span={24}>{renderMessage()}</Col>
+          </Row>
           <Form
             form={form}
             name="horizontal_login"
             onFinish={onSendMessage}
-            style={{ padding: '20px 0', borderRadius: '5px' }}
+            className="form_chat"
           >
             <Form.Item name="message">
               <Input
@@ -252,7 +226,6 @@ export const Chatapp = () => {
                     <Tooltip title="Share Location">
                       <HeatMapOutlined
                         type="info-circle"
-                        style={{ color: 'rgba(0,0,0,.45)' }}
                         onClick={shareLocation}
                       />
                     </Tooltip>
@@ -262,9 +235,7 @@ export const Chatapp = () => {
             </Form.Item>
           </Form>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Vũ Duy Anh Design ©2021 Created Chat_App
-        </Footer>
+        <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
       </Layout>
     </Layout>
   );
