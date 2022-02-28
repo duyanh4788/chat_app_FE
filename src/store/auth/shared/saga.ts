@@ -11,7 +11,7 @@ export function* sigInUser(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.sigInUserSuccess(data));
   } catch (error) {
-    yield put(actions.sigInUserSuccess(_.get(error, 'message')));
+    yield put(actions.sigInUserFail(_.get(error, 'message')));
   }
 }
 
@@ -21,13 +21,13 @@ export function* signUpUser(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.signUpUserSuccess(data));
   } catch (error) {
-    yield put(actions.signUpUserSuccess(_.get(error, 'message')));
+    yield put(actions.signUpUserFail(_.get(error, 'message')));
   }
 }
 
 export function* AuthSaga() {
-  yield all([yield takeLatest(actions.sigInUser.type, sigInUser, authRequest)]);
   yield all([
+    yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
   ]);
 }

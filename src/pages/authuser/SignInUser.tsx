@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import * as AuthSelector from 'store/auth/shared/selectors';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as AuthConst from 'store/auth/constants/auth.constant';
+import * as _ from 'lodash';
 import { AuthSaga } from 'store/auth/shared/saga';
 import {
   useInjectReducer,
@@ -12,9 +12,6 @@ import {
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../../images/logo.png';
-import { Unsubscribe } from 'redux';
-import { RootStore } from 'store/configStore';
-import { openNotificationJoin } from 'store/utils/Notification';
 
 export function SignInUser() {
   useInjectReducer({
@@ -27,26 +24,6 @@ export function SignInUser() {
   });
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    const storeSub$: Unsubscribe = RootStore.subscribe(() => {
-      const { type, payload } = RootStore.getState().lastAction;
-      switch (type) {
-        case AuthSlice.actions.sigInUserSuccess.type:
-          openNotificationJoin(200, payload);
-          break;
-        case AuthSlice.actions.sigInUserFail.type:
-          openNotificationJoin(400, payload);
-          break;
-
-        default:
-          break;
-      }
-    });
-    return () => {
-      storeSub$();
-    };
-  }, []);
 
   const onFinish = (values: any) => {
     dispatch(AuthSlice.actions.sigInUser(values));

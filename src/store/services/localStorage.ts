@@ -8,8 +8,9 @@ export type LocalStorageItem = {
 export enum LocalStorageKey {
   token = '_token',
   tokenExpired = '_expired',
-  userName = '_userName',
-  email = '_email',
+  fullName = '_fullName',
+  account = '_account',
+  id = '_id',
 }
 
 export class LocalStorageService {
@@ -69,18 +70,22 @@ export class LocalStorageService {
     const listLocalStorageItem: LocalStorageItem[] = [];
     listLocalStorageItem.push({
       key: LocalStorageKey.token,
-      value: _.get(user, 'token'),
+      value: _.get(user, 'toKen'),
     });
     listLocalStorageItem.push({
-      key: LocalStorageKey.userName,
-      value: _.get(user, 'userName'),
+      key: LocalStorageKey.fullName,
+      value: _.get(user, 'fullName'),
     });
     listLocalStorageItem.push({
-      key: LocalStorageKey.email,
-      value: _.get(user, '_email'),
+      key: LocalStorageKey.account,
+      value: _.get(user, 'account'),
+    });
+    listLocalStorageItem.push({
+      key: LocalStorageKey.id,
+      value: _.get(user, 'id'),
     });
 
-    const expiredUser: number = new Date(+new Date() + 8640000).getTime();
+    const expiredUser: number = new Date(+new Date() + 3600).getTime();
     listLocalStorageItem.push({
       key: LocalStorageKey.tokenExpired,
       value: expiredUser,

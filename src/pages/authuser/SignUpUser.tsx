@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import * as AuthSelector from 'store/auth/shared/selectors';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as AuthConst from 'store/auth/constants/auth.constant';
+import * as _ from 'lodash';
 import { AuthSaga } from 'store/auth/shared/saga';
 import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Unsubscribe } from 'redux';
 import { Form, Input, Button } from 'antd';
 import {
   UserOutlined,
@@ -17,8 +15,6 @@ import {
   MailOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
-import { RootStore } from 'store/configStore';
-import { openNotificationJoin } from 'store/utils/Notification';
 
 export function SignUpUser() {
   useInjectReducer({
@@ -31,27 +27,6 @@ export function SignUpUser() {
   });
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    const storeSub$: Unsubscribe = RootStore.subscribe(() => {
-      const { type, payload } = RootStore.getState().lastAction;
-      const { status, message } = payload;
-      switch (type) {
-        case AuthSlice.actions.signUpUserSuccess.type:
-          openNotificationJoin(status, message);
-          break;
-        case AuthSlice.actions.signUpUserFail.type:
-          openNotificationJoin(status, message);
-          break;
-
-        default:
-          break;
-      }
-    });
-    return () => {
-      storeSub$();
-    };
-  }, []);
 
   const onFinish = values => {
     dispatch(AuthSlice.actions.signUpUser(values));

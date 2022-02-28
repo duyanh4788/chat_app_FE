@@ -38,20 +38,14 @@ export function configRequest(request: any): any {
 }
 
 export function configResponse(response: ApiResponse<any>): any {
-  console.log(response);
   if (!response.ok) {
     if (response.status === 404 || response.status === 400) {
-      throw new Error(
-        !isEmpty(response.data) ? response.data : '404 Not Found',
-      );
+      throw !isEmpty(response.data) ? response.data : '404 Not Found';
     }
     const message = get(response.data, 'message');
     if (isEmpty(response.data) || !message) {
       throw new Error(response.problem);
     }
-    throw new Error(message);
   }
-  const { data } = response;
-  if (data) return data;
   return response.data;
 }

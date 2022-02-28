@@ -4,7 +4,7 @@ import { SmileOutlined } from '@ant-design/icons';
 
 export const openNotificationJoin = (status: number, message: string) => {
   notification.open({
-    duration: 100,
+    duration: 5,
     message,
     icon: (
       <SmileOutlined
