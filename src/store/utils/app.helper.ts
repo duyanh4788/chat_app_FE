@@ -115,9 +115,9 @@ export class AppHelper {
     return moment(dateTime).format('HH:mm');
   }
 
-  static formmatDateLogTimeForm(dateTime) {
+  static formmatDateTimeChat(dateTime) {
     if (!dateTime) return '-';
-    return moment(dateTime).format('DD/MM/YYYY HH:mm');
+    return moment(dateTime).format('DD-MM-YYYY HH:mm:ss');
   }
 
   static truncate(text: string, length: number): string {

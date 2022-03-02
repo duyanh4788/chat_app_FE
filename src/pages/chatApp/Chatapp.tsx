@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -27,9 +28,12 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import ReactEmoji from 'react-emoji';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { AppHelper } from 'store/utils/app.helper';
+import moment from 'moment';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
+
+let socket;
 
 export const Chatapp = () => {
   const local = new LocalStorageService();
@@ -38,27 +42,37 @@ export const Chatapp = () => {
   const uid = local.getItem('_id');
   const [form] = Form.useForm();
   const [collapsed, setCollapsed] = useState(false);
-  // =============================================== //
-  const [userList, setUserList] = useState<any[]>([]);
-  const [errorAcknow, setErrorAcknow] = useState(null);
-  const [sendMessage, setSendMessage] = useState(null);
-  const [sendLocation, setSendLocation] = useState<any>('');
+  const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
+  const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [receiverMessage, setReceiverMessage] = useState(null);
   const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
   // =============================================== //
-  const onDate = AppHelper.formDateYDM(new Date());
-  console.log(onDate);
-  const PORRT: any = ApiRouter.SOCKET_LOCAL;
-  const socket = io(PORRT, { transports: ['websocket'] });
-  const room = 'FE01';
+  const [userList, setUserList] = useState<any[]>([]);
+  const onDate = moment(new Date()).format('DD-MM-YYYY');
+  // =============================================== //
+  const PORT_SOCKET: any = ApiRouter.SOCKET_LOCAL;
 
   useEffect(() => {
+    socket = io(PORT_SOCKET, { transports: ['websocket'] });
+    const room = 'FE01';
     // join room
     socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
+    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, message => {
+      openNotificationJoin(message);
+    });
+    return () => {
+      // disconecet
+      socket.on(SOCKET_COMMIT.DISCONNECT, () => {
+        return () => {
+          socket.disconnect();
+        };
+      });
+    };
+  }, [PORT_SOCKET]);
+
+  useEffect(() => {
     // render list member
     socket.on(SOCKET_COMMIT.SEND_LIST_CLIENT, listUser => {});
-    // send message
-    socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
     // reciver message
     socket.on(SOCKET_COMMIT.SEND_MESSAGE, receiverMessage => {
       setReceiverMessage(receiverMessage);
@@ -66,35 +80,13 @@ export const Chatapp = () => {
     socket.on(SOCKET_COMMIT.SEND_ARRAY_MESSAGE, arrayMessage => {
       setReceiverArrayMessage(arrayMessage);
     });
-    // send location
-    socket.emit(SOCKET_COMMIT.SEND_LOCATION, sendLocation);
-    // disconecet
-    return () => {
-      socket.on(SOCKET_COMMIT.DISCONNECT, () => {
-        return () => {
-          socket.disconnect();
-        };
-      });
-    };
-  }, [sendMessage, sendLocation]);
-
-  useEffect(() => {
-    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, message => {
-      openNotificationJoin(message);
-    });
   }, []);
 
   useEffect(() => {
-    if (errorAcknow !== null) {
+    if (errorAcknow) {
       openNotificationAcknow();
     }
-  });
-
-  useEffect(() => {
-    if (receiverMessage && receiverMessage !== null) {
-      setErrorAcknow(null);
-    }
-  });
+  }, [errorAcknow]);
 
   const openNotificationJoin = notify => {
     notification.open({
@@ -110,15 +102,18 @@ export const Chatapp = () => {
     });
   };
 
+  const onSendMessage = event => {
+    setErrorAcknow(undefined);
+    event.preventDefault();
+    if (sendMessage) {
+      socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
+    }
+    return setSendMessage('');
+  };
+
   const acknowLedGements = error => {
     if (error) {
       setErrorAcknow(error);
-    }
-  };
-
-  const onSendMessage = e => {
-    if (e.message !== '') {
-      setSendMessage(e.message);
     }
   };
 
@@ -131,7 +126,8 @@ export const Chatapp = () => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
-      setSendLocation(location);
+      // setSendLocation(location);
+      socket.emit(SOCKET_COMMIT.SEND_LOCATION, location);
     });
   };
 
@@ -139,6 +135,7 @@ export const Chatapp = () => {
     if (receiverArrayMessage) {
       return receiverArrayMessage.map((row, idx) => {
         if (row.account !== account) {
+          console.log(row.createAt);
           return (
             <div className="member_chat" key={idx}>
               <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
@@ -146,7 +143,11 @@ export const Chatapp = () => {
                 <p className="message_text">
                   {ReactEmoji.emojify(row.message)}
                 </p>
-                <p className="time">{row.createAt}</p>
+                <p className="time">
+                  {row.createAt.split(' ')[0] === onDate
+                    ? 'Hôm nay' + row.createAt.split(' ')[1]
+                    : row.createAt}
+                </p>
               </div>
             </div>
           );
@@ -155,7 +156,14 @@ export const Chatapp = () => {
           <div className="my_chat" key={idx}>
             <div className="message_box">
               <p className="message_text">{ReactEmoji.emojify(row.message)}</p>
-              <span className="time">{row.createAt}</span>
+
+              {row.createAt.split(' ')[0] === onDate ? (
+                <span className="time">
+                  Hôm nay {row.createAt.split(' ')[1]}
+                </span>
+              ) : (
+                <span className="time">row.createAt</span>
+              )}
             </div>
             <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
           </div>
@@ -169,7 +177,7 @@ export const Chatapp = () => {
   };
 
   return (
-    <Layout>
+    <Layout className="layout">
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key={userList.length + 1} icon={<RollbackOutlined />}>
@@ -187,7 +195,7 @@ export const Chatapp = () => {
         </Menu>
       </Sider>
       <Layout>
-        <Header className="site-layout-background">
+        <Header className="site_layout_background">
           <Breadcrumb className="avatar">
             <Breadcrumb.Item>
               <Avatar className="bg_green" icon={<UserOutlined />} />
@@ -195,42 +203,33 @@ export const Chatapp = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         </Header>
-        <Content className="site-layout">
-          <ScrollToBottom className="row_chat">
-            {renderMessage()}
-          </ScrollToBottom>
-          <Form
-            form={form}
-            name="horizontal_login"
-            onFinish={onSendMessage}
-            className="form_chat"
-          >
-            <Form.Item name="message">
-              <Input
-                placeholder="Enter Message"
-                suffix={
-                  <React.Fragment>
-                    <Tooltip title="Send Message">
-                      <SendOutlined
-                        type="info-circle"
-                        style={{
-                          color: 'rgba(0,0,0,.45)',
-                          marginRight: '10px',
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title="Share Location">
-                      <HeatMapOutlined
-                        type="info-circle"
-                        onClick={shareLocation}
-                      />
-                    </Tooltip>
-                  </React.Fragment>
-                }
-              />
-            </Form.Item>
-          </Form>
+        <Content className="site_layout">
+          <ScrollToBottom>{renderMessage()}</ScrollToBottom>
         </Content>
+        <div className="form_chat">
+          <Input
+            placeholder="Enter Message"
+            value={sendMessage}
+            onChange={e => setSendMessage(e.target.value)}
+            onPressEnter={onSendMessage}
+            suffix={
+              <React.Fragment>
+                <Tooltip title="Send Message">
+                  <SendOutlined
+                    type="info-circle"
+                    style={{
+                      color: 'rgba(0,0,0,.45)',
+                      marginRight: '10px',
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Share Location">
+                  <HeatMapOutlined type="info-circle" onClick={shareLocation} />
+                </Tooltip>
+              </React.Fragment>
+            }
+          />
+        </div>
         <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
       </Layout>
     </Layout>

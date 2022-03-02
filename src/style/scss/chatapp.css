@@ -7,37 +7,27 @@
   height: 100vh;
 }
 
-.ant-layout .site-layout-background {
-  background: #f4f5f7;
-}
-
-.ant-layout .site-layout-background .avatar {
+.ant-layout .site_layout_background .avatar {
   margin: 20px 0;
 }
 
-.ant-layout .site-layout-background .avatar .bg_green {
+.ant-layout .site_layout_background .avatar .bg_green {
   background-color: #87d068;
 }
 
-.ant-layout .site-layout-background .avatar .account {
+.ant-layout .site_layout_background .avatar .account {
   color: #f4f5f7;
   font-weight: bolder;
   margin-left: 5px;
 }
 
-.ant-layout .site-layout {
+.ant-layout .site_layout {
   padding: 20px;
-}
-
-.ant-layout .site-layout .row_chat {
   overflow: auto;
-  min-height: 660px;
-  max-height: 660px;
   background: #dae3d77a;
-  border-radius: 10px;
 }
 
-.ant-layout .site-layout .row_chat .member_chat {
+.ant-layout .site_layout .member_chat {
   border-radius: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -48,14 +38,14 @@
   padding: 10px;
 }
 
-.ant-layout .site-layout .row_chat .member_chat .avatar_img {
+.ant-layout .site_layout .member_chat .avatar_img {
   float: left;
   max-width: 32px;
   width: 100%;
   margin-right: 5px;
 }
 
-.ant-layout .site-layout .row_chat .member_chat .message_box {
+.ant-layout .site_layout .member_chat .message_box {
   background: #f4f5f7;
   border-radius: 10px;
   padding: 5px 20px;
@@ -63,7 +53,7 @@
   max-width: 80%;
 }
 
-.ant-layout .site-layout .row_chat .member_chat .message_box .message_text {
+.ant-layout .site_layout .member_chat .message_box .message_text {
   width: 100%;
   letter-spacing: 0;
   float: right;
@@ -71,13 +61,13 @@
   word-wrap: break-word;
 }
 
-.ant-layout .site-layout .row_chat .member_chat .time {
+.ant-layout .site_layout .member_chat .time {
   font-size: 10px;
   color: gray;
   font-weight: bold;
 }
 
-.ant-layout .site-layout .row_chat .my_chat {
+.ant-layout .site_layout .my_chat {
   border-radius: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -88,14 +78,14 @@
   padding: 10px;
 }
 
-.ant-layout .site-layout .row_chat .my_chat .avatar_img {
+.ant-layout .site_layout .my_chat .avatar_img {
   float: right;
   max-width: 32px;
   width: 100%;
   margin-left: 5px;
 }
 
-.ant-layout .site-layout .row_chat .my_chat .message_box {
+.ant-layout .site_layout .my_chat .message_box {
   background: #f4f5f7;
   border-radius: 10px;
   padding: 5px 20px;
@@ -103,7 +93,7 @@
   max-width: 80%;
 }
 
-.ant-layout .site-layout .row_chat .my_chat .message_box .message_text {
+.ant-layout .site_layout .my_chat .message_box .message_text {
   width: 100%;
   letter-spacing: 0;
   float: left;
@@ -111,30 +101,31 @@
   word-wrap: break-word;
 }
 
-.ant-layout .site-layout .row_chat .my_chat .time {
+.ant-layout .site_layout .my_chat .time {
   font-size: 10px;
   color: gray;
   font-weight: bold;
 }
 
-.ant-layout .site-layout .row_chat .my_chat::after {
+.ant-layout .site_layout .my_chat::after {
   content: '';
   clear: both;
   display: table;
 }
 
-.ant-layout .site-layout .form_chat {
-  margin: 20px 0;
-}
-
-.ant-layout .site-layout .display_flex {
+.ant-layout .site_layout .display_flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.ant-layout .site-layout .bg_green {
+.ant-layout .site_layout .bg_green {
   background-color: #87d068;
+}
+
+.ant-layout .form_chat {
+  padding: 20px;
+  background: #dae3d77a;
 }
 
 .ant-layout .ant-layout-header,
