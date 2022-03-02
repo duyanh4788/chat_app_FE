@@ -2,10 +2,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
-import Axios from 'axios';
 import {
   Layout,
   Menu,
@@ -14,8 +12,6 @@ import {
   Input,
   Tooltip,
   Form,
-  Row,
-  Col,
   Avatar,
 } from 'antd';
 import {
@@ -27,6 +23,10 @@ import {
 } from '@ant-design/icons';
 import { ApiRouter } from 'store/services/request.constants';
 import { LocalStorageService } from 'store/services/localStorage';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import ReactEmoji from 'react-emoji';
+import { SOCKET_COMMIT } from 'store/commom/socket_commit';
+import { AppHelper } from 'store/utils/app.helper';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -46,32 +46,31 @@ export const Chatapp = () => {
   const [receiverMessage, setReceiverMessage] = useState(null);
   const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
   // =============================================== //
-
+  const onDate = AppHelper.formDateYDM(new Date());
+  console.log(onDate);
   const PORRT: any = ApiRouter.SOCKET_LOCAL;
   const socket = io(PORRT, { transports: ['websocket'] });
   const room = 'FE01';
 
   useEffect(() => {
     // join room
-    socket.emit('join room', { room, fullName, account, uid });
+    socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
     // render list member
-    socket.on('send list client inside room', listUser => {
-      console.log(listUser);
-    });
+    socket.on(SOCKET_COMMIT.SEND_LIST_CLIENT, listUser => {});
     // send message
-    socket.emit('send message', sendMessage, acknowLedGements);
+    socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
     // reciver message
-    socket.on('send message', receiverMessage => {
+    socket.on(SOCKET_COMMIT.SEND_MESSAGE, receiverMessage => {
       setReceiverMessage(receiverMessage);
     });
-    socket.on('send array message', arrayMessage => {
+    socket.on(SOCKET_COMMIT.SEND_ARRAY_MESSAGE, arrayMessage => {
       setReceiverArrayMessage(arrayMessage);
     });
     // send location
-    socket.emit('send location', sendLocation);
+    socket.emit(SOCKET_COMMIT.SEND_LOCATION, sendLocation);
     // disconecet
     return () => {
-      socket.on('disconnect', () => {
+      socket.on(SOCKET_COMMIT.DISCONNECT, () => {
         return () => {
           socket.disconnect();
         };
@@ -80,7 +79,7 @@ export const Chatapp = () => {
   }, [sendMessage, sendLocation]);
 
   useEffect(() => {
-    socket.on('send message notify', message => {
+    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, message => {
       openNotificationJoin(message);
     });
   }, []);
@@ -146,24 +145,24 @@ export const Chatapp = () => {
                 <div className="avatar">
                   <Avatar className="bg_green">{row.fullName}</Avatar>
                 </div>
-                <div className="chat">{row.message}</div>
+                <p className="message">{ReactEmoji.emojify(row.message)}</p>
               </div>
               <p className="time">{row.createAt}</p>
             </div>
           );
         }
         return (
-          <div key={idx} className="my_chat">
-            <div className="warp_my_chat">
-              <div className="display_flex">
-                <div className="chat">{row.message}</div>
-                <div className="avatar">
-                  <Avatar className="bg_green">{row.fullName}</Avatar>
-                </div>
+          <React.Fragment key={idx}>
+            <div className="my_chat">
+              <div className="message_box">
+                <p className="message_text">
+                  {ReactEmoji.emojify(row.message)}
+                </p>
               </div>
-              <p className="time">{row.createAt}</p>
+              <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
             </div>
-          </div>
+            <span className="time">{row.createAt}</span>
+          </React.Fragment>
         );
       });
     }
@@ -192,17 +191,18 @@ export const Chatapp = () => {
         </Menu>
       </Sider>
       <Layout>
-        <Header className="site-layout-background">Room Chat : {room}</Header>
-        <Content className="site-layout">
+        <Header className="site-layout-background">
           <Breadcrumb className="avatar">
             <Breadcrumb.Item>
               <Avatar className="bg_green" icon={<UserOutlined />} />
               <span className="account">{fullName}</span>
             </Breadcrumb.Item>
           </Breadcrumb>
-          <Row className="row_chat">
-            <Col span={24}>{renderMessage()}</Col>
-          </Row>
+        </Header>
+        <Content className="site-layout">
+          <ScrollToBottom className="row_chat">
+            {renderMessage()}
+          </ScrollToBottom>
           <Form
             form={form}
             name="horizontal_login"

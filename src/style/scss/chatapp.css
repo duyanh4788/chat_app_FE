@@ -11,55 +11,30 @@
   background: #f4f5f7;
 }
 
-.ant-layout .site-layout {
-  padding: 0 20px;
-}
-
-.ant-layout .site-layout .avatar {
+.ant-layout .site-layout-background .avatar {
   margin: 20px 0;
 }
 
-.ant-layout .site-layout .account {
-  color: gray;
+.ant-layout .site-layout-background .avatar .bg_green {
+  background-color: #87d068;
+}
+
+.ant-layout .site-layout-background .avatar .account {
+  color: #f4f5f7;
   font-weight: bolder;
   margin-left: 5px;
 }
 
+.ant-layout .site-layout {
+  padding: 20px;
+}
+
 .ant-layout .site-layout .row_chat {
-  overflow-y: scroll;
-  height: 670px;
-  border: 1px solid #b3b3b387;
+  overflow: auto;
+  min-height: 660px;
+  max-height: 660px;
+  background: #dae3d77a;
   border-radius: 10px;
-  background: #f4f5f7;
-}
-
-.ant-layout .site-layout .row_chat .my_chat {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-}
-
-.ant-layout .site-layout .row_chat .my_chat .warp_my_chat {
-  padding: 5px;
-  max-width: 400px;
-  max-height: 400px;
-  text-align: right;
-}
-
-.ant-layout .site-layout .row_chat .my_chat .warp_my_chat .chat {
-  border: 1px solid #fff;
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.ant-layout .site-layout .row_chat .my_chat .warp_my_chat .time {
-  font-size: 10px;
-  color: gray;
-  font-weight: bold;
 }
 
 .ant-layout .site-layout .row_chat .member_chat {
@@ -79,6 +54,52 @@
   font-size: 10px;
   color: gray;
   font-weight: bold;
+}
+
+.ant-layout .site-layout .row_chat .my_chat {
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 10px;
+}
+
+.ant-layout .site-layout .row_chat .my_chat .avatar_img {
+  float: right;
+  max-width: 32px;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.ant-layout .site-layout .row_chat .my_chat .message_box {
+  background: #f4f5f7;
+  border-radius: 10px;
+  padding: 5px 20px;
+  display: inline-block;
+  max-width: 80%;
+}
+
+.ant-layout .site-layout .row_chat .my_chat .message_box .message_text {
+  width: 100%;
+  letter-spacing: 0;
+  float: left;
+  font-size: 1.1em;
+  word-wrap: break-word;
+}
+
+.ant-layout .site-layout .row_chat .my_chat .time {
+  font-size: 10px;
+  color: gray;
+  font-weight: bold;
+}
+
+.ant-layout .site-layout .row_chat .my_chat::after {
+  content: '';
+  clear: both;
+  display: table;
 }
 
 .ant-layout .site-layout .form_chat {

@@ -6,44 +6,26 @@
   height: 100vh;
   .site-layout-background {
     background: #f4f5f7;
-  }
-  .site-layout {
-    padding: 0 20px;
     .avatar {
       margin: 20px 0;
-    }
-    .account {
-      color: gray;
-      font-weight: bolder;
-      margin-left: 5px;
-    }
-    .row_chat {
-      overflow-y: scroll;
-      height: 670px;
-      border: 1px solid #b3b3b387;
-      border-radius: 10px;
-      background: #f4f5f7;
-      .my_chat {
-        display: flex;
-        justify-content: flex-end;
-        .warp_my_chat {
-          padding: 5px;
-          max-width: 400px;
-          max-height: 400px;
-          text-align: right;
-          .chat {
-            border: 1px solid #fff;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-          }
-          .time {
-            font-size: 10px;
-            color: gray;
-            font-weight: bold;
-          }
-        }
+      .bg_green {
+        background-color: #87d068;
       }
+      .account {
+        color: #f4f5f7;
+        font-weight: bolder;
+        margin-left: 5px;
+      }
+    }
+  }
+  .site-layout {
+    padding: 20px;
+    .row_chat {
+      overflow: auto;
+      min-height: 660px;
+      max-height: 660px;
+      background: #dae3d77a;
+      border-radius: 10px;
       .member_chat {
         padding: 5px;
         max-width: 400px;
@@ -59,6 +41,42 @@
           color: gray;
           font-weight: bold;
         }
+      }
+      .my_chat {
+        border-radius: 5px;
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        .avatar_img {
+          float: right;
+          max-width: 32px;
+          width: 100%;
+          margin-left: 10px;
+        }
+        .message_box {
+          background: #f4f5f7;
+          border-radius: 10px;
+          padding: 5px 20px;
+          display: inline-block;
+          max-width: 80%;
+          .message_text {
+            width: 100%;
+            letter-spacing: 0;
+            float: left;
+            font-size: 1.1em;
+            word-wrap: break-word;
+          }
+        }
+        .time {
+          font-size: 10px;
+          color: gray;
+          font-weight: bold;
+        }
+      }
+      .my_chat::after {
+        content: '';
+        clear: both;
+        display: table;
       }
     }
     .form_chat {
