@@ -38,16 +38,37 @@
 }
 
 .ant-layout .site-layout .row_chat .member_chat {
-  padding: 5px;
-  max-width: 400px;
-  text-align: left;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 10px;
 }
 
-.ant-layout .site-layout .row_chat .member_chat .chat {
-  border: 1px solid #fff;
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 10px;
+.ant-layout .site-layout .row_chat .member_chat .avatar_img {
+  float: left;
+  max-width: 32px;
+  width: 100%;
+  margin-right: 5px;
+}
+
+.ant-layout .site-layout .row_chat .member_chat .message_box {
+  background: #f4f5f7;
+  border-radius: 10px;
+  padding: 5px 20px;
+  display: inline-block;
+  max-width: 80%;
+}
+
+.ant-layout .site-layout .row_chat .member_chat .message_box .message_text {
+  width: 100%;
+  letter-spacing: 0;
+  float: right;
+  font-size: 1.1em;
+  word-wrap: break-word;
 }
 
 .ant-layout .site-layout .row_chat .member_chat .time {
@@ -71,7 +92,7 @@
   float: right;
   max-width: 32px;
   width: 100%;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .ant-layout .site-layout .row_chat .my_chat .message_box {

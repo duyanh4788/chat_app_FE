@@ -140,29 +140,25 @@ export const Chatapp = () => {
       return receiverArrayMessage.map((row, idx) => {
         if (row.account !== account) {
           return (
-            <div key={idx} className="member_chat">
-              <div className="display_flex">
-                <div className="avatar">
-                  <Avatar className="bg_green">{row.fullName}</Avatar>
-                </div>
-                <p className="message">{ReactEmoji.emojify(row.message)}</p>
-              </div>
-              <p className="time">{row.createAt}</p>
-            </div>
-          );
-        }
-        return (
-          <React.Fragment key={idx}>
-            <div className="my_chat">
+            <div className="member_chat" key={idx}>
+              <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
               <div className="message_box">
                 <p className="message_text">
                   {ReactEmoji.emojify(row.message)}
                 </p>
+                <p className="time">{row.createAt}</p>
               </div>
-              <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
             </div>
-            <span className="time">{row.createAt}</span>
-          </React.Fragment>
+          );
+        }
+        return (
+          <div className="my_chat" key={idx}>
+            <div className="message_box">
+              <p className="message_text">{ReactEmoji.emojify(row.message)}</p>
+              <span className="time">{row.createAt}</span>
+            </div>
+            <Avatar className="bg_green avatar_img">{row.fullName}</Avatar>
+          </div>
         );
       });
     }
