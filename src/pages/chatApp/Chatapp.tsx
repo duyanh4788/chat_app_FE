@@ -182,7 +182,7 @@ export const Chatapp = () => {
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key={userList.length + 1} icon={<RollbackOutlined />}>
             <Link to="/" onClick={() => localStorage.clear()}>
-              Come Back DEMO RECOVER GIT 2
+              Come Back
             </Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
