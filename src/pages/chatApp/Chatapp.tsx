@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
+import * as _ from 'lodash';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import {
@@ -82,6 +83,14 @@ export const Chatapp = () => {
     });
   }, []);
 
+  let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
+
+  useEffect(() => {
+    if (!_.isEmpty(myRow)) {
+      myRow.scrollTop = myRow.scrollHeight;
+    }
+  }, [receiverArrayMessage]);
+
   useEffect(() => {
     if (errorAcknow) {
       openNotificationAcknow();
@@ -144,8 +153,8 @@ export const Chatapp = () => {
                   {ReactEmoji.emojify(row.message)}
                 </p>
                 <p className="time">
-                  {row.createAt.split(' ')[0] === onDate
-                    ? 'Hôm nay' + row.createAt.split(' ')[1]
+                  {row?.createAt?.split(' ')[0] === onDate
+                    ? 'Hôm nay' + row?.createAt?.split(' ')[1]
                     : row.createAt}
                 </p>
               </div>
@@ -157,9 +166,9 @@ export const Chatapp = () => {
             <div className="message_box">
               <p className="message_text">{ReactEmoji.emojify(row.message)}</p>
 
-              {row.createAt.split(' ')[0] === onDate ? (
+              {row?.createAt?.split(' ')[0] === onDate ? (
                 <span className="time">
-                  Hôm nay {row.createAt.split(' ')[1]}
+                  Hôm nay {row?.createAt?.split(' ')[1]}
                 </span>
               ) : (
                 <span className="time">row.createAt</span>
@@ -203,9 +212,7 @@ export const Chatapp = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         </Header>
-        <Content className="site_layout">
-          <ScrollToBottom>{renderMessage()}</ScrollToBottom>
-        </Content>
+        <Content className="site_layout">{renderMessage()}</Content>
         <div className="form_chat">
           <Input
             placeholder="Enter Message"
