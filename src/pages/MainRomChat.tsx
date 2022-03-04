@@ -12,7 +12,7 @@ import { SignUpUser } from './authuser/SignUpUser';
 import { SignInUser } from './authuser/SignInUser';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
-import { openNotificationJoin } from 'store/utils/Notification';
+import { openNotifi } from 'store/utils/Notification';
 import { LocalStorageService } from 'store/services/localStorage';
 
 const { TabPane } = Tabs;
@@ -30,24 +30,18 @@ export const MainRomChat = () => {
       switch (type) {
         case AuthSlice.actions.sigInUserSuccess.type:
           local.setLocalUser(_.get(payload, 'info'));
-          openNotificationJoin(
-            _.get(payload, 'code'),
-            _.get(payload, 'message'),
-          );
+          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
           history.push('/chatApp');
           break;
         case AuthSlice.actions.sigInUserFail.type:
-          openNotificationJoin(400, payload);
+          openNotifi(400, payload);
           break;
         case AuthSlice.actions.signUpUserSuccess.type:
           callback('2');
-          openNotificationJoin(
-            _.get(payload, 'code'),
-            _.get(payload, 'message'),
-          );
+          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
           break;
         case AuthSlice.actions.signUpUserFail.type:
-          openNotificationJoin(400, payload);
+          openNotifi(400, payload);
           break;
         default:
           break;

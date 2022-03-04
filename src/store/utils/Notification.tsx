@@ -2,7 +2,7 @@ import React from 'react';
 import { notification } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
-export const openNotificationJoin = (status: number, message: string) => {
+export const openNotifi = (status: number, message: string) => {
   notification.open({
     duration: 5,
     message,

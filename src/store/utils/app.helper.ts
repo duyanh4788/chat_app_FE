@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 /* eslint-disable array-callback-return */
 import * as _ from 'lodash';
 const moment = require('moment');
@@ -41,33 +42,6 @@ export class AppHelper {
    * @param  {String} cur input string currency
    * @return {String}  Price with format VND  "123.457 ₫"
    */
-  static formatCurrency(cur): string {
-    if (isNaN(cur)) return AppHelper.getVND(0);
-    return AppHelper.getVND(cur);
-  }
-
-  static getVND(vnd): string {
-    if (isNaN(vnd)) return AppHelper.getVND(0);
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(vnd);
-  }
-
-  static getNotVND(vnd): string {
-    return new Intl.NumberFormat('vi-VN').format(vnd);
-  }
-
-  static formDateTime(dateTime) {
-    console.log(dateTime);
-    if (!dateTime) return '-';
-    return moment(dateTime).format('DD/MM/YYYY');
-  }
-
-  static formDateTimeNoneSt(dateTime) {
-    if (!dateTime) return '';
-    return moment(dateTime).format('DD/MM/YYYY');
-  }
 
   static convertBirthDate(dateStr) {
     if (!dateStr) return '';
@@ -85,11 +59,6 @@ export class AppHelper {
     return moment(dateTime).format('YYYY-DD-MM');
   }
 
-  static formDateTimeApi(dateTime) {
-    if (!dateTime) return '-';
-    return moment(dateTime).format('YYYY-MM-DD');
-  }
-
   static formDatePrintRegisBank(dateTime) {
     if (!dateTime) return null;
     return moment(dateTime).format('MM/DD/YYYY');
@@ -105,11 +74,6 @@ export class AppHelper {
     return moment(dateTime).format('M');
   }
 
-  static formmatDateLogTime(dateTime) {
-    if (!dateTime) return '-';
-    return moment(dateTime).format('DD/MM/YYYY - HH:mm:ss');
-  }
-
   static formTimer(dateTime) {
     if (!dateTime) return '-';
     return moment(dateTime).format('HH:mm');
@@ -117,7 +81,21 @@ export class AppHelper {
 
   static formmatDateTimeChat(dateTime) {
     if (!dateTime) return '-';
-    return moment(dateTime).format('DD-MM-YYYY HH:mm:ss');
+    if (
+      moment(dateTime).format('DD-MM-YYYY') === AppHelper.getToDate(new Date())
+    ) {
+      return 'Hôm nay' + ' ' + AppHelper.formTimer(dateTime);
+    }
+    return moment(dateTime).format('DD-MM-YYYY - HH:mm');
+  }
+
+  static getToDate(date) {
+    return moment(date).format('DD-MM-YYYY');
+  }
+
+  static convertFullName(name: string | any) {
+    if (!name) return '';
+    return name.split(' ').pop().charAt(0) + name.split(' ').shift().charAt(0);
   }
 
   static truncate(text: string, length: number): string {

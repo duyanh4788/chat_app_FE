@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import * as AuthSlice from 'store/auth/shared/slice';
 import * as _ from 'lodash';
+import * as AuthSlice from 'store/auth/shared/slice';
 import { AuthSaga } from 'store/auth/shared/saga';
 import {
   useInjectReducer,
