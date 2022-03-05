@@ -5,7 +5,8 @@ import { RootStore } from './store/configStore';
 import { MainRomChat } from './pages/MainRomChat';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Chatapp } from 'pages/chatApp/Chatapp';
-import './style/mainScss/index.css';
+import './style/scss/chat_app.css';
+import './style/scss/main_form.css';
 import 'antd/dist/antd.css';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
