@@ -1,6 +1,4 @@
 export const ApiRouter = {
-  LOCAL: process.env.REACT_APP_LOCAL_API_URL,
-  GLOBOAL: process.env.REACT_APP_GLOBAL_API_URL,
-  SOCKET_LOCAL: process.env.REACT_APP_LOCAL_SOCKET_API_URL,
-  SOCKET_GLOBOAL: process.env.REACT_APP_GLOBAL_SOCKET_API_URL,
+  CHAT_APP_API: process.env.REACT_APP_API_URL,
+  SOCKET_URL: process.env.REACT_APP_SOCKET_API_URL,
 };

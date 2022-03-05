@@ -4,7 +4,7 @@ import { ApiRouter } from 'store/services/request.constants';
 
 export class ListHttp {
   request: any;
-  constructor(endPoint = ApiRouter.LOCAL) {
+  constructor(endPoint = ApiRouter.CHAT_APP_API) {
     this.request = new HttpRequest(endPoint).request;
   }
 

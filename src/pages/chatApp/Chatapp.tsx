@@ -56,7 +56,7 @@ export const Chatapp = () => {
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
   const [userList, setUserList] = useState<any[]>([]);
-  const PORT_SOCKET: any = ApiRouter.SOCKET_LOCAL;
+  const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
     dispatch(ListSlice.actions.getListUsers());
