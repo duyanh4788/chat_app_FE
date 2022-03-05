@@ -8,3 +8,8 @@ export const selectLoading = createSelector(
   [selectAuth],
   state => state.loading,
 );
+
+export const selectSuccess = createSelector(
+  [selectAuth],
+  state => state.success,
+);

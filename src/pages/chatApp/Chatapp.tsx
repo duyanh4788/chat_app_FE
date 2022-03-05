@@ -86,6 +86,10 @@ export const Chatapp = () => {
       storeSub$();
       dispatch(ListSlice.actions.clearListMessage());
       dispatch(ListSlice.actions.clearListUser());
+      setReceiverArrayMessage([]);
+      setUserList([]);
+      setSendMessage(undefined);
+      setErrorAcknow(undefined);
     };
   }, []);
 
@@ -163,14 +167,13 @@ export const Chatapp = () => {
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
   };
-
   const renderMessage = () => {
     if (_.isEmpty(receiverArrayMessage) && !receiverArrayMessage.length) {
       return null;
     }
     if (!_.isEmpty(receiverArrayMessage) && receiverArrayMessage.length) {
       return receiverArrayMessage.map((row, idx) => {
-        if (row.account !== account) {
+        if (!_.isEmpty(row.account) && row.account !== account) {
           return (
             <div className="member_chat" key={idx}>
               <Avatar className="bg_green avatar_img">

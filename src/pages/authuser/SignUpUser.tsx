@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as AuthSlice from 'store/auth/shared/slice';
+import * as AuthSelector from 'store/auth/shared/selectors';
 import * as _ from 'lodash';
 import { AuthSaga } from 'store/auth/shared/saga';
 import {
@@ -27,6 +29,11 @@ export function SignUpUser() {
   });
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const success = useSelector(AuthSelector.selectSuccess);
+
+  useEffect(() => {
+    if (success) form.resetFields();
+  }, [success]);
 
   const onFinish = values => {
     dispatch(AuthSlice.actions.signUpUser(values));

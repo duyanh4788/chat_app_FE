@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import * as _ from 'lodash';
@@ -17,12 +17,11 @@ import { LocalStorageService } from 'store/services/localStorage';
 
 const { TabPane } = Tabs;
 
-function callback(key) {}
-
 export const MainRomChat = () => {
   const history = useHistory();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
+  const [tabsPanel, setTabsPanel] = useState<string>('1');
 
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
@@ -37,7 +36,7 @@ export const MainRomChat = () => {
           openNotifi(400, payload);
           break;
         case AuthSlice.actions.signUpUserSuccess.type:
-          callback('2');
+          setTabsPanel('1');
           openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
           break;
         case AuthSlice.actions.signUpUserFail.type:
@@ -51,12 +50,13 @@ export const MainRomChat = () => {
       storeSub$();
     };
   }, []);
+
   return (
     <div className="main_form">
       {loading && <AppLoading loading />}
       <div>
         <h1>Room Chat Lẩu Xanh</h1>
-        <Tabs defaultActiveKey="1" onChange={callback}>
+        <Tabs activeKey={tabsPanel} centered onChange={e => setTabsPanel(e)}>
           <TabPane tab={<p>Đăng nhập</p>} key="1">
             <SignInUser />
           </TabPane>

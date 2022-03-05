@@ -2,10 +2,14 @@ import { createSlice } from 'store/core/@reduxjs/toolkit';
 
 export interface AuthState {
   loading: boolean;
+  success: boolean;
+  error: any;
 }
 
 export const initialState: AuthState = {
   loading: false,
+  success: false,
+  error: {},
 };
 
 const AuthSlice = createSlice({
@@ -27,6 +31,7 @@ const AuthSlice = createSlice({
     },
     signUpUserSuccess(state, action) {
       state.loading = false;
+      state.success = action.payload.success;
     },
     signUpUserFail(state, action) {
       state.loading = false;
