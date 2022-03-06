@@ -1,5 +1,6 @@
 import React from 'react';
-import { Spin, Alert } from 'antd';
+import { Spin } from 'antd';
+import { GithubFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const LoadingWrapper = styled.div`
@@ -22,9 +23,11 @@ export const LoaderFallBack = () => ({
 export function AppLoading({ loading }) {
   return (
     <LoadingWrapper>
-      <Spin tip="Loading...">
-        <Alert type="info" />
-      </Spin>
+      <Spin
+        indicator={
+          <GithubFilled style={{ fontSize: 50, color: '#222260' }} spin />
+        }
+      />
     </LoadingWrapper>
   );
 }

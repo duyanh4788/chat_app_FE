@@ -9,6 +9,7 @@ import * as ListSlice from 'store/list/shared/slice';
 import * as ListConst from 'store/list/constants/list.constant';
 import * as ListSelector from 'store/list/shared/selectors';
 import { ListSaga } from 'store/list/shared/saga';
+import { useHistory } from 'react-router-dom';
 import {
   useInjectReducer,
   useInjectSaga,
@@ -37,11 +38,13 @@ const { SubMenu } = Menu;
 let socket;
 
 export const Chatapp = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const local = new LocalStorageService();
   const fullName = local.getItem('_fullName');
   const account = local.getItem('_account');
   const uid = local.getItem('_id');
+  const token = local.getItem('_token');
   useInjectReducer({
     key: ListSlice.sliceKey,
     reducer: ListSlice.reducer,
@@ -54,11 +57,19 @@ export const Chatapp = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
   const [sendMessage, setSendMessage] = useState<any>(undefined);
-  const [receiverArrayMessage, setReceiverArrayMessage] = useState<any[]>([]);
+  const [listMessages, setListMessages] = useState<any[]>([]);
   const [userList, setUserList] = useState<any[]>([]);
-  const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
+    if (
+      _.isEmpty(fullName) &&
+      _.isEmpty(account) &&
+      _.isEmpty(uid) &&
+      _.isEmpty(token)
+    ) {
+      openNotifi(400, 'Vui lòng đăng nhập');
+      return history.push('/');
+    }
     dispatch(ListSlice.actions.getListUsers());
     dispatch(ListSlice.actions.getListMessages());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
@@ -73,7 +84,7 @@ export const Chatapp = () => {
           openNotifi(400, payload);
           break;
         case ListSlice.actions.getListMessagesSuccess.type:
-          setReceiverArrayMessage(payload.data);
+          setListMessages(payload.data);
           break;
         case ListSlice.actions.getListMessagesFail.type:
           openNotifi(400, payload);
@@ -86,7 +97,7 @@ export const Chatapp = () => {
       storeSub$();
       dispatch(ListSlice.actions.clearListMessage());
       dispatch(ListSlice.actions.clearListUser());
-      setReceiverArrayMessage([]);
+      setListMessages([]);
       setUserList([]);
       setSendMessage(undefined);
       setErrorAcknow(undefined);
@@ -94,27 +105,26 @@ export const Chatapp = () => {
   }, []);
 
   useEffect(() => {
-    socket = io(PORT_SOCKET, { transports: ['websocket'] });
+    const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
     const room = 'CHAT_APP';
+    socket = io(PORT_SOCKET, { transports: ['websocket'] });
     // join room
     socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
-    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, message => {
+    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
       openNotifi(200, message);
     });
-    socket.on(SOCKET_COMMIT.DISCONNECT, () => {
+    // render list member
+    socket.on(SOCKET_COMMIT.SEND_LIST_USERS, (listUser: any[]) => {
+      console.log(listUser);
+    });
+    socket.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (listMessages: any[]) => {
+      setListMessages(listMessages);
+    });
+    socket.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
+      openNotifi(200, message);
       return () => {
         socket.disconnect();
       };
-    });
-  }, [PORT_SOCKET]);
-
-  useEffect(() => {
-    // render list member
-    // socket.on(SOCKET_COMMIT.SEND_LIST_CLIENT, listUser => {});
-    // reciver message
-    // socket.on(SOCKET_COMMIT.SEND_MESSAGE, receiverMessage => {});
-    socket.on(SOCKET_COMMIT.SEND_ARRAY_MESSAGE, arrayMessage => {
-      setReceiverArrayMessage(arrayMessage);
     });
   }, []);
 
@@ -123,7 +133,7 @@ export const Chatapp = () => {
     if (!_.isEmpty(myRow)) {
       myRow.scrollTop = myRow.scrollHeight;
     }
-  }, [receiverArrayMessage]);
+  }, [listMessages]);
 
   useEffect(() => {
     if (errorAcknow) {
@@ -131,23 +141,12 @@ export const Chatapp = () => {
     }
   }, [errorAcknow]);
 
-  const onSendMessage = event => {
+  const onSendMessage = (event: any) => {
     event.preventDefault();
     if (sendMessage) {
       socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
     }
     return resetData();
-  };
-
-  const resetData = () => {
-    setErrorAcknow(undefined);
-    setSendMessage('');
-  };
-
-  const acknowLedGements = error => {
-    if (error) {
-      setErrorAcknow(error);
-    }
   };
 
   const shareLocation = () => {
@@ -159,20 +158,31 @@ export const Chatapp = () => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
-      // setSendLocation(location);
       socket.emit(SOCKET_COMMIT.SEND_LOCATION, location);
     });
   };
 
-  const onCollapse = collapsed => {
+  const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed);
   };
+
+  const resetData = () => {
+    setErrorAcknow(undefined);
+    setSendMessage('');
+  };
+
+  const acknowLedGements = (error: any) => {
+    if (error) {
+      setErrorAcknow(error);
+    }
+  };
+
   const renderMessage = () => {
-    if (_.isEmpty(receiverArrayMessage) && !receiverArrayMessage.length) {
+    if (_.isEmpty(listMessages) && !listMessages.length) {
       return null;
     }
-    if (!_.isEmpty(receiverArrayMessage) && receiverArrayMessage.length) {
-      return receiverArrayMessage.map((row, idx) => {
+    if (!_.isEmpty(listMessages) && listMessages.length) {
+      return listMessages.map((row, idx) => {
         if (!_.isEmpty(row.account) && row.account !== account) {
           return (
             <div className="member_chat" key={idx}>
@@ -226,7 +236,14 @@ export const Chatapp = () => {
           <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
             {!_.isEmpty(userList) && userList.length ? (
               userList.map((row, idx) => {
-                return <Menu.Item key={idx}>{row.account}</Menu.Item>;
+                return (
+                  <Menu.Item key={idx} className="subMenu">
+                    <Avatar size={20} className="bg_green">
+                      {AppHelper.convertFullName(row.fullName)}
+                    </Avatar>
+                    <span className="account">{row.fullName}</span>
+                  </Menu.Item>
+                );
               })
             ) : (
               <Menu.Item>Không có thành viên</Menu.Item>
@@ -238,7 +255,11 @@ export const Chatapp = () => {
         <Header className="site_layout_background">
           <Breadcrumb className="avatar">
             <Breadcrumb.Item>
-              <Avatar className="bg_green" icon={<UserOutlined />} />
+              <Avatar className="bg_green">
+                <Avatar className="bg_green">
+                  {AppHelper.convertFullName(fullName)}
+                </Avatar>
+              </Avatar>
               <span className="account">{fullName}</span>
             </Breadcrumb.Item>
           </Breadcrumb>
@@ -259,6 +280,7 @@ export const Chatapp = () => {
                       color: 'rgba(0,0,0,.45)',
                       marginRight: '10px',
                     }}
+                    onClick={onSendMessage}
                   />
                 </Tooltip>
                 <Tooltip title="Share Location">
