@@ -31,6 +31,7 @@ import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
+import { format } from 'timeago.js';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -41,10 +42,7 @@ export const Chatapp = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const local = new LocalStorageService();
-  const fullName = local.getItem('_fullName');
-  const account = local.getItem('_account');
-  const uid = local.getItem('_id');
-  const token = local.getItem('_token');
+  const infoUser = local.getItem('_info');
   useInjectReducer({
     key: ListSlice.sliceKey,
     reducer: ListSlice.reducer,
@@ -61,15 +59,6 @@ export const Chatapp = () => {
   const [userList, setUserList] = useState<any[]>([]);
 
   useEffect(() => {
-    if (
-      _.isEmpty(fullName) &&
-      _.isEmpty(account) &&
-      _.isEmpty(uid) &&
-      _.isEmpty(token)
-    ) {
-      openNotifi(400, 'Vui lòng đăng nhập');
-      return history.push('/');
-    }
     dispatch(ListSlice.actions.getListUsers());
     dispatch(ListSlice.actions.getListMessages());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
@@ -104,29 +93,29 @@ export const Chatapp = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
-    const room = 'CHAT_APP';
-    socket = io(PORT_SOCKET, { transports: ['websocket'] });
-    // join room
-    socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
-    socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
-      openNotifi(200, message);
-    });
-    // render list member
-    socket.on(SOCKET_COMMIT.SEND_LIST_USERS, (listUser: any[]) => {
-      console.log(listUser);
-    });
-    socket.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (listMessages: any[]) => {
-      setListMessages(listMessages);
-    });
-    socket.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
-      openNotifi(200, message);
-      return () => {
-        socket.disconnect();
-      };
-    });
-  }, []);
+  // useEffect(() => {
+  //   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
+  //   const room = 'CHAT_APP';
+  //   socket = io(PORT_SOCKET, { transports: ['websocket'] });
+  //   // join room
+  //   socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
+  //   socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
+  //     openNotifi(200, message);
+  //   });
+  //   // render list member
+  //   socket.on(SOCKET_COMMIT.SEND_LIST_USERS, (listUser: any[]) => {
+  //     console.log(listUser);
+  //   });
+  //   socket.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (listMessages: any[]) => {
+  //     setListMessages(listMessages);
+  //   });
+  //   socket.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
+  //     openNotifi(200, message);
+  //     return () => {
+  //       socket.disconnect();
+  //     };
+  //   });
+  // }, []);
 
   useEffect(() => {
     let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
@@ -143,10 +132,10 @@ export const Chatapp = () => {
 
   const onSendMessage = (event: any) => {
     event.preventDefault();
-    if (sendMessage) {
-      socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
-    }
-    return resetData();
+    // if (sendMessage) {
+    //   socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
+    // }
+    // return resetData();
   };
 
   const shareLocation = () => {
@@ -158,7 +147,7 @@ export const Chatapp = () => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
-      socket.emit(SOCKET_COMMIT.SEND_LOCATION, location);
+      // socket.emit(SOCKET_COMMIT.SEND_LOCATION, location);
     });
   };
 
@@ -183,7 +172,10 @@ export const Chatapp = () => {
     }
     if (!_.isEmpty(listMessages) && listMessages.length) {
       return listMessages.map((row, idx) => {
-        if (!_.isEmpty(row.account) && row.account !== account) {
+        if (
+          !_.isEmpty(row.account) &&
+          row.account !== _.get(infoUser, 'account')
+        ) {
           return (
             <div className="member_chat" key={idx}>
               <Avatar className="bg_green avatar_img">
@@ -193,11 +185,9 @@ export const Chatapp = () => {
               </Avatar>
               <div className="message_box">
                 <p className="message_text">
-                  {!_.isEmpty(row.message) ? row.message : ''}
+                  {!_.isEmpty(row.text) ? row.text : ''}
                 </p>
-                <span className="time">
-                  {AppHelper.formmatDateTimeChat(row.createAt)}
-                </span>
+                <span className="time">{format(row.createdAt)}</span>
               </div>
             </div>
           );
@@ -206,11 +196,9 @@ export const Chatapp = () => {
           <div className="my_chat" key={idx}>
             <div className="message_box">
               <p className="message_text">
-                {!_.isEmpty(row.message) ? row.message : ''}
+                {!_.isEmpty(row.text) ? row.text : ''}
               </p>
-              <span className="time">
-                {AppHelper.formmatDateTimeChat(row.createAt)}
-              </span>
+              <span className="time">{format(row.createdAt)}</span>
             </div>
             <Avatar className="bg_green avatar_img">
               {!_.isEmpty(row.fullName)
@@ -235,18 +223,16 @@ export const Chatapp = () => {
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
             {!_.isEmpty(userList) && userList.length ? (
-              userList.map((row, idx) => {
-                return (
-                  <Menu.Item key={idx} className="subMenu">
-                    <Avatar size={20} className="bg_green">
-                      {AppHelper.convertFullName(row.fullName)}
-                    </Avatar>
-                    <span className="account">{row.fullName}</span>
-                  </Menu.Item>
-                );
-              })
+              userList.map((row, idx) => (
+                <Menu.Item key={idx} className="subMenu">
+                  <Avatar size={20} className="bg_green">
+                    {AppHelper.convertFullName(row.fullName)}
+                  </Avatar>
+                  <span className="account">{row.fullName}</span>
+                </Menu.Item>
+              ))
             ) : (
-              <Menu.Item>Không có thành viên</Menu.Item>
+              <Menu.Item key="sub2">Không có thành viên</Menu.Item>
             )}
           </SubMenu>
         </Menu>
@@ -257,10 +243,10 @@ export const Chatapp = () => {
             <Breadcrumb.Item>
               <Avatar className="bg_green">
                 <Avatar className="bg_green">
-                  {AppHelper.convertFullName(fullName)}
+                  {AppHelper.convertFullName(_.get(infoUser, 'fullName'))}
                 </Avatar>
               </Avatar>
-              <span className="account">{fullName}</span>
+              <span className="account">{_.get(infoUser, 'fullName')}</span>
             </Breadcrumb.Item>
           </Breadcrumb>
         </Header>

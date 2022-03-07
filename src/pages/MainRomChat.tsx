@@ -28,7 +28,7 @@ export const MainRomChat = () => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
         case AuthSlice.actions.sigInUserSuccess.type:
-          local.setLocalUser(_.get(payload, 'info'));
+          local.setInfoUser(_.get(payload, 'info'));
           openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
           history.push('/chatApp');
           break;
