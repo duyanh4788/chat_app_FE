@@ -107,7 +107,7 @@ export const Chatapp = () => {
   useEffect(() => {
     const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
     const room = 'CHAT_APP';
-    socket = io(PORT_SOCKET);
+    socket = io(PORT_SOCKET, { transports: ['websocket'] });
     // join room
     socket.emit(SOCKET_COMMIT.JOIN_ROOM, { room, fullName, account, uid });
     socket.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
