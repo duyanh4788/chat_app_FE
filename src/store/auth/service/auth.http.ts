@@ -1,4 +1,5 @@
 import { AuthApi } from 'store/auth/constants/auth.constant';
+import { SignInModel, SignUpModel } from 'store/model/Auth.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
@@ -8,11 +9,31 @@ export class AuthHttp {
     this.request = new HttpRequest(endPoint).request;
   }
 
-  public signInUser = (data: any): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_IN, data);
+  private configSingIn = (user: SignInModel) => {
+    return {
+      account: user.account,
+      passWord: user.passWord,
+    };
   };
 
-  public signUpUser = (data: any): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_UP, data);
+  private configSignUp = (user: SignUpModel) => {
+    return {
+      account: user.account,
+      passWord: user.passWord,
+      fullName: user.fullName,
+      email: user.email,
+    };
+  };
+
+  public signInUser = (data: SignInModel): Promise<any> => {
+    return this.request.post(AuthApi.SIGN_IN, {
+      ...this.configSingIn(data),
+    });
+  };
+
+  public signUpUser = (data: SignUpModel): Promise<any> => {
+    return this.request.post(AuthApi.SIGN_UP, {
+      ...this.configSignUp(data),
+    });
   };
 }

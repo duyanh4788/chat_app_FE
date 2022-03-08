@@ -5,10 +5,10 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import * as _ from 'lodash';
-import * as ListSlice from 'store/list/shared/slice';
-import * as ListConst from 'store/list/constants/list.constant';
-import * as ListSelector from 'store/list/shared/selectors';
-import { ListSaga } from 'store/list/shared/saga';
+import * as ChatAppSlice from 'store/chatApp/shared/slice';
+import * as ChatAppConst from 'store/chatApp/constants/chatapp.constant';
+import * as ChatAppSelector from 'store/chatApp/shared/selectors';
+import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useHistory } from 'react-router-dom';
 import {
   useInjectReducer,
@@ -44,38 +44,45 @@ export const Chatapp = () => {
   const local = new LocalStorageService();
   const infoUser = local.getItem('_info');
   useInjectReducer({
-    key: ListSlice.sliceKey,
-    reducer: ListSlice.reducer,
+    key: ChatAppSlice.sliceKey,
+    reducer: ChatAppSlice.reducer,
   });
   useInjectSaga({
-    key: ListSlice.sliceKey,
-    saga: ListSaga,
+    key: ChatAppSlice.sliceKey,
+    saga: ChatAppSaga,
   });
-  const loading = useSelector(ListSelector.selectLoading);
+  const loading = useSelector(ChatAppSelector.selectLoading);
+  const convertStationMyFriend = useSelector(
+    ChatAppSelector.selectConvertStationMyFriend,
+  );
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [listMessages, setListMessages] = useState<any[]>([]);
   const [userList, setUserList] = useState<any[]>([]);
+  const [myFriend, setMyFriend] = useState<any>(null);
 
   useEffect(() => {
-    dispatch(ListSlice.actions.getListUsers());
-    dispatch(ListSlice.actions.getListMessages());
+    if (_.isEmpty(infoUser)) {
+      openNotifi(400, 'Vui lòng đăng nhập');
+      return history.push('/');
+    }
+    dispatch(ChatAppSlice.actions.getListUsers());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
-        case ListSlice.actions.getListUsersSuccess.type:
+        case ChatAppSlice.actions.getListUsersSuccess.type:
           if (!_.isEmpty(payload) && payload.data.length) {
             setUserList(payload.data);
           }
           break;
-        case ListSlice.actions.getListUsersFail.type:
+        case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
           break;
-        case ListSlice.actions.getListMessagesSuccess.type:
+        case ChatAppSlice.actions.getListMessagesSuccess.type:
           setListMessages(payload.data);
           break;
-        case ListSlice.actions.getListMessagesFail.type:
+        case ChatAppSlice.actions.getListMessagesFail.type:
           openNotifi(400, payload);
           break;
         default:
@@ -84,8 +91,7 @@ export const Chatapp = () => {
     });
     return () => {
       storeSub$();
-      dispatch(ListSlice.actions.clearListMessage());
-      dispatch(ListSlice.actions.clearListUser());
+      dispatch(ChatAppSlice.actions.clearData());
       setListMessages([]);
       setUserList([]);
       setSendMessage(undefined);
@@ -132,10 +138,15 @@ export const Chatapp = () => {
 
   const onSendMessage = (event: any) => {
     event.preventDefault();
-    // if (sendMessage) {
-    //   socket.emit(SOCKET_COMMIT.SEND_MESSAGE, sendMessage, acknowLedGements);
-    // }
-    // return resetData();
+    const data = {
+      senderId: _.get(infoUser, 'id'),
+      senderName: _.get(infoUser, 'fullName'),
+      reciverId: _.get(myFriend, '_id'),
+      reciverName: _.get(myFriend, 'fullName'),
+      text: sendMessage,
+    };
+    dispatch(ChatAppSlice.actions.postNewMessage(data));
+    return resetData();
   };
 
   const shareLocation = () => {
@@ -166,45 +177,56 @@ export const Chatapp = () => {
     }
   };
 
+  const handleSelectUser = (friend: any) => {
+    setMyFriend(friend);
+    dispatch(
+      ChatAppSlice.actions.saveConvertStation({
+        reciverId: _.get(friend, '_id'),
+        senderId: _.get(infoUser, 'id'),
+      }),
+    );
+  };
+
   const renderMessage = () => {
-    if (_.isEmpty(listMessages) && !listMessages.length) {
-      return null;
+    if (_.isEmpty(convertStationMyFriend) && !convertStationMyFriend.length) {
+      return (
+        <div className="box_chat_empty">
+          <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
+        </div>
+      );
     }
-    if (!_.isEmpty(listMessages) && listMessages.length) {
-      return listMessages.map((row, idx) => {
-        if (
-          !_.isEmpty(row.account) &&
-          row.account !== _.get(infoUser, 'account')
-        ) {
+    if (!_.isEmpty(convertStationMyFriend) && convertStationMyFriend.length) {
+      return convertStationMyFriend.map((row, idx) => {
+        if (row.senderId === _.get(infoUser, 'id')) {
           return (
-            <div className="member_chat" key={idx}>
-              <Avatar className="bg_green avatar_img">
-                {!_.isEmpty(row.fullName)
-                  ? AppHelper.convertFullName(row.fullName)
-                  : ''}
-              </Avatar>
+            <div className="my_chat" key={idx}>
               <div className="message_box">
                 <p className="message_text">
                   {!_.isEmpty(row.text) ? row.text : ''}
                 </p>
                 <span className="time">{format(row.createdAt)}</span>
               </div>
+              <Avatar className="bg_green avatar_img">
+                {!_.isEmpty(row.senderName)
+                  ? AppHelper.convertFullName(row.senderName)
+                  : ''}
+              </Avatar>
             </div>
           );
         }
         return (
-          <div className="my_chat" key={idx}>
+          <div className="member_chat" key={idx}>
+            <Avatar className="bg_green avatar_img">
+              {!_.isEmpty(row.reciverName)
+                ? AppHelper.convertFullName(row.reciverName)
+                : ''}
+            </Avatar>
             <div className="message_box">
               <p className="message_text">
                 {!_.isEmpty(row.text) ? row.text : ''}
               </p>
               <span className="time">{format(row.createdAt)}</span>
             </div>
-            <Avatar className="bg_green avatar_img">
-              {!_.isEmpty(row.fullName)
-                ? AppHelper.convertFullName(row.fullName)
-                : ''}
-            </Avatar>
           </div>
         );
       });
@@ -221,16 +243,22 @@ export const Chatapp = () => {
               Come Back
             </Link>
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="Member">
+          <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
             {!_.isEmpty(userList) && userList.length ? (
-              userList.map((row, idx) => (
-                <Menu.Item key={idx} className="subMenu">
-                  <Avatar size={20} className="bg_green">
-                    {AppHelper.convertFullName(row.fullName)}
-                  </Avatar>
-                  <span className="account">{row.fullName}</span>
-                </Menu.Item>
-              ))
+              userList
+                .filter(item => item._id !== _.get(infoUser, 'id'))
+                .map((row, idx) => (
+                  <Menu.Item
+                    key={idx}
+                    className="subMenu"
+                    onClick={() => handleSelectUser(row)}
+                  >
+                    <Avatar size={20} className="bg_green">
+                      {AppHelper.convertFullName(row.fullName)}
+                    </Avatar>
+                    <span className="account">{row.fullName}</span>
+                  </Menu.Item>
+                ))
             ) : (
               <Menu.Item key="sub2">Không có thành viên</Menu.Item>
             )}
@@ -250,32 +278,44 @@ export const Chatapp = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         </Header>
-        <Content className="site_layout">{renderMessage()}</Content>
-        <div className="form_chat">
-          <Input
-            placeholder="Enter Message"
-            value={sendMessage}
-            onChange={e => setSendMessage(e.target.value)}
-            onPressEnter={onSendMessage}
-            suffix={
-              <React.Fragment>
-                <Tooltip title="Send Message">
-                  <SendOutlined
-                    type="info-circle"
-                    style={{
-                      color: 'rgba(0,0,0,.45)',
-                      marginRight: '10px',
-                    }}
-                    onClick={onSendMessage}
-                  />
-                </Tooltip>
-                <Tooltip title="Share Location">
-                  <HeatMapOutlined type="info-circle" onClick={shareLocation} />
-                </Tooltip>
-              </React.Fragment>
-            }
-          />
-        </div>
+        {convertStationMyFriend && convertStationMyFriend.length >= 0 ? (
+          <React.Fragment>
+            <Content className="site_layout">{renderMessage()}</Content>
+            <div className="form_chat">
+              <Input
+                placeholder="Enter Message"
+                value={sendMessage}
+                onChange={e => setSendMessage(e.target.value)}
+                onPressEnter={onSendMessage}
+                suffix={
+                  <React.Fragment>
+                    <Tooltip title="Send Message">
+                      <SendOutlined
+                        type="info-circle"
+                        style={{
+                          color: 'rgba(0,0,0,.45)',
+                          marginRight: '10px',
+                        }}
+                        onClick={onSendMessage}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Share Location">
+                      <HeatMapOutlined
+                        type="info-circle"
+                        onClick={shareLocation}
+                      />
+                    </Tooltip>
+                  </React.Fragment>
+                }
+              />
+            </div>
+          </React.Fragment>
+        ) : (
+          <Content className="site_layout_empty">
+            <span>Well Come Chat App</span>
+          </Content>
+        )}
+
         <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
       </Layout>
     </Layout>

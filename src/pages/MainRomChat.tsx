@@ -20,26 +20,31 @@ const { TabPane } = Tabs;
 export const MainRomChat = () => {
   const history = useHistory();
   const local = new LocalStorageService();
+  const infoUser = local.getItem('_info');
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
 
   useEffect(() => {
+    if (!_.isEmpty(infoUser)) {
+      openNotifi(200, `Hello ${_.get(infoUser, 'fullName')}`);
+      return history.push('/chatApp');
+    }
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
+        case AuthSlice.actions.signUpUserSuccess.type:
+          setTabsPanel('1');
+          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
+          break;
         case AuthSlice.actions.sigInUserSuccess.type:
           local.setInfoUser(_.get(payload, 'info'));
           openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
           history.push('/chatApp');
           break;
-        case AuthSlice.actions.sigInUserFail.type:
+        case AuthSlice.actions.signUpUserFail.type:
           openNotifi(400, payload);
           break;
-        case AuthSlice.actions.signUpUserSuccess.type:
-          setTabsPanel('1');
-          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
-          break;
-        case AuthSlice.actions.signUpUserFail.type:
+        case AuthSlice.actions.sigInUserFail.type:
           openNotifi(400, payload);
           break;
         default:
