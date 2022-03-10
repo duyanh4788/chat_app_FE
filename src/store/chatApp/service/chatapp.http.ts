@@ -11,10 +11,8 @@ export class ChatAppHttp {
 
   private configNewMessage = (message: MessagesModel) => {
     return {
+      conversationId: message.conversationId,
       senderId: message.senderId,
-      senderName: message.senderName,
-      reciverId: message.reciverId,
-      reciverName: message.reciverName,
       text: message.text,
     };
   };
@@ -29,17 +27,25 @@ export class ChatAppHttp {
   public getListUsers = (): Promise<any> =>
     this.request.get(ChatAppApi.LIST_USER);
 
+  public getListMessages = (sernderId: any): Promise<any> =>
+    this.request.post(ChatAppApi.LIST_MESSAGE, sernderId);
+
   public postNewMessage = (data: MessagesModel): Promise<any> =>
     this.request.post(ChatAppApi.NEW_MESSAGE, {
       ...this.configNewMessage(data),
     });
 
+  public saveConvertStation = (data: ConvertStation): Promise<any> =>
+    this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
+      ...this.configConverStation(data),
+    });
+
+  // ======================================================= //
+
   public convertStationMyFriend = (data: MessagesModel): Promise<any> =>
     this.request.post(ChatAppApi.CONVERT_STATION_MY_FRIEND, {
       ...this.configNewMessage(data),
     });
-
-  // ======================================================= //
 
   public getUserById = (id: any): Promise<any> =>
     this.request.get(ChatAppApi.GET_USER_BY_ID + id);
@@ -47,16 +53,8 @@ export class ChatAppHttp {
   public getFriendById = (id: any): Promise<any> =>
     this.request.get(ChatAppApi.GET_FRIEND_BY_ID + id);
 
-  public getListMessages = (): Promise<any> =>
-    this.request.get(ChatAppApi.LIST_MESSAGE);
-
-  public saveConvertStation = (data: ConvertStation): Promise<any> =>
-    this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
-      ...this.configConverStation(data),
-    });
-
   public convertStationByUserId = (id: any): Promise<any> =>
-    this.request.get(ChatAppApi.CONVERT_STATION_BY_USER_ID + id);
+    this.request.post(ChatAppApi.CONVERT_STATION_BY_USER_ID, id);
 
   public findTwoUserById = (id: any): Promise<any> =>
     this.request.get(

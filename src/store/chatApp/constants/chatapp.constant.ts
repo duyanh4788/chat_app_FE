@@ -5,9 +5,9 @@ export const ChatAppApi = {
 
   GET_USER_BY_ID: '/userById/',
   GET_FRIEND_BY_ID: '/friendById/',
-  LIST_MESSAGE: '/listMessage',
+  LIST_MESSAGE: '/getListMessages',
   SAVE_CONVERT_STATION: '/saveConvertStation',
-  CONVERT_STATION_BY_USER_ID: '/convertStationByUserId',
+  CONVERT_STATION_BY_USER_ID: '/converStationByUserId',
   FIRST_USER_ID: '/firstUserId=?',
   SECONDARY_USER_ID: '/secondaryUserId=?',
 };

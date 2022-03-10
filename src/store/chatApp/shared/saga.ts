@@ -15,6 +15,16 @@ export function* getListUsers(api, action) {
   }
 }
 
+export function* getListMessages(api, action) {
+  const resPonse = yield call(api.getListMessages, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.getListMessagesSuccess(data));
+  } catch (error) {
+    yield put(actions.getListMessagesFail(_.get(error, 'message')));
+  }
+}
+
 export function* postNewMessage(api, action) {
   const resPonse = yield call(api.postNewMessage, action.payload);
   try {
@@ -25,6 +35,18 @@ export function* postNewMessage(api, action) {
   }
 }
 
+export function* saveConvertStation(api, action) {
+  const resPonse = yield call(api.saveConvertStation, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.saveConvertStationSuccess(data));
+  } catch (error) {
+    yield put(actions.saveConvertStationFail(_.get(error, 'message')));
+  }
+}
+
+// ======================================================= //
+
 export function* convertStationMyFriend(api, action) {
   const resPonse = yield call(api.convertStationMyFriend, action.payload);
   try {
@@ -34,8 +56,6 @@ export function* convertStationMyFriend(api, action) {
     yield put(actions.convertStationMyFriendFail(_.get(error, 'message')));
   }
 }
-
-// ======================================================= //
 
 export function* getUserById(api, action) {
   const resPonse = yield call(api.getUserById, action.payload);
@@ -57,16 +77,6 @@ export function* getFriendById(api, action) {
   }
 }
 
-export function* saveConvertStation(api, action) {
-  const resPonse = yield call(api.saveConvertStation, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.saveConvertStationSuccess(data));
-  } catch (error) {
-    yield put(actions.saveConvertStationFail(_.get(error, 'message')));
-  }
-}
-
 export function* convertStationByUserId(api, action) {
   const resPonse = yield call(api.convertStationByUserId, action.payload);
   try {
@@ -84,16 +94,6 @@ export function* findTwoUserById(api, action) {
     yield put(actions.findTwoUserByIdSuccess(data));
   } catch (error) {
     yield put(actions.findTwoUserByIdFail(_.get(error, 'message')));
-  }
-}
-
-export function* getListMessages(api, action) {
-  const resPonse = yield call(api.getListMessages, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.getListMessagesSuccess(data));
-  } catch (error) {
-    yield put(actions.getListMessagesFail(_.get(error, 'message')));
   }
 }
 

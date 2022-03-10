@@ -47,5 +47,13 @@ export function configResponse(response: ApiResponse<any>): any {
       throw new Error(response.problem);
     }
   }
-  return response.data;
+  const {
+    data: { data, code, success, message },
+  } = response;
+  if ((code === 400 && !success) || code === 500 || !success) {
+    throw new Error(message);
+  }
+  if (code === 200 && success) {
+    return data;
+  }
 }

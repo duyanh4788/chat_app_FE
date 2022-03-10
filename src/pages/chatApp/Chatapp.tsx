@@ -52,14 +52,12 @@ export const Chatapp = () => {
     saga: ChatAppSaga,
   });
   const loading = useSelector(ChatAppSelector.selectLoading);
-  const convertStationMyFriend = useSelector(
-    ChatAppSelector.selectConvertStationMyFriend,
-  );
+  const convertStation = useSelector(ChatAppSelector.selectConvertStation);
+  const listUsers = useSelector(ChatAppSelector.selectListUsers);
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [listMessages, setListMessages] = useState<any[]>([]);
-  const [userList, setUserList] = useState<any[]>([]);
   const [myFriend, setMyFriend] = useState<any>(null);
 
   useEffect(() => {
@@ -72,15 +70,13 @@ export const Chatapp = () => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
         case ChatAppSlice.actions.getListUsersSuccess.type:
-          if (!_.isEmpty(payload) && payload.data.length) {
-            setUserList(payload.data);
-          }
           break;
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
           break;
         case ChatAppSlice.actions.getListMessagesSuccess.type:
-          setListMessages(payload.data);
+          console.log(payload);
+          setListMessages(payload);
           break;
         case ChatAppSlice.actions.getListMessagesFail.type:
           openNotifi(400, payload);
@@ -93,11 +89,20 @@ export const Chatapp = () => {
       storeSub$();
       dispatch(ChatAppSlice.actions.clearData());
       setListMessages([]);
-      setUserList([]);
       setSendMessage(undefined);
       setErrorAcknow(undefined);
     };
   }, []);
+
+  useEffect(() => {
+    if (!_.isEmpty(convertStation)) {
+      dispatch(
+        ChatAppSlice.actions.getListMessages({
+          conversationId: _.get(convertStation, '_id'),
+        }),
+      );
+    }
+  }, [convertStation]);
 
   // useEffect(() => {
   //   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
@@ -139,10 +144,8 @@ export const Chatapp = () => {
   const onSendMessage = (event: any) => {
     event.preventDefault();
     const data = {
+      conversationId: _.get(convertStation, '_id'),
       senderId: _.get(infoUser, 'id'),
-      senderName: _.get(infoUser, 'fullName'),
-      reciverId: _.get(myFriend, '_id'),
-      reciverName: _.get(myFriend, 'fullName'),
       text: sendMessage,
     };
     dispatch(ChatAppSlice.actions.postNewMessage(data));
@@ -188,15 +191,15 @@ export const Chatapp = () => {
   };
 
   const renderMessage = () => {
-    if (_.isEmpty(convertStationMyFriend) && !convertStationMyFriend.length) {
-      return (
-        <div className="box_chat_empty">
-          <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
-        </div>
-      );
-    }
-    if (!_.isEmpty(convertStationMyFriend) && convertStationMyFriend.length) {
-      return convertStationMyFriend.map((row, idx) => {
+    // if (_.isEmpty(convertStation) && !convertStation.length) {
+    //   return (
+    //     <div className="box_chat_empty">
+    //       <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
+    //     </div>
+    //   );
+    // }
+    if (!_.isEmpty(convertStation) && convertStation.length) {
+      return convertStation.map((row, idx) => {
         if (row.senderId === _.get(infoUser, 'id')) {
           return (
             <div className="my_chat" key={idx}>
@@ -238,14 +241,14 @@ export const Chatapp = () => {
       {loading && <AppLoading loading />}
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key={userList.length} icon={<RollbackOutlined />}>
+          <Menu.Item key="sub1" icon={<RollbackOutlined />}>
             <Link to="/" onClick={() => localStorage.clear()}>
               Come Back
             </Link>
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
-            {!_.isEmpty(userList) && userList.length ? (
-              userList
+          <SubMenu key="sub2" icon={<UserOutlined />} title="My Friends">
+            {!_.isEmpty(listUsers) && listUsers.length ? (
+              listUsers
                 .filter(item => item._id !== _.get(infoUser, 'id'))
                 .map((row, idx) => (
                   <Menu.Item
@@ -260,7 +263,7 @@ export const Chatapp = () => {
                   </Menu.Item>
                 ))
             ) : (
-              <Menu.Item key="sub2">Không có thành viên</Menu.Item>
+              <Menu.Item key="sub3">Không có thành viên</Menu.Item>
             )}
           </SubMenu>
         </Menu>
@@ -278,7 +281,9 @@ export const Chatapp = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         </Header>
-        {convertStationMyFriend && convertStationMyFriend.length >= 0 ? (
+        {convertStation &&
+        convertStation._id &&
+        convertStation.members.length ? (
           <React.Fragment>
             <Content className="site_layout">{renderMessage()}</Content>
             <div className="form_chat">

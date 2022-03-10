@@ -6,6 +6,7 @@ export interface ChatAppState {
   userById: any;
   friendById: any;
   listMessages: any;
+  convertStation: any;
   convertStationMyFriend: any;
   convertStationByUserId: any;
   findTwoUserById: any;
@@ -14,8 +15,9 @@ export interface ChatAppState {
 export const initialState: ChatAppState = {
   loading: false,
   listUsers: {},
-  convertStationMyFriend: null,
+  convertStation: null,
 
+  convertStationMyFriend: null,
   userById: {},
   friendById: {},
   listMessages: {},
@@ -38,6 +40,17 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
+    getListMessages(state, action) {
+      state.loading = true;
+    },
+    getListMessagesSuccess(state, action) {
+      state.loading = false;
+      state.listMessages = action.payload;
+    },
+    getListMessagesFail(state, action) {
+      state.loading = false;
+    },
+
     postNewMessage(state, action) {
       state.loading = true;
     },
@@ -48,18 +61,29 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
+    saveConvertStation(state, action) {
+      state.loading = true;
+    },
+    saveConvertStationSuccess(state, action) {
+      state.loading = false;
+      state.convertStation = action.payload;
+    },
+    saveConvertStationFail(state, action) {
+      state.loading = false;
+    },
+
+    // ======================================================= //
+
     convertStationMyFriend(state, action) {
       state.loading = true;
     },
     convertStationMyFriendSuccess(state, action) {
       state.loading = false;
-      state.convertStationMyFriend = action.payload.data;
+      state.convertStationMyFriend = action.payload;
     },
     convertStationMyFriendFail(state, action) {
       state.loading = false;
     },
-
-    // ======================================================= //
 
     getUserById(state) {
       state.loading = true;
@@ -83,17 +107,7 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
-    saveConvertStation(state, action) {
-      state.loading = true;
-    },
-    saveConvertStationSuccess(state, action) {
-      state.loading = false;
-    },
-    saveConvertStationFail(state, action) {
-      state.loading = false;
-    },
-
-    convertStationByUserId(state) {
+    convertStationByUserId(state, actions) {
       state.loading = true;
     },
     convertStationByUserIdSuccess(state, action) {
@@ -112,17 +126,6 @@ const ChatAppSlice = createSlice({
       state.findTwoUserById = action.payload;
     },
     findTwoUserByIdFail(state, action) {
-      state.loading = false;
-    },
-
-    getListMessages(state) {
-      state.loading = true;
-    },
-    getListMessagesSuccess(state, action) {
-      state.loading = false;
-      state.listMessages = action.payload;
-    },
-    getListMessagesFail(state, action) {
       state.loading = false;
     },
 
