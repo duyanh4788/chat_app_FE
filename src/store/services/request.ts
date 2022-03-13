@@ -16,7 +16,8 @@ export class HttpRequest {
       },
       timeout: 25000,
     });
-    const token = this.localService.getItem(LocalStorageKey.token);
+    const infoUser = this.localService.getItem(LocalStorageKey.info);
+    const token = get(infoUser, 'token');
     if (token) {
       this.request.setHeaders({
         Authorization: token,
@@ -47,9 +48,7 @@ export function configResponse(response: ApiResponse<any>): any {
       throw new Error(response.problem);
     }
   }
-  const {
-    data: { data, code, success, message },
-  } = response;
+  const { data, code, success, message } = response.data;
   if ((code === 400 && !success) || code === 500 || !success) {
     throw new Error(message);
   }

@@ -3,26 +3,15 @@ import { createSlice } from 'store/core/@reduxjs/toolkit';
 export interface ChatAppState {
   loading: boolean;
   listUsers: any;
-  userById: any;
-  friendById: any;
-  listMessages: any;
   convertStation: any;
-  convertStationMyFriend: any;
-  convertStationByUserId: any;
-  findTwoUserById: any;
+  listMessages: any;
 }
 
 export const initialState: ChatAppState = {
   loading: false,
   listUsers: {},
   convertStation: null,
-
-  convertStationMyFriend: null,
-  userById: {},
-  friendById: {},
   listMessages: {},
-  convertStationByUserId: {},
-  findTwoUserById: {},
 };
 
 const ChatAppSlice = createSlice({
@@ -72,71 +61,31 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
-    // ======================================================= //
-
-    convertStationMyFriend(state, action) {
+    changeStatusOnline(state, action) {
       state.loading = true;
     },
-    convertStationMyFriendSuccess(state, action) {
+    changeStatusOnlineSuccess(state, action) {
       state.loading = false;
-      state.convertStationMyFriend = action.payload;
     },
-    convertStationMyFriendFail(state, action) {
+    changeStatusOnlineFail(state, action) {
       state.loading = false;
     },
 
-    getUserById(state) {
+    changeStatusoffline(state, action) {
       state.loading = true;
     },
-    getUserByIdSuccess(state, action) {
-      state.loading = false;
-      state.userById = action.payload;
-    },
-    getUserByIdFail(state, action) {
+    changeStatusofflineSuccess(state, action) {
       state.loading = false;
     },
-
-    getFriendById(state) {
-      state.loading = true;
-    },
-    getFriendByIdSuccess(state, action) {
-      state.loading = false;
-      state.friendById = action.payload;
-    },
-    getFriendByIdFail(state, action) {
-      state.loading = false;
-    },
-
-    convertStationByUserId(state, actions) {
-      state.loading = true;
-    },
-    convertStationByUserIdSuccess(state, action) {
-      state.loading = false;
-      state.convertStationByUserId = action.payload;
-    },
-    convertStationByUserIdFail(state, action) {
-      state.loading = false;
-    },
-
-    findTwoUserById(state) {
-      state.loading = true;
-    },
-    findTwoUserByIdSuccess(state, action) {
-      state.loading = false;
-      state.findTwoUserById = action.payload;
-    },
-    findTwoUserByIdFail(state, action) {
+    changeStatusofflineFail(state, action) {
       state.loading = false;
     },
 
     clearData(state) {
+      state.loading = false;
       state.listUsers = {};
+      state.convertStation = {};
       state.listMessages = {};
-      state.userById = {};
-      state.friendById = {};
-      state.convertStationMyFriend = {};
-      state.convertStationByUserId = {};
-      state.findTwoUserById = {};
     },
   },
 });

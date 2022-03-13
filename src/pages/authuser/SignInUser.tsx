@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as _ from 'lodash';
 import * as AuthSlice from 'store/auth/shared/slice';
@@ -24,6 +24,12 @@ export function SignInUser() {
   });
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    return () => {
+      form.resetFields();
+    };
+  }, []);
 
   const onFinish = (values: any) => {
     dispatch(AuthSlice.actions.sigInUser(values));

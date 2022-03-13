@@ -7,18 +7,49 @@
   height: 100vh;
 }
 
-.ant-layout .site_layout_background .avatar {
+.ant-layout .sider_btn {
+  padding: 10px;
+}
+
+.ant-layout .sider_btn .btn_back {
+  background-color: #001529;
+  color: #ffff;
+  outline: none;
+}
+
+.ant-layout .sider_btn .btn_back a {
+  color: #fff;
+  margin-left: 5px;
+}
+
+.ant-layout .site_info .avatar {
   margin: 20px 0;
 }
 
-.ant-layout .site_layout_background .avatar .bg_green {
+.ant-layout .site_info .avatar .bg_green {
   background-color: #87d068;
 }
 
-.ant-layout .site_layout_background .avatar .account {
+.ant-layout .site_info .avatar .account {
   color: #ffffff;
   font-weight: bolder;
   margin-left: 5px;
+}
+
+.ant-layout .subMenu {
+  padding: 10px !important;
+}
+
+.ant-layout .subMenu .ant-menu-title-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .ant-layout .subMenu .bg_green {
@@ -26,7 +57,7 @@
 }
 
 .ant-layout .subMenu .account {
-  font-size: 12px;
+  font-size: 13px;
   color: #ffffff;
   font-weight: bolder;
   margin-left: 5px;
@@ -183,6 +214,10 @@
   color: #e0dcdc;
   cursor: default;
   font-weight: bolder;
+}
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #e5ebe73b !important;
 }
 
 .site_layout::-webkit-scrollbar {

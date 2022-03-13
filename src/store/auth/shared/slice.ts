@@ -31,7 +31,7 @@ const AuthSlice = createSlice({
     },
     signUpUserSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.success;
+      state.success = action.payload;
     },
     signUpUserFail(state, action) {
       state.loading = false;

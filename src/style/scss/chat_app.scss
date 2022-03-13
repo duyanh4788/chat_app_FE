@@ -4,7 +4,19 @@
   background-size: cover;
   backdrop-filter: blur(8px);
   height: 100vh;
-  .site_layout_background {
+  .sider_btn {
+    padding: 10px;
+    .btn_back {
+      background-color: #001529;
+      color: #ffff;
+      outline: none;
+      a {
+        color: #fff;
+        margin-left: 5px;
+      }
+    }
+  }
+  .site_info {
     .avatar {
       margin: 20px 0;
       .bg_green {
@@ -17,12 +29,19 @@
       }
     }
   }
+
   .subMenu {
+    padding: 10px !important;
+    .ant-menu-title-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     .bg_green {
       background-color: #87d068;
     }
     .account {
-      font-size: 12px;
+      font-size: 13px;
       color: #ffffff;
       font-weight: bolder;
       margin-left: 5px;
@@ -32,7 +51,6 @@
     padding: 20px;
     overflow: auto;
     background: #dae3d77a;
-    // border-radius: 10px;
     .member_chat {
       border-radius: 5px;
       display: flex;
@@ -143,6 +161,10 @@
     cursor: default;
     font-weight: bolder;
   }
+}
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #e5ebe73b !important;
 }
 
 .site_layout::-webkit-scrollbar {

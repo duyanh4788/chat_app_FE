@@ -8,3 +8,7 @@ export interface ConvertStation {
   senderId: string;
   reciverId: string;
 }
+
+export interface StatusUser {
+  id: string;
+}

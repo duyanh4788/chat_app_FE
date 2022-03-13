@@ -45,90 +45,47 @@ export function* saveConvertStation(api, action) {
   }
 }
 
-// ======================================================= //
-
-export function* convertStationMyFriend(api, action) {
-  const resPonse = yield call(api.convertStationMyFriend, action.payload);
+export function* changeStatusOnline(api, action) {
+  const resPonse = yield call(api.changeStatusOnline, action.payload);
   try {
     const data = yield configResponse(resPonse);
-    yield put(actions.convertStationMyFriendSuccess(data));
+    yield put(actions.changeStatusOnlineSuccess(data));
   } catch (error) {
-    yield put(actions.convertStationMyFriendFail(_.get(error, 'message')));
+    yield put(actions.changeStatusOnlineFail(_.get(error, 'message')));
   }
 }
 
-export function* getUserById(api, action) {
-  const resPonse = yield call(api.getUserById, action.payload);
+export function* changeStatusoffline(api, action) {
+  const resPonse = yield call(api.changeStatusoffline, action.payload);
   try {
     const data = yield configResponse(resPonse);
-    yield put(actions.getUserByIdSuccess(data));
+    yield put(actions.changeStatusofflineSuccess(data));
   } catch (error) {
-    yield put(actions.getUserByIdFail(_.get(error, 'message')));
-  }
-}
-
-export function* getFriendById(api, action) {
-  const resPonse = yield call(api.getFriendById, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.getFriendByIdSuccess(data));
-  } catch (error) {
-    yield put(actions.getFriendByIdFail(_.get(error, 'message')));
-  }
-}
-
-export function* convertStationByUserId(api, action) {
-  const resPonse = yield call(api.convertStationByUserId, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.convertStationByUserIdSuccess(data));
-  } catch (error) {
-    yield put(actions.convertStationByUserIdFail(_.get(error, 'message')));
-  }
-}
-
-export function* findTwoUserById(api, action) {
-  const resPonse = yield call(api.findTwoUserById, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.findTwoUserByIdSuccess(data));
-  } catch (error) {
-    yield put(actions.findTwoUserByIdFail(_.get(error, 'message')));
+    yield put(actions.changeStatusofflineFail(_.get(error, 'message')));
   }
 }
 
 export function* ChatAppSaga() {
   yield all([
-    yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
-    yield takeLatest(actions.getUserById.type, getUserById, chatApptRequest),
     yield takeLatest(
-      actions.getFriendById.type,
-      getFriendById,
+      actions.changeStatusOnline.type,
+      changeStatusOnline,
       chatApptRequest,
     ),
+    yield takeLatest(
+      actions.changeStatusoffline.type,
+      changeStatusoffline,
+      chatApptRequest,
+    ),
+    yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
     yield takeLatest(
       actions.postNewMessage.type,
       postNewMessage,
       chatApptRequest,
     ),
     yield takeLatest(
-      actions.convertStationMyFriend.type,
-      convertStationMyFriend,
-      chatApptRequest,
-    ),
-    yield takeLatest(
       actions.saveConvertStation.type,
       saveConvertStation,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.convertStationByUserId.type,
-      convertStationByUserId,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.findTwoUserById.type,
-      findTwoUserById,
       chatApptRequest,
     ),
     yield takeLatest(

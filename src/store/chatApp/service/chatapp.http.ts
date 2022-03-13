@@ -27,37 +27,22 @@ export class ChatAppHttp {
   public getListUsers = (): Promise<any> =>
     this.request.get(ChatAppApi.LIST_USER);
 
+  public saveConvertStation = (data: ConvertStation): Promise<any> =>
+    this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
+      ...this.configConverStation(data),
+    });
+
   public getListMessages = (sernderId: any): Promise<any> =>
-    this.request.post(ChatAppApi.LIST_MESSAGE, sernderId);
+    this.request.post(ChatAppApi.GET_LIST_MESSAGE, sernderId);
 
   public postNewMessage = (data: MessagesModel): Promise<any> =>
     this.request.post(ChatAppApi.NEW_MESSAGE, {
       ...this.configNewMessage(data),
     });
 
-  public saveConvertStation = (data: ConvertStation): Promise<any> =>
-    this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
-      ...this.configConverStation(data),
-    });
+  public changeStatusOnline = (id: string): Promise<any> =>
+    this.request.post(ChatAppApi.CHANGE_STATUS_ONLINE, id);
 
-  // ======================================================= //
-
-  public convertStationMyFriend = (data: MessagesModel): Promise<any> =>
-    this.request.post(ChatAppApi.CONVERT_STATION_MY_FRIEND, {
-      ...this.configNewMessage(data),
-    });
-
-  public getUserById = (id: any): Promise<any> =>
-    this.request.get(ChatAppApi.GET_USER_BY_ID + id);
-
-  public getFriendById = (id: any): Promise<any> =>
-    this.request.get(ChatAppApi.GET_FRIEND_BY_ID + id);
-
-  public convertStationByUserId = (id: any): Promise<any> =>
-    this.request.post(ChatAppApi.CONVERT_STATION_BY_USER_ID, id);
-
-  public findTwoUserById = (id: any): Promise<any> =>
-    this.request.get(
-      ChatAppApi.FIRST_USER_ID + id + ChatAppApi.SECONDARY_USER_ID + id,
-    );
+  public changeStatusoffline = (id: string): Promise<any> =>
+    this.request.post(ChatAppApi.CHANGE_STATUS_OFFLINE, id);
 }

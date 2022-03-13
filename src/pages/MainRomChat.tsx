@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
+import * as AuthConst from 'store/auth/constants/auth.constant';
 import * as _ from 'lodash';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -34,11 +35,11 @@ export const MainRomChat = () => {
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
-          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
+          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
-          local.setInfoUser(_.get(payload, 'info'));
-          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
+          local.setInfoUser(payload);
+          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
           history.push('/chatApp');
           break;
         case AuthSlice.actions.signUpUserFail.type:
