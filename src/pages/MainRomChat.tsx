@@ -61,7 +61,7 @@ export const MainRomChat = () => {
     <div className="main_form">
       {loading && <AppLoading loading />}
       <div>
-        <h1>Room Chat Lẩu Xanh</h1>
+        <h1>Chat App</h1>
         <Tabs activeKey={tabsPanel} centered onChange={e => setTabsPanel(e)}>
           <TabPane tab={<p>Đăng nhập</p>} key="1">
             <SignInUser />

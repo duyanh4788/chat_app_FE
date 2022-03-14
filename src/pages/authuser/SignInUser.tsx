@@ -37,8 +37,8 @@ export function SignInUser() {
 
   return (
     <div className="form_input form_sign_in ">
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <img src={logo} alt={logo} width={50} height={50} />
+      <div className="logo">
+        <img src={logo} alt={logo} className="logo_img" />
       </div>
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
         <Form.Item

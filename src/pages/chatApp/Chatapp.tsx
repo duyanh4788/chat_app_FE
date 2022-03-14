@@ -287,7 +287,7 @@ export const Chatapp = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{notiFyTitle}</title>
+        <title style={{ color: 'red' }}>{notiFyTitle}</title>
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}
