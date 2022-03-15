@@ -1,6 +1,7 @@
 export const AuthApi = {
   SIGN_IN: '/signIn',
   SIGN_UP: '/signUp',
+  GET_USER_BY_ID: '/getUserById/',
 };
 
 export const REPONSE_CONSTANT = {
@@ -8,6 +9,8 @@ export const REPONSE_CONSTANT = {
   SIGN_IN_FAIL: 'SIGN_IN_FAIL',
   SIGN_UP_SUCCESS: 'SIGN_UP_SUCCESS',
   SIGN_UP_FAIL: 'SIGN_UP_FAIL',
+  GET_USER_BY_ID_SUCCESS: 'GET_USER_BY_ID_SUCCESS',
+  GET_USER_BY_ID_FAIL: 'GET_USER_BY_ID_FAIL',
 };
 
 export const REPONSE_MESSAGE = {
