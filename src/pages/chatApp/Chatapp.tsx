@@ -2,14 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { io } from 'socket.io-client';
 import * as _ from 'lodash';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppConst from 'store/chatApp/constants/chatapp.constant';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
-import { useHistory } from 'react-router-dom';
 import {
   useInjectReducer,
   useInjectSaga,
@@ -28,21 +27,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { ApiRouter } from 'store/services/request.constants';
-import { LocalStorageService } from 'store/services/localStorage';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
+import { AuthContext } from 'pages/AuthContext/AuthContextApi';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 export const Chatapp = () => {
-  const history = useHistory();
+  const infoUser = useContext(AuthContext);
   const dispatch = useDispatch();
-  const local = new LocalStorageService();
-  const infoUser = local.getItem('_info');
   useInjectReducer({
     key: ChatAppSlice.sliceKey,
     reducer: ChatAppSlice.reducer,
@@ -63,21 +60,10 @@ export const Chatapp = () => {
   const socket: any = useRef();
 
   useEffect(() => {
-    function handleUser(user) {
-      if (_.isEmpty(user)) {
-        openNotifi(400, 'Vui lòng đăng nhập');
-        return history.push('/');
-      }
-    }
-    handleUser(infoUser);
-  }, [infoUser]);
-
-  useEffect(() => {
-    if (!_.isEmpty(infoUser)) {
-      dispatch(
-        ChatAppSlice.actions.changeStatusOnline({ id: _.get(infoUser, 'id') }),
-      );
-    }
+    openNotifi(200, `Hello ${_.get(infoUser, 'fullName')}`);
+    dispatch(
+      ChatAppSlice.actions.changeStatusOnline({ id: _.get(infoUser, '_id') }),
+    );
     dispatch(ChatAppSlice.actions.getListUsers());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
@@ -121,7 +107,7 @@ export const Chatapp = () => {
       );
     }
   }, [convertStation]);
-  console.log(listUsers);
+
   useEffect(() => {
     const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
     socket.current = io(PORT_SOCKET, { transports: ['websocket'] });
@@ -173,18 +159,17 @@ export const Chatapp = () => {
       setErrorAcknow(error);
     }
   };
-
   const renderMessage = () => {
-    // if (_.isEmpty(convertStation) && !convertStation.length) {
-    //   return (
-    //     <div className="box_chat_empty">
-    //       <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
-    //     </div>
-    //   );
-    // }
+    if (!_.isEmpty(convertStation) && listMessages.length === 0) {
+      return (
+        <div className="box_chat_empty">
+          <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
+        </div>
+      );
+    }
     if (!_.isEmpty(convertStation) && listMessages.length) {
       return listMessages.map((row, idx) => {
-        if (row.senderId === _.get(infoUser, 'id')) {
+        if (row.senderId === _.get(infoUser, '_id')) {
           return (
             <div className="my_chat" key={idx}>
               <div className="message_box">
@@ -233,7 +218,7 @@ export const Chatapp = () => {
   const getFormValue = () => {
     return {
       conversationId: _.get(convertStation, '_id'),
-      senderId: _.get(infoUser, 'id'),
+      senderId: _.get(infoUser, '_id'),
       text: '',
     };
   };
@@ -304,7 +289,7 @@ export const Chatapp = () => {
                   localStorage.clear();
                   dispatch(
                     ChatAppSlice.actions.changeStatusoffline({
-                      id: _.get(infoUser, 'id'),
+                      id: _.get(infoUser, '_id'),
                     }),
                   );
                 }}
@@ -317,7 +302,7 @@ export const Chatapp = () => {
             <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
               {!_.isEmpty(listUsers) && listUsers.length ? (
                 listUsers
-                  .filter(item => item._id !== _.get(infoUser, 'id'))
+                  .filter(item => item._id !== _.get(infoUser, '_id'))
                   .map((row, idx) => (
                     <Menu.Item
                       key={idx}

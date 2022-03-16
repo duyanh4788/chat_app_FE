@@ -37,7 +37,7 @@ export class LocalStorageService {
     return this;
   }
 
-  public setInfoUser(user: any): this {
+  public setAuth(user: any): this {
     const listLocalStorageItem: LocalStorageItem = {
       key: LocalStorageKey.info,
       value: user,

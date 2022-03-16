@@ -8,16 +8,18 @@ import { Chatapp } from 'pages/chatApp/Chatapp';
 import './style/scss/chat_app.css';
 import './style/scss/main_form.css';
 import 'antd/dist/antd.css';
+import { AuthContextProvider } from 'pages/AuthContext/AuthContextApi';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
-
 const ConnectedApp = () => (
   <BrowserRouter>
     <Provider store={RootStore}>
-      <Switch>
-        <Route path="/" exact component={MainRomChat} />
-        <Route path="/chatApp" exact component={Chatapp} />
-      </Switch>
+      <AuthContextProvider>
+        <Switch>
+          <Route path="/" exact component={MainRomChat} />
+          <Route path="/chatApp" exact component={Chatapp} />
+        </Switch>
+      </AuthContextProvider>
     </Provider>
   </BrowserRouter>
 );

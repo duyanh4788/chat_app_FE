@@ -168,9 +168,9 @@
 
 .ant-layout .site_layout .box_chat_empty span {
   font-size: 20px;
-  color: gray;
+  color: rgba(128, 128, 128, 0.603);
   cursor: default;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .ant-layout .site_layout .display_flex {

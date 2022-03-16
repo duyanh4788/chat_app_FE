@@ -15,6 +15,16 @@ export function* getListUsers(api, action) {
   }
 }
 
+export function* getUserById(api, action) {
+  const resPonse = yield call(api.getUserById, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.getUserByIdSuccess(data));
+  } catch (error) {
+    yield put(actions.getUserByIdFail(_.get(error, 'message')));
+  }
+}
+
 export function* getListMessages(api, action) {
   const resPonse = yield call(api.getListMessages, action.payload);
   try {
@@ -78,6 +88,7 @@ export function* ChatAppSaga() {
       chatApptRequest,
     ),
     yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
+    yield takeLatest(actions.getUserById.type, getUserById, chatApptRequest),
     yield takeLatest(
       actions.postNewMessage.type,
       postNewMessage,

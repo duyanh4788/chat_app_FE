@@ -14,6 +14,11 @@ export const selectListUsers = createSelector(
   state => state.listUsers,
 );
 
+export const selectUserById = createSelector(
+  [selectChatApp],
+  state => state.userById,
+);
+
 export const selectConvertStation = createSelector(
   [selectChatApp],
   state => state.convertStation,

@@ -21,15 +21,10 @@ const { TabPane } = Tabs;
 export const MainRomChat = () => {
   const history = useHistory();
   const local = new LocalStorageService();
-  const infoUser = local.getItem('_info');
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
 
   useEffect(() => {
-    if (!_.isEmpty(infoUser)) {
-      openNotifi(200, `Hello ${_.get(infoUser, 'fullName')}`);
-      return history.push('/chatApp');
-    }
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
@@ -38,7 +33,10 @@ export const MainRomChat = () => {
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
-          local.setInfoUser(payload);
+          local.setAuth({
+            toKen: _.get(payload, 'toKen'),
+            id: _.get(payload, 'id'),
+          });
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
           history.push('/chatApp');
           break;
