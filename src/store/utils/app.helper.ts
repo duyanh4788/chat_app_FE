@@ -127,14 +127,6 @@ export class AppHelper {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
-  static getFirstLastName(fullName: string): any {
-    const name: string[] = fullName.split(/(?<=^\S+)\s/);
-    return {
-      firstName: name[1],
-      lastName: name[0],
-    };
-  }
-
   static getCurrentTimeAndDate(times): string {
     const today = new Date(times);
     const day = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate();
