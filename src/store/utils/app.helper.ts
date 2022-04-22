@@ -128,7 +128,7 @@ export class AppHelper {
   }
 
   static getFirstLastName(fullName: string): any {
-    const name: string[] = fullName.split(/(?<=^\S+)\s/);
+    const name: string[] = fullName.split(/(?:\/)([^#]+)(?=#*)/);
     return {
       firstName: name[1],
       lastName: name[0],
