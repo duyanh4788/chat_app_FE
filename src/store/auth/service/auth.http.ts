@@ -36,4 +36,8 @@ export class AuthHttp {
       ...this.configSignUp(data),
     });
   };
+
+  public getUserById = (id: string): Promise<any> => {
+    return this.request.get(AuthApi.GET_USER_BY_ID + id);
+  };
 }

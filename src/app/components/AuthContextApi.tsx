@@ -1,51 +1,53 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { createContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as _ from 'lodash';
-import * as ChatAppSlice from 'store/chatApp/shared/slice';
-import * as ChatAppConst from 'store/chatApp/constants/chatapp.constant';
-import * as ChatAppSelector from 'store/chatApp/shared/selectors';
-import { ChatAppSaga } from 'store/chatApp/shared/saga';
+import * as AuthSlice from 'store/auth/shared/slice';
+import * as AuthConst from 'store/auth/constants/auth.constant';
+import * as AuthSelector from 'store/auth/shared/selectors';
+import { AuthSaga } from 'store/auth/shared/saga';
 import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
+import { Unsubscribe } from 'redux';
+import { RootStore } from 'store/configStore';
 import { LocalStorageService } from 'store/services/localStorage';
-import { UserModel } from 'store/model/User.model';
 import { openNotifi } from 'store/utils/Notification';
 
 export const AuthContext = React.createContext({});
 export const AuthContextProvider = ({ children }) => {
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const local = new LocalStorageService();
   const infoUser = local.getItem('_info');
+
   useInjectReducer({
-    key: ChatAppSlice.sliceKey,
-    reducer: ChatAppSlice.reducer,
+    key: AuthSlice.sliceKey,
+    reducer: AuthSlice.reducer,
   });
   useInjectSaga({
-    key: ChatAppSlice.sliceKey,
-    saga: ChatAppSaga,
+    key: AuthSlice.sliceKey,
+    saga: AuthSaga,
   });
-  const userById = useSelector(ChatAppSelector.selectUserById);
+  const userById = useSelector(AuthSelector.selectUserById);
 
   useEffect(() => {
     function handleUser(user) {
-      if (_.isEmpty(user)) {
+      if (_.isEmpty(user) && location.pathname === '/chatApp') {
         openNotifi(400, 'Vui lòng đăng nhập');
         return history.push('/');
       }
       if (!_.isEmpty(user)) {
-        dispatch(ChatAppSlice.actions.getUserById(_.get(infoUser, 'id')));
-        return history.push('/chatApp');
+        dispatch(AuthSlice.actions.getUserById(_.get(user, 'id')));
+        return;
       }
     }
     handleUser(infoUser);
   }, []);
-
   return (
     <AuthContext.Provider value={userById}>{children}</AuthContext.Provider>
   );

@@ -25,12 +25,6 @@ export function SignInUser() {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
-  }, []);
-
   const onFinish = (values: any) => {
     dispatch(AuthSlice.actions.sigInUser(values));
   };

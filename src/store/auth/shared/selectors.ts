@@ -13,3 +13,8 @@ export const selectSuccess = createSelector(
   [selectAuth],
   state => state.success,
 );
+
+export const selectUserById = createSelector(
+  [selectAuth],
+  state => state.userById,
+);

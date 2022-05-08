@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
+import * as _ from 'lodash';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthConst from 'store/auth/constants/auth.constant';
-import * as _ from 'lodash';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tabs } from 'antd';
 import { AppLoading } from 'store/utils/Apploading';
-import { SignUpUser } from './authuser/SignUpUser';
-import { SignInUser } from './authuser/SignInUser';
+import { SignUpUser } from '../components/SignUpUser';
+import { SignInUser } from '../components/SignInUser';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { openNotifi } from 'store/utils/Notification';
@@ -20,6 +20,7 @@ const { TabPane } = Tabs;
 
 export const MainRomChat = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
@@ -38,12 +39,18 @@ export const MainRomChat = () => {
             id: _.get(payload, 'id'),
           });
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
+          dispatch(AuthSlice.actions.getUserById(_.get(payload, 'id')));
+          break;
+        case AuthSlice.actions.getUserByIdSuccess.type:
           history.push('/chatApp');
           break;
         case AuthSlice.actions.signUpUserFail.type:
           openNotifi(400, payload);
           break;
         case AuthSlice.actions.sigInUserFail.type:
+          openNotifi(400, payload);
+          break;
+        case AuthSlice.actions.getUserByIdFail.type:
           openNotifi(400, payload);
           break;
         default:

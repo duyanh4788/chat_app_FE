@@ -32,13 +32,13 @@ import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
-import { AuthContext } from 'pages/AuthContext/AuthContextApi';
+import { AuthContext } from 'app/components/AuthContextApi';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 export const Chatapp = () => {
-  const infoUser = useContext(AuthContext);
+  const userAuthContext = useContext(AuthContext);
   const dispatch = useDispatch();
   useInjectReducer({
     key: ChatAppSlice.sliceKey,
@@ -60,10 +60,16 @@ export const Chatapp = () => {
   const socket: any = useRef();
 
   useEffect(() => {
-    openNotifi(200, `Hello ${_.get(infoUser, 'fullName')}`);
-    dispatch(
-      ChatAppSlice.actions.changeStatusOnline({ id: _.get(infoUser, '_id') }),
-    );
+    if (!_.isEmpty(userAuthContext)) {
+      dispatch(
+        ChatAppSlice.actions.changeStatusOnline({
+          id: _.get(userAuthContext, '_id'),
+        }),
+      );
+    }
+    if (!_.isEmpty(userAuthContext)) {
+      openNotifi(200, `Hello ${_.get(userAuthContext, 'fullName')}`);
+    }
     dispatch(ChatAppSlice.actions.getListUsers());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
@@ -93,7 +99,9 @@ export const Chatapp = () => {
       setErrorAcknow(undefined);
       setMyFriend(null);
       dispatch(
-        ChatAppSlice.actions.changeStatusoffline({ id: _.get(infoUser, 'id') }),
+        ChatAppSlice.actions.changeStatusoffline({
+          id: _.get(userAuthContext, 'id'),
+        }),
       );
     };
   }, []);
@@ -109,31 +117,38 @@ export const Chatapp = () => {
   }, [convertStation]);
 
   useEffect(() => {
-    const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
-    socket.current = io(PORT_SOCKET, { transports: ['websocket'] });
-    socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, infoUser);
-    socket.current.on(SOCKET_COMMIT.SEND_LIST_USERS, (dataUser: any) => {
-      let newList: any = listUsers.filter(item => {
-        if (item._id !== dataUser._id) {
-          item.isOnline = dataUser.isOnline;
-        }
-        return item;
+    if (!_.isEmpty(userAuthContext)) {
+      const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
+      socket.current = io(PORT_SOCKET, { transports: ['websocket'] });
+      socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
+      socket.current.on(SOCKET_COMMIT.SEND_LIST_USERS, (dataUser: any) => {
+        // let newList: any = listUsers.filter(item => {
+        //   if (item._id !== dataUser._id) {
+        //     item.isOnline = dataUser.isOnline;
+        //   }
+        //   return item;
+        // });
+        // setListUsers(oldListUser => [...oldListUser, dataUser]);
       });
-      console.log(newList);
-      // setListUsers(oldListUser => [...oldListUser, dataUser]);
-    });
-    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
-      openNotifi(200, message);
-    });
-    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (message: string) => {
-      setNotiFyTitle(message);
-      // setListUsers(oldListUser => [...oldListUser, { isOnline: true }]);
-    });
-    socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
-      setListMessages(oldMessages => [...oldMessages, dataMessage]);
-    });
+      socket.current.on(
+        SOCKET_COMMIT.SEND_MESSAGE_NOTIFY,
+        (message: string) => {
+          openNotifi(200, message);
+        },
+      );
+      socket.current.on(
+        SOCKET_COMMIT.SEND_MESSAGE_SENDER,
+        (message: string) => {
+          setNotiFyTitle(message);
+          // setListUsers(oldListUser => [...oldListUser, { isOnline: true }]);
+        },
+      );
+      socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
+        setListMessages(oldMessages => [...oldMessages, dataMessage]);
+      });
+    }
     return () => {
-      socket.current.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
+      socket.current?.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
         return () => {
           socket.disconnect();
         };
@@ -169,7 +184,7 @@ export const Chatapp = () => {
     }
     if (!_.isEmpty(convertStation) && listMessages.length) {
       return listMessages.map((row, idx) => {
-        if (row.senderId === _.get(infoUser, '_id')) {
+        if (row.senderId === _.get(userAuthContext, '_id')) {
           return (
             <div className="my_chat" key={idx}>
               <div className="message_box">
@@ -179,8 +194,10 @@ export const Chatapp = () => {
                 <span className="time">{format(row.createdAt)}</span>
               </div>
               <Avatar className="bg_green avatar_img">
-                {!_.isEmpty(_.get(infoUser, 'fullName'))
-                  ? AppHelper.convertFullName(_.get(infoUser, 'fullName'))
+                {!_.isEmpty(_.get(userAuthContext, 'fullName'))
+                  ? AppHelper.convertFullName(
+                      _.get(userAuthContext, 'fullName'),
+                    )
                   : ''}
               </Avatar>
             </div>
@@ -210,7 +227,7 @@ export const Chatapp = () => {
     dispatch(
       ChatAppSlice.actions.saveConvertStation({
         reciverId: _.get(friend, '_id'),
-        senderId: _.get(infoUser, 'id'),
+        senderId: _.get(userAuthContext, 'id'),
       }),
     );
   };
@@ -218,11 +235,10 @@ export const Chatapp = () => {
   const getFormValue = () => {
     return {
       conversationId: _.get(convertStation, '_id'),
-      senderId: _.get(infoUser, '_id'),
+      senderId: _.get(userAuthContext, '_id'),
       text: '',
     };
   };
-
   const onSendMessage = (event: any) => {
     event.preventDefault();
     if (sendMessage) {
@@ -282,27 +298,22 @@ export const Chatapp = () => {
           onCollapse={(e: boolean) => setCollapsed(e)}
         >
           <div className="sider_btn">
-            <Button className="btn_back" icon={<RollbackOutlined />}>
-              <Link
-                to="/"
-                onClick={() => {
-                  localStorage.clear();
-                  dispatch(
-                    ChatAppSlice.actions.changeStatusoffline({
-                      id: _.get(infoUser, '_id'),
-                    }),
-                  );
-                }}
-              >
+            <Link
+              to="/"
+              onClick={() => {
+                localStorage.clear();
+              }}
+            >
+              <Button className="btn_back" icon={<RollbackOutlined />}>
                 Back
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
           <Menu theme="dark" defaultSelectedKeys={['sub1']} mode="inline">
             <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
               {!_.isEmpty(listUsers) && listUsers.length ? (
                 listUsers
-                  .filter(item => item._id !== _.get(infoUser, '_id'))
+                  .filter(item => item._id !== _.get(userAuthContext, '_id'))
                   .map((row, idx) => (
                     <Menu.Item
                       key={idx}
@@ -334,10 +345,14 @@ export const Chatapp = () => {
               <Breadcrumb.Item>
                 <Avatar className="bg_green">
                   <Avatar className="bg_green">
-                    {AppHelper.convertFullName(_.get(infoUser, 'fullName'))}
+                    {AppHelper.convertFullName(
+                      _.get(userAuthContext, 'fullName'),
+                    )}
                   </Avatar>
                 </Avatar>
-                <span className="account">{_.get(infoUser, 'fullName')}</span>
+                <span className="account">
+                  {_.get(userAuthContext, 'fullName')}
+                </span>
               </Breadcrumb.Item>
             </Breadcrumb>
           </Header>

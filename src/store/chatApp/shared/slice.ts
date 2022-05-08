@@ -5,7 +5,6 @@ export interface ChatAppState {
   listUsers: any;
   convertStation: any;
   listMessages: any;
-  userById: any;
 }
 
 export const initialState: ChatAppState = {
@@ -13,7 +12,6 @@ export const initialState: ChatAppState = {
   listUsers: {},
   convertStation: null,
   listMessages: {},
-  userById: {},
 };
 
 const ChatAppSlice = createSlice({
@@ -28,17 +26,6 @@ const ChatAppSlice = createSlice({
       state.listUsers = action.payload;
     },
     getListUsersFail(state, action) {
-      state.loading = false;
-    },
-
-    getUserById(state, action) {
-      state.loading = true;
-    },
-    getUserByIdSuccess(state, action) {
-      state.loading = false;
-      state.userById = action.payload;
-    },
-    getUserByIdFail(state, action) {
       state.loading = false;
     },
 
