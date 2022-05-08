@@ -50,6 +50,17 @@ const AuthSlice = createSlice({
     getUserByIdFail(state, action) {
       state.loading = false;
     },
+
+    changeStatusOnline(state, action) {
+      state.loading = true;
+    },
+    changeStatusOnlineSuccess(state, action) {
+      state.loading = false;
+      state.userById = action.payload;
+    },
+    changeStatusOnlineFail(state, action) {
+      state.loading = false;
+    },
   },
 });
 

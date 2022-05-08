@@ -61,13 +61,6 @@ export const Chatapp = () => {
 
   useEffect(() => {
     if (!_.isEmpty(userAuthContext)) {
-      dispatch(
-        ChatAppSlice.actions.changeStatusOnline({
-          id: _.get(userAuthContext, '_id'),
-        }),
-      );
-    }
-    if (!_.isEmpty(userAuthContext)) {
       openNotifi(200, `Hello ${_.get(userAuthContext, 'fullName')}`);
     }
     dispatch(ChatAppSlice.actions.getListUsers());
@@ -122,6 +115,7 @@ export const Chatapp = () => {
       socket.current = io(PORT_SOCKET, { transports: ['websocket'] });
       socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
       socket.current.on(SOCKET_COMMIT.SEND_LIST_USERS, (dataUser: any) => {
+        console.log(dataUser);
         // let newList: any = listUsers.filter(item => {
         //   if (item._id !== dataUser._id) {
         //     item.isOnline = dataUser.isOnline;

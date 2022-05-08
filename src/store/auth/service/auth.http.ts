@@ -40,4 +40,7 @@ export class AuthHttp {
   public getUserById = (id: string): Promise<any> => {
     return this.request.get(AuthApi.GET_USER_BY_ID + id);
   };
+
+  public changeStatusOnline = (id: string): Promise<any> =>
+    this.request.post(AuthApi.CHANGE_STATUS_IS_ONLINE, id);
 }

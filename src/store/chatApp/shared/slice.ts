@@ -61,16 +61,6 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
-    changeStatusOnline(state, action) {
-      state.loading = true;
-    },
-    changeStatusOnlineSuccess(state, action) {
-      state.loading = false;
-    },
-    changeStatusOnlineFail(state, action) {
-      state.loading = false;
-    },
-
     changeStatusoffline(state, action) {
       state.loading = true;
     },

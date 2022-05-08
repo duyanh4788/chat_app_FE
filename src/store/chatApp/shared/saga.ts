@@ -45,16 +45,6 @@ export function* saveConvertStation(api, action) {
   }
 }
 
-export function* changeStatusOnline(api, action) {
-  const resPonse = yield call(api.changeStatusOnline, action.payload);
-  try {
-    const data = yield configResponse(resPonse);
-    yield put(actions.changeStatusOnlineSuccess(data));
-  } catch (error) {
-    yield put(actions.changeStatusOnlineFail(_.get(error, 'message')));
-  }
-}
-
 export function* changeStatusoffline(api, action) {
   const resPonse = yield call(api.changeStatusoffline, action.payload);
   try {
@@ -67,11 +57,6 @@ export function* changeStatusoffline(api, action) {
 
 export function* ChatAppSaga() {
   yield all([
-    yield takeLatest(
-      actions.changeStatusOnline.type,
-      changeStatusOnline,
-      chatApptRequest,
-    ),
     yield takeLatest(
       actions.changeStatusoffline.type,
       changeStatusoffline,

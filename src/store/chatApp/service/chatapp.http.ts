@@ -40,9 +40,6 @@ export class ChatAppHttp {
       ...this.configNewMessage(data),
     });
 
-  public changeStatusOnline = (id: string): Promise<any> =>
-    this.request.post(ChatAppApi.CHANGE_STATUS_ONLINE, id);
-
   public changeStatusoffline = (id: string): Promise<any> =>
     this.request.post(ChatAppApi.CHANGE_STATUS_OFFLINE, id);
 }

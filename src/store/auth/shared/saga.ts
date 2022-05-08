@@ -36,10 +36,25 @@ export function* getUserById(api, action) {
   }
 }
 
+export function* changeStatusOnline(api, action) {
+  const resPonse = yield call(api.changeStatusOnline, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.changeStatusOnlineSuccess(data));
+  } catch (error) {
+    yield put(actions.changeStatusOnlineFail(_.get(error, 'message')));
+  }
+}
+
 export function* AuthSaga() {
   yield all([
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),
+    yield takeLatest(
+      actions.changeStatusOnline.type,
+      changeStatusOnline,
+      authRequest,
+    ),
   ]);
 }

@@ -39,9 +39,13 @@ export const MainRomChat = () => {
             id: _.get(payload, 'id'),
           });
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
-          dispatch(AuthSlice.actions.getUserById(_.get(payload, 'id')));
+          dispatch(
+            AuthSlice.actions.changeStatusOnline({
+              id: _.get(payload, 'id'),
+            }),
+          );
           break;
-        case AuthSlice.actions.getUserByIdSuccess.type:
+        case AuthSlice.actions.changeStatusOnlineSuccess.type:
           history.push('/chatApp');
           break;
         case AuthSlice.actions.signUpUserFail.type:
@@ -50,7 +54,7 @@ export const MainRomChat = () => {
         case AuthSlice.actions.sigInUserFail.type:
           openNotifi(400, payload);
           break;
-        case AuthSlice.actions.getUserByIdFail.type:
+        case AuthSlice.actions.changeStatusOnlineFail.type:
           openNotifi(400, payload);
           break;
         default:
