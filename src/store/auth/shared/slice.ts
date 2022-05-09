@@ -61,6 +61,11 @@ const AuthSlice = createSlice({
     changeStatusOnlineFail(state, action) {
       state.loading = false;
     },
+    clearData(state) {
+      state.success = {};
+      state.error = {};
+      state.userById = {};
+    },
   },
 });
 

@@ -6,5 +6,7 @@ export const SOCKET_COMMIT = {
   SEND_MESSAGE_NOTIFY: 'send_message_notify',
   SEND_MESSAGE_SENDER: 'send_message_sender',
   SEND_LIST_USERS: 'send_list_users',
+  CHANGE_STATUS_ONLINE: 'change_status_online',
+  CHANGE_STATUS_OFFLINE: 'change_status_offline',
   DISCONNECTED: 'disconnected',
 };

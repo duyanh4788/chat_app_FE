@@ -34,7 +34,6 @@ export const AuthContextProvider = ({ children }) => {
     saga: AuthSaga,
   });
   const userById = useSelector(AuthSelector.selectUserById);
-
   useEffect(() => {
     function handleUser(user) {
       if (_.isEmpty(user) && location.pathname === '/chatApp') {
