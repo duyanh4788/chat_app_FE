@@ -2,14 +2,16 @@ import { createSlice } from 'store/core/@reduxjs/toolkit';
 
 export interface AuthState {
   loading: boolean;
-  success: boolean;
+  success: any;
   error: any;
+  userById: any;
 }
 
 export const initialState: AuthState = {
   loading: false,
-  success: false,
+  success: {},
   error: {},
+  userById: {},
 };
 
 const AuthSlice = createSlice({
@@ -21,6 +23,7 @@ const AuthSlice = createSlice({
     },
     sigInUserSuccess(state, action) {
       state.loading = false;
+      state.success = action.payload;
     },
     sigInUserFail(state, action) {
       state.loading = false;
@@ -31,10 +34,37 @@ const AuthSlice = createSlice({
     },
     signUpUserSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.success;
+      state.success = action.payload;
     },
     signUpUserFail(state, action) {
       state.loading = false;
+    },
+
+    getUserById(state, action) {
+      state.loading = true;
+    },
+    getUserByIdSuccess(state, action) {
+      state.loading = false;
+      state.userById = action.payload;
+    },
+    getUserByIdFail(state, action) {
+      state.loading = false;
+    },
+
+    changeStatusOnline(state, action) {
+      state.loading = true;
+    },
+    changeStatusOnlineSuccess(state, action) {
+      state.loading = false;
+      state.userById = action.payload;
+    },
+    changeStatusOnlineFail(state, action) {
+      state.loading = false;
+    },
+    clearData(state) {
+      state.success = {};
+      state.error = {};
+      state.userById = {};
     },
   },
 });

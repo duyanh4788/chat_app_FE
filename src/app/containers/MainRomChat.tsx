@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
+import * as _ from 'lodash';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as _ from 'lodash';
+import * as AuthConst from 'store/auth/constants/auth.constant';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tabs } from 'antd';
 import { AppLoading } from 'store/utils/Apploading';
-import { SignUpUser } from './authuser/SignUpUser';
-import { SignInUser } from './authuser/SignInUser';
+import { SignUpUser } from '../components/SignUpUser';
+import { SignInUser } from '../components/SignInUser';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { openNotifi } from 'store/utils/Notification';
@@ -19,6 +20,7 @@ const { TabPane } = Tabs;
 
 export const MainRomChat = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
@@ -27,19 +29,32 @@ export const MainRomChat = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
+        case AuthSlice.actions.signUpUserSuccess.type:
+          setTabsPanel('1');
+          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
+          break;
         case AuthSlice.actions.sigInUserSuccess.type:
-          local.setLocalUser(_.get(payload, 'info'));
-          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
+          local.setAuth({
+            toKen: _.get(payload, 'toKen'),
+            id: _.get(payload, 'id'),
+          });
+          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
+          dispatch(
+            AuthSlice.actions.changeStatusOnline({
+              id: _.get(payload, 'id'),
+            }),
+          );
+          break;
+        case AuthSlice.actions.changeStatusOnlineSuccess.type:
           history.push('/chatApp');
+          break;
+        case AuthSlice.actions.signUpUserFail.type:
+          openNotifi(400, payload);
           break;
         case AuthSlice.actions.sigInUserFail.type:
           openNotifi(400, payload);
           break;
-        case AuthSlice.actions.signUpUserSuccess.type:
-          setTabsPanel('1');
-          openNotifi(_.get(payload, 'code'), _.get(payload, 'message'));
-          break;
-        case AuthSlice.actions.signUpUserFail.type:
+        case AuthSlice.actions.changeStatusOnlineFail.type:
           openNotifi(400, payload);
           break;
         default:
@@ -55,7 +70,7 @@ export const MainRomChat = () => {
     <div className="main_form">
       {loading && <AppLoading loading />}
       <div>
-        <h1>Room Chat Lẩu Xanh</h1>
+        <h1>Chat App</h1>
         <Tabs activeKey={tabsPanel} centered onChange={e => setTabsPanel(e)}>
           <TabPane tab={<p>Đăng nhập</p>} key="1">
             <SignInUser />

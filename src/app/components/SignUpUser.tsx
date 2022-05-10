@@ -32,6 +32,12 @@ export function SignUpUser() {
   const success = useSelector(AuthSelector.selectSuccess);
 
   useEffect(() => {
+    return () => {
+      form.resetFields();
+    };
+  }, []);
+
+  useEffect(() => {
     if (success) form.resetFields();
   }, [success]);
 

@@ -1,7 +1,7 @@
 import { AuthState } from 'store/auth/shared/slice';
-import { ListState } from 'store/list/shared/slice';
+import { ChatAppState } from 'store/chatApp/shared/slice';
 
 export interface RootState {
   auth: AuthState;
-  list: ListState;
+  chatapp: ChatAppState;
 }
