@@ -134,7 +134,7 @@ export class AppHelper {
       lastName: name[0],
     };
   }
-  
+
   static getCurrentTimeAndDate(times): string {
     const today = new Date(times);
     const day = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate();
