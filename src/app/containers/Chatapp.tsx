@@ -15,8 +15,7 @@ import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Helmet, HelmetWrapper } from 'react-helmet';
 import { Layout, Menu, Breadcrumb, Input, Tooltip, Avatar, Button } from 'antd';
 import {
   RollbackOutlined,
@@ -126,11 +125,8 @@ export const Chatapp = () => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
     return () => {
-      socket.current.emit(SOCKET_COMMIT.DISCONNECTED, (message: any) => {
-        return () => {
-          socket.disconnect();
-        };
-      });
+      socket.current.emit(SOCKET_COMMIT.DISCONNECTED);
+      socket.current.disconnect();
     };
   }, []);
 
@@ -174,6 +170,7 @@ export const Chatapp = () => {
       return setErrorAcknow(error);
     }
   };
+
   const renderMessage = () => {
     if (!_.isEmpty(convertStation) && listMessages.length === 0) {
       return (
@@ -183,42 +180,45 @@ export const Chatapp = () => {
       );
     }
     if (!_.isEmpty(convertStation) && listMessages.length) {
-      return listMessages.map((row, idx) => {
-        if (row.senderId === _.get(userAuthContext, '_id')) {
-          return (
-            <div className="my_chat" key={idx}>
-              <div className="message_box">
-                <p className="message_text">
-                  {!_.isEmpty(row.text) ? row.text : ''}
-                </p>
-                <span className="time">{format(row.createdAt)}</span>
+      return listMessages
+        .filter(({ conversationId }) => conversationId === convertStation._id)
+        .map((row, idx) => {
+          if (row.senderId === _.get(userAuthContext, '_id')) {
+            return (
+              <div className="my_chat" key={idx}>
+                <div className="message_box">
+                  <p className="message_text">
+                    {!_.isEmpty(row.text) ? row.text : ''}
+                  </p>
+                  <span className="time">{format(row.createdAt)}</span>
+                </div>
+                <Avatar className="bg_green avatar_img">
+                  {!_.isEmpty(_.get(userAuthContext, 'fullName'))
+                    ? AppHelper.convertFullName(
+                        _.get(userAuthContext, 'fullName'),
+                      )
+                    : ''}
+                </Avatar>
               </div>
-              <Avatar className="bg_green avatar_img">
-                {!_.isEmpty(_.get(userAuthContext, 'fullName'))
-                  ? AppHelper.convertFullName(
-                      _.get(userAuthContext, 'fullName'),
-                    )
-                  : ''}
-              </Avatar>
-            </div>
-          );
-        }
-        return (
-          <div className="member_chat" key={idx}>
-            <Avatar className="bg_green avatar_img">
-              {!_.isEmpty(myFriend)
-                ? AppHelper.convertFullName(_.get(myFriend, 'fullName'))
-                : ''}
-            </Avatar>
-            <div className="message_box">
-              <p className="message_text">
-                {!_.isEmpty(row.text) ? row.text : ''}
-              </p>
-              <span className="time">{format(row.createdAt)}</span>
-            </div>
-          </div>
-        );
-      });
+            );
+          } else {
+            return (
+              <div className="member_chat" key={idx}>
+                <Avatar className="bg_green avatar_img">
+                  {!_.isEmpty(myFriend)
+                    ? AppHelper.convertFullName(_.get(myFriend, 'fullName'))
+                    : ''}
+                </Avatar>
+                <div className="message_box">
+                  <p className="message_text">
+                    {!_.isEmpty(row.text) ? row.text : ''}
+                  </p>
+                  <span className="time">{format(row.createdAt)}</span>
+                </div>
+              </div>
+            );
+          }
+        });
     }
   };
 
@@ -227,15 +227,15 @@ export const Chatapp = () => {
     dispatch(
       ChatAppSlice.actions.saveConvertStation({
         reciverId: _.get(friend, '_id'),
-        senderId: _.get(userAuthContext, 'id'),
+        senderId: _.get(userAuthContext, '_id'),
       }),
     );
   };
-
   const getFormValue = () => {
     return {
       conversationId: _.get(convertStation, '_id'),
       senderId: _.get(userAuthContext, '_id'),
+      reciverId: _.get(myFriend, '_id'),
       text: '',
     };
   };
@@ -288,7 +288,7 @@ export const Chatapp = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title style={{ color: 'red' }}>{notiFyTitle}</title>
+        <title>{notiFyTitle}</title>
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}

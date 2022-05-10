@@ -1,6 +1,7 @@
 export interface MessagesModel {
   conversationId: string;
   senderId: string;
+  reciverId: string;
   text: string;
 }
 

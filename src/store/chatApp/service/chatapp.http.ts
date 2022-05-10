@@ -13,6 +13,7 @@ export class ChatAppHttp {
     return {
       conversationId: message.conversationId,
       senderId: message.senderId,
+      reciverId: message.reciverId,
       text: message.text,
     };
   };
