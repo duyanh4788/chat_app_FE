@@ -60,6 +60,7 @@ export const Chatapp = () => {
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
   const socket: any = useRef();
+  const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
   useEffect(() => {
     dispatch(ChatAppSlice.actions.getListUsers());
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
@@ -112,8 +113,10 @@ export const Chatapp = () => {
   }, [convertStation]);
 
   useEffect(() => {
-    const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
-    socket.current = io(PORT_SOCKET, { transports: ['websocket'] });
+    socket.current = io(PORT_SOCKET, {
+      transports: ['websocket'],
+      upgrade: false,
+    });
     socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
       return openNotifi(200, message);
@@ -128,7 +131,7 @@ export const Chatapp = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED);
       socket.current.disconnect();
     };
-  }, []);
+  }, [PORT_SOCKET]);
 
   useEffect(() => {
     if (!_.isEmpty(listUsers)) {
@@ -137,7 +140,7 @@ export const Chatapp = () => {
           ({ _id }) => _id !== dataUser._id,
         );
         newList.push(dataUser);
-        return setListUsers(newList);
+        setListUsers(newList);
       });
       socket.current.on(
         SOCKET_COMMIT.CHANGE_STATUS_OFFLINE,
@@ -146,7 +149,7 @@ export const Chatapp = () => {
             ({ _id }) => _id !== dataUser._id,
           );
           newList.push(dataUser);
-          return setListUsers(newList);
+          setListUsers(newList);
         },
       );
     }
