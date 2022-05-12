@@ -128,7 +128,7 @@ export const Chatapp = () => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
     return () => {
-      socket.current.emit(SOCKET_COMMIT.DISCONNECTED);
+      socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
       socket.current.disconnect();
     };
   }, [PORT_SOCKET, userAuthContext]);
@@ -253,6 +253,7 @@ export const Chatapp = () => {
       );
       socket.current.emit(
         SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
         { ...getFormValue(), text: sendMessage },
         acknowLedGements,
       );
@@ -274,6 +275,7 @@ export const Chatapp = () => {
       );
       socket.current.emit(
         SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
         {
           ...getFormValue(),
           text: linkLocation,
