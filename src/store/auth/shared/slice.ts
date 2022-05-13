@@ -23,7 +23,7 @@ const AuthSlice = createSlice({
     },
     sigInUserSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.userById = action.payload;
     },
     sigInUserFail(state, action) {
       state.loading = false;
@@ -56,7 +56,6 @@ const AuthSlice = createSlice({
     },
     changeStatusOnlineSuccess(state, action) {
       state.loading = false;
-      state.userById = action.payload;
     },
     changeStatusOnlineFail(state, action) {
       state.loading = false;

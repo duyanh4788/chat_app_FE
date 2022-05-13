@@ -24,7 +24,6 @@ export const MainRomChat = () => {
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
-
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
@@ -36,12 +35,12 @@ export const MainRomChat = () => {
         case AuthSlice.actions.sigInUserSuccess.type:
           local.setAuth({
             toKen: _.get(payload, 'toKen'),
-            id: _.get(payload, 'id'),
+            id: _.get(payload, '_id'),
           });
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
           dispatch(
             AuthSlice.actions.changeStatusOnline({
-              id: _.get(payload, 'id'),
+              id: _.get(payload, '_id'),
             }),
           );
           break;

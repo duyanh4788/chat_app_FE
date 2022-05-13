@@ -10,12 +10,13 @@ import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppConst from 'store/chatApp/constants/chatapp.constant';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
+import * as AuthSelector from 'store/auth/shared/selectors';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Helmet, HelmetWrapper } from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { Layout, Menu, Breadcrumb, Input, Tooltip, Avatar, Button } from 'antd';
 import {
   RollbackOutlined,
@@ -34,14 +35,20 @@ import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
 import { AuthContext } from 'app/components/AuthContextApi';
+import { LocalStorageService } from 'store/services/localStorage';
+import { ChatAppHttp } from 'store/chatApp/service/chatapp.http';
+import { configResponse } from 'store/services/request';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 export const Chatapp = () => {
+  const authHttp = new ChatAppHttp();
   const userAuthContext = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
+  const local = new LocalStorageService();
+  const infoUserLocal = local.getItem('_info');
   useInjectReducer({
     key: ChatAppSlice.sliceKey,
     reducer: ChatAppSlice.reducer,
@@ -60,15 +67,27 @@ export const Chatapp = () => {
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
   const socket: any = useRef();
+  const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
+
   useEffect(() => {
-    dispatch(ChatAppSlice.actions.getListUsers());
+    async function initListUser() {
+      try {
+        const data = await authHttp.getListUsers();
+        const result = configResponse(data);
+        if (!_.isEmpty(result) && result.length) {
+          setListUsers(result);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          openNotifi(400, error.message);
+        }
+      }
+    }
+    initListUser();
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
-        case ChatAppSlice.actions.getListUsersSuccess.type:
-          setListUsers(payload);
-          break;
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
           break;
@@ -122,6 +141,7 @@ export const Chatapp = () => {
       return openNotifi(200, message);
     });
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (message: string) => {
+      notiFyTitleRef.current = message;
       return setNotiFyTitle(message);
     });
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
@@ -168,10 +188,77 @@ export const Chatapp = () => {
     }
   }, [errorAcknow]);
 
+  const handleSelectUser = (friend: any) => {
+    setMyFriend(friend);
+    dispatch(
+      ChatAppSlice.actions.saveConvertStation({
+        reciverId: _.get(friend, '_id'),
+        senderId: _.get(userAuthContext, '_id'),
+      }),
+    );
+  };
+
   const acknowLedGements = (error: any) => {
     if (error) {
       return setErrorAcknow(error);
     }
+  };
+
+  const getValueFromChat = () => {
+    return {
+      conversationId: _.get(convertStation, '_id'),
+      senderId: _.get(userAuthContext, '_id'),
+      reciverId: _.get(myFriend, '_id'),
+      text: '',
+    };
+  };
+
+  const onSendMessage = (event: any) => {
+    event.preventDefault();
+    if (sendMessage) {
+      dispatch(
+        ChatAppSlice.actions.postNewMessage({
+          ...getValueFromChat(),
+          text: sendMessage,
+        }),
+      );
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        { ...getValueFromChat(), text: sendMessage },
+        acknowLedGements,
+      );
+    }
+    return resetFromChat();
+  };
+
+  const shareLocation = () => {
+    if (!navigator.geolocation) {
+      return 'Browser Not Support Location';
+    }
+    navigator.geolocation.getCurrentPosition(position => {
+      const linkLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+      dispatch(
+        ChatAppSlice.actions.postNewMessage({
+          ...getValueFromChat(),
+          text: linkLocation,
+        }),
+      );
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        {
+          ...getValueFromChat(),
+          text: linkLocation,
+        },
+        acknowLedGements,
+      );
+    });
+  };
+
+  const resetFromChat = () => {
+    setErrorAcknow(undefined);
+    setSendMessage('');
   };
 
   const renderMessage = () => {
@@ -225,75 +312,10 @@ export const Chatapp = () => {
     }
   };
 
-  const handleSelectUser = (friend: any) => {
-    setMyFriend(friend);
-    dispatch(
-      ChatAppSlice.actions.saveConvertStation({
-        reciverId: _.get(friend, '_id'),
-        senderId: _.get(userAuthContext, '_id'),
-      }),
-    );
-  };
-  const getFormValue = () => {
-    return {
-      conversationId: _.get(convertStation, '_id'),
-      senderId: _.get(userAuthContext, '_id'),
-      reciverId: _.get(myFriend, '_id'),
-      text: '',
-    };
-  };
-  const onSendMessage = (event: any) => {
-    event.preventDefault();
-    if (sendMessage) {
-      dispatch(
-        ChatAppSlice.actions.postNewMessage({
-          ...getFormValue(),
-          text: sendMessage,
-        }),
-      );
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        { ...getFormValue(), text: sendMessage },
-        acknowLedGements,
-      );
-    }
-    return resetData();
-  };
-
-  const shareLocation = () => {
-    if (!navigator.geolocation) {
-      return 'Browser Not Support Location';
-    }
-    navigator.geolocation.getCurrentPosition(position => {
-      const linkLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
-      dispatch(
-        ChatAppSlice.actions.postNewMessage({
-          ...getFormValue(),
-          text: linkLocation,
-        }),
-      );
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        {
-          ...getFormValue(),
-          text: linkLocation,
-        },
-        acknowLedGements,
-      );
-    });
-  };
-
-  const resetData = () => {
-    setErrorAcknow(undefined);
-    setSendMessage('');
-  };
-
   return (
     <React.Fragment>
       <Helmet>
-        <title>{notiFyTitle}</title>
+        <title ref={notiFyTitleRef}>{notiFyTitle}</title>
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}

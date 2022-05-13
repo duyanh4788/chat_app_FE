@@ -5,15 +5,12 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as _ from 'lodash';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as AuthConst from 'store/auth/constants/auth.constant';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import { AuthSaga } from 'store/auth/shared/saga';
 import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Unsubscribe } from 'redux';
-import { RootStore } from 'store/configStore';
 import { LocalStorageService } from 'store/services/localStorage';
 import { openNotifi } from 'store/utils/Notification';
 
@@ -34,6 +31,7 @@ export const AuthContextProvider = ({ children }) => {
     saga: AuthSaga,
   });
   const userById = useSelector(AuthSelector.selectUserById);
+
   useEffect(() => {
     function handleUser(user) {
       if (_.isEmpty(user) && location.pathname === '/chatApp') {
