@@ -1,6 +1,4 @@
 # chat_app_FE
-<img src="http://tekmedi.com/images/logo/logo_tekmedi.jpg" alt="Tekmedi Development Team" align="center" />
-
 
 <br />
 
