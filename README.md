@@ -101,7 +101,7 @@ There’s also a <a href="https://vimeo.com/168648012">fantastic video</a> on ho
 ## Quick Install
 
 1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
-2.  Clone this repo using `git clone --depth=1 http://103.27.239.167/bvk/web-admin-react <YOUR_PROJECT_NAME>`
+2.  Clone this repo using `git clone --depth=1 git@github.com:duyanh4788/chat_app_FE.git <YOUR_PROJECT_NAME>`
 3.  Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
 4.  Copy file `example.env.dev` to `.env`
 5.  Run `npm run install & yarn install` in order to install dependencies.<br />
@@ -117,7 +117,7 @@ There’s also a <a href="https://vimeo.com/168648012">fantastic video</a> on ho
   `$ docker-compose stop` <br>
 ## Deployment
 1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
-2.  Clone this repo using `git clone --depth=1 http://103.27.239.167/bvk/web-admin-react <YOUR_PROJECT_NAME>`
+2.  Clone this repo using `git clone --depth=1 git@github.com:duyanh4788/chat_app_FE.git <YOUR_PROJECT_NAME>`
 3.  Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
 4.  Copy file `example.env.prod` to `.env`
 5.  Run `npm run install` & `yarn install` in order to install dependencies.
@@ -154,7 +154,7 @@ Quick scaffolding First install the URL Rewrite module on the IIS Server. Then c
 ## Release Production URL Reference
   <div align="left">
     <strong>
-      <a href="http://admin.web.bvk.tekmedi.com/">http://admin.web.bvk.tekmedi.com/</a>
+      <a href="https://chat-app-fe.vercel.app/">https://chat-app-fe.vercel.app/</a>
     </strong>
   </div>
 
