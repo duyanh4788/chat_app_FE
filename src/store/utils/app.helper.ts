@@ -103,6 +103,13 @@ export class AppHelper {
     else return text;
   }
 
+  static checkLinkHttp(text: string) {
+    if (_.isEmpty(text)) return null;
+    if (text.indexOf('http://') === 0 || text.indexOf('https://') === 0)
+      return true;
+    else return false;
+  }
+
   /**
    * Text To TitleCase
    * @param   { String } str string text input

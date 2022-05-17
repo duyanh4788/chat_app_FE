@@ -63,7 +63,6 @@ const AuthSlice = createSlice({
     clearData(state) {
       state.success = {};
       state.error = {};
-      state.userById = {};
     },
   },
 });

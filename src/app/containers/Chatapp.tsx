@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable no-useless-concat */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
@@ -202,6 +203,12 @@ export const Chatapp = () => {
     if (error) {
       return setErrorAcknow(error);
     }
+    dispatch(
+      ChatAppSlice.actions.postNewMessage({
+        ...getValueFromChat(),
+        text: sendMessage,
+      }),
+    );
   };
 
   const getValueFromChat = () => {
@@ -216,12 +223,6 @@ export const Chatapp = () => {
   const onSendMessage = (event: any) => {
     event.preventDefault();
     if (sendMessage) {
-      dispatch(
-        ChatAppSlice.actions.postNewMessage({
-          ...getValueFromChat(),
-          text: sendMessage,
-        }),
-      );
       socket.current.emit(
         SOCKET_COMMIT.SEND_MESSAGE,
         userAuthContext,
@@ -278,7 +279,14 @@ export const Chatapp = () => {
               <div className="my_chat" key={idx}>
                 <div className="message_box">
                   <p className="message_text">
-                    {!_.isEmpty(row.text) ? row.text : ''}
+                    {!_.isEmpty(row.text) &&
+                    !AppHelper.checkLinkHttp(row.text) ? (
+                      row.text
+                    ) : (
+                      <a href={row.text} target="_blank">
+                        {row.text}
+                      </a>
+                    )}
                   </p>
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
