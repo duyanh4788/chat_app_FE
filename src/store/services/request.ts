@@ -41,9 +41,7 @@ export function configRequest(request: any): any {
 export function configResponse(response: ApiResponse<any>): any {
   if (!response.ok) {
     if (response.status === 404 || response.status === 400) {
-      throw !isEmpty(response.data)
-        ? new Error(response.problem)
-        : new Error('404 Not Found');
+      throw !isEmpty(response.data) ? response.data : '404 Not Found';
     }
     const message = get(response.data, 'message');
     if (isEmpty(response.data) || !message) {
