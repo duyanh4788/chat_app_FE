@@ -8,10 +8,8 @@ import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
-import * as ChatAppConst from 'store/chatApp/constants/chatapp.constant';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as AuthSelector from 'store/auth/shared/selectors';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import {
   useInjectReducer,
@@ -36,7 +34,6 @@ import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
 import { AuthContext } from 'app/components/AuthContextApi';
-import { LocalStorageService } from 'store/services/localStorage';
 import { ChatAppHttp } from 'store/chatApp/service/chatapp.http';
 import { configResponse } from 'store/services/request';
 
@@ -48,8 +45,6 @@ export const Chatapp = () => {
   const userAuthContext = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
-  const local = new LocalStorageService();
-  const infoUserLocal = local.getItem('_info');
   useInjectReducer({
     key: ChatAppSlice.sliceKey,
     reducer: ChatAppSlice.reducer,
@@ -70,7 +65,6 @@ export const Chatapp = () => {
   const socket: any = useRef();
   const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
-
   useEffect(() => {
     async function initListUser() {
       try {
