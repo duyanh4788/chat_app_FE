@@ -303,7 +303,14 @@ export const Chatapp = () => {
                 </Avatar>
                 <div className="message_box">
                   <p className="message_text">
-                    {!_.isEmpty(row.text) ? row.text : ''}
+                    {!_.isEmpty(row.text) &&
+                    !AppHelper.checkLinkHttp(row.text) ? (
+                      row.text
+                    ) : (
+                      <a href={row.text} target="_blank">
+                        {row.text}
+                      </a>
+                    )}
                   </p>
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
