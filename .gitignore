@@ -6,6 +6,7 @@ node_modules
 stats.json
 .pnp
 .pnp.js
+.env
 
 # misc
 .DS_Store
