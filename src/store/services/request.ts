@@ -48,11 +48,11 @@ export function configResponse(response: ApiResponse<any>): any {
       throw new Error(response.problem);
     }
   }
-  const { data, code, success, message } = response.data;
-  if ((code === 400 && !success) || code === 500 || !success) {
+  const { data, code, message } = response.data;
+  if (code === 400 || code === 500) {
     throw new Error(message);
   }
-  if (code === 200 && success) {
+  if (code === 200) {
     return data;
   }
 }
