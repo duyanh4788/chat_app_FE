@@ -33,8 +33,10 @@ export class ChatAppHttp {
       ...this.configConverStation(data),
     });
 
-  public getListMessages = (sernderId: any): Promise<any> =>
-    this.request.post(ChatAppApi.GET_LIST_MESSAGE, sernderId);
+  public getListMessages = (sernderId: any): Promise<any> => {
+    return this.request.post(ChatAppApi.GET_LIST_MESSAGE, sernderId);
+  }
+
 
   public postNewMessage = (data: MessagesModel): Promise<any> =>
     this.request.post(ChatAppApi.NEW_MESSAGE, {

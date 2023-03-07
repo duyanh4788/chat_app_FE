@@ -4,7 +4,7 @@ export interface ChatAppState {
   loading: boolean;
   listUsers: any;
   convertStation: any;
-  listMessages: any;
+  getListMessages: any;
   uploadAWS: any;
 }
 
@@ -12,7 +12,7 @@ export const initialState: ChatAppState = {
   loading: false,
   listUsers: {},
   convertStation: null,
-  listMessages: {},
+  getListMessages: {},
   uploadAWS: {},
 };
 
@@ -36,7 +36,7 @@ const ChatAppSlice = createSlice({
     },
     getListMessagesSuccess(state, action) {
       state.loading = false;
-      state.listMessages = action.payload;
+      state.getListMessages = action.payload;
     },
     getListMessagesFail(state, action) {
       state.loading = false;
@@ -92,7 +92,7 @@ const ChatAppSlice = createSlice({
       state.loading = false;
       state.listUsers = {};
       state.convertStation = {};
-      state.listMessages = {};
+      state.getListMessages = {};
       state.uploadAWS = {};
     },
   },

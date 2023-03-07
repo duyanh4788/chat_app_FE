@@ -71,12 +71,12 @@ export const Chatapp = () => {
   const loading = useSelector(ChatAppSelector.selectLoading);
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
+  const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
   const [listUsers, setListUsers] = useState<any[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [listMessages, setListMessages] = useState<any[]>([]);
-  const [fileUploadAWS, setFileUploadAWS] = useState<UploadFile[]>([]);
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<any>(undefined);
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
@@ -104,9 +104,6 @@ export const Chatapp = () => {
       switch (type) {
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
-          break;
-        case ChatAppSlice.actions.getListMessagesSuccess.type:
-          setListMessages(payload);
           break;
         case ChatAppSlice.actions.getListMessagesFail.type:
           openNotifi(400, payload);
@@ -140,10 +137,11 @@ export const Chatapp = () => {
   }, []);
 
   useEffect(() => {
-    if (!_.isEmpty(convertStation)) {
+    if (!_.isEmpty(convertStation) && !listMessages.length) {
       dispatch(
         ChatAppSlice.actions.getListMessages({
           conversationId: _.get(convertStation, '_id'),
+          skip: 0,
         }),
       );
     }
@@ -198,7 +196,21 @@ export const Chatapp = () => {
     if (!_.isEmpty(myRow)) {
       myRow.scrollTop = myRow.scrollHeight;
     }
-  }, [listMessages]);
+    function initListMsg(msg: any) {
+      if (!msg || (msg && !msg.listMessages?.length)) return;
+      if (!listMessages.length) {
+        setListMessages(msg.listMessages);
+        return;
+      }
+      if (listMessages.length) {
+        msg.listMessages.forEach(item => {
+          setListMessages(old => [item, ...old]);
+        });
+        return;
+      }
+    }
+    initListMsg(getListMessages);
+  }, [getListMessages]);
 
   useEffect(() => {
     if (errorAcknow) {
@@ -350,12 +362,6 @@ export const Chatapp = () => {
     }
   };
 
-  const handleChangeUploadAWS3: UploadProps['onChange'] = ({
-    fileList: newFileList,
-  }) => {
-    setFileUploadAWS(newFileList);
-  };
-
   const handleUploadAWS3 = (file: RcFile) => {
     const fromData = new FormData();
     fromData.append('file', file);
@@ -370,11 +376,24 @@ export const Chatapp = () => {
   const propsDrag: UploadProps = {
     listType: 'picture',
     openFileDialogOnClick: false,
-    onChange: () => handleChangeUploadAWS3,
     beforeUpload: file => {
       handleUploadAWS3(file);
       return false;
     },
+  };
+
+  const handleScrollListMessages = () => {
+    let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
+    if (myRow.scrollTop < 1 && getListMessages.skip) {
+      dispatch(
+        ChatAppSlice.actions.getListMessages({
+          conversationId: _.get(convertStation, '_id'),
+          skip:
+            getListMessages && getListMessages.skip ? getListMessages.skip : 10,
+        }),
+      );
+      return;
+    }
   };
 
   return (
@@ -452,7 +471,12 @@ export const Chatapp = () => {
           convertStation._id &&
           convertStation.members.length ? (
             <React.Fragment>
-              <Content className="site_layout">{renderMessage()}</Content>
+              <Content
+                className="site_layout"
+                onScroll={handleScrollListMessages}
+              >
+                {renderMessage()}
+              </Content>
               <div className="form_chat">
                 <Dragger {...propsDrag}>
                   <Input
@@ -466,7 +490,6 @@ export const Chatapp = () => {
                         <Upload
                           action=""
                           listType="picture"
-                          onChange={handleChangeUploadAWS3}
                           beforeUpload={file => {
                             handleUploadAWS3(file);
                             return false;

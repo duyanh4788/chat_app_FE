@@ -19,9 +19,9 @@ export const selectConvertStation = createSelector(
   state => state.convertStation,
 );
 
-export const selectListMessages = createSelector(
+export const selectGetListMessages = createSelector(
   [selectChatApp],
-  state => state.listMessages,
+  state => state.getListMessages,
 );
 
 export const selectUploadAWS = createSelector(
