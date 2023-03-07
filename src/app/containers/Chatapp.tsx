@@ -26,7 +26,6 @@ import {
   Button,
   Upload,
   Image,
-  message,
 } from 'antd';
 import {
   RollbackOutlined,
@@ -35,6 +34,7 @@ import {
   HeatMapOutlined,
   SmileOutlined,
   UploadOutlined,
+  CloseCircleTwoTone,
 } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -77,6 +77,7 @@ export const Chatapp = () => {
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [listMessages, setListMessages] = useState<any[]>([]);
   const [fileUploadAWS, setFileUploadAWS] = useState<UploadFile[]>([]);
+  const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<any>(undefined);
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
   const socket: any = useRef();
@@ -205,21 +206,6 @@ export const Chatapp = () => {
     }
   }, [errorAcknow]);
 
-  useEffect(() => {
-    function initResponseUploadAWS(data: string) {
-      if (_.isEmpty(data)) return;
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        { ...getValueFromChat(), text: data },
-        acknowLedGements,
-      );
-      dispatch(ChatAppSlice.actions.clearUploadAWS3());
-      setFileUploadAWS([]);
-    }
-    initResponseUploadAWS(uploadAWS);
-  }, [uploadAWS]);
-
   const handleSelectUser = (friend: any) => {
     setMyFriend(friend);
     dispatch(
@@ -261,6 +247,14 @@ export const Chatapp = () => {
         acknowLedGements,
       );
     }
+    if (!_.isEmpty(uploadAWS)) {
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        { ...getValueFromChat(), text: uploadAWS },
+        acknowLedGements,
+      );
+    }
     return resetFromChat();
   };
 
@@ -291,6 +285,8 @@ export const Chatapp = () => {
   const resetFromChat = () => {
     setErrorAcknow(undefined);
     setSendMessage('');
+    setFromDataUploadAWS3(undefined);
+    dispatch(ChatAppSlice.actions.clearUploadAWS3());
   };
 
   const renderCheckTypeMessages = (text: string) => {
@@ -360,19 +356,23 @@ export const Chatapp = () => {
     setFileUploadAWS(newFileList);
   };
 
-  const postUploadAWS3 = (file: RcFile) => {
+  const handleUploadAWS3 = (file: RcFile) => {
     const fromData = new FormData();
     fromData.append('file', file);
+    let reader = new FileReader();
+    reader.addEventListener('load', () => {
+      setFromDataUploadAWS3(reader.result);
+    });
+    reader.readAsDataURL(file);
     dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
   };
 
   const propsDrag: UploadProps = {
     listType: 'picture',
-    fileList: fileUploadAWS,
     openFileDialogOnClick: false,
     onChange: () => handleChangeUploadAWS3,
     beforeUpload: file => {
-      postUploadAWS3(file);
+      handleUploadAWS3(file);
       return false;
     },
   };
@@ -466,16 +466,15 @@ export const Chatapp = () => {
                         <Upload
                           action=""
                           listType="picture"
-                          fileList={fileUploadAWS}
                           onChange={handleChangeUploadAWS3}
                           beforeUpload={file => {
-                            postUploadAWS3(file);
+                            handleUploadAWS3(file);
                             return false;
                           }}
                         >
-                          {fileUploadAWS.length >= 1 ? null : (
-                            <UploadOutlined style={{ cursor: 'pointer' }} />
-                          )}
+                          <UploadOutlined
+                            style={{ cursor: 'pointer', marginRight: '10px' }}
+                          />
                         </Upload>
                         <Tooltip title="Send Message">
                           <SendOutlined
@@ -496,6 +495,20 @@ export const Chatapp = () => {
                       </React.Fragment>
                     }
                   />
+                  {formDataUploadAWS3 && (
+                    <div className="images_review">
+                      <Image
+                        src={formDataUploadAWS3}
+                        width={200}
+                        style={{ borderRadius: '10px' }}
+                      />
+                      <CloseCircleTwoTone
+                        style={{ marginLeft: '5px' }}
+                        twoToneColor="#00152900"
+                        onClick={() => setFromDataUploadAWS3(undefined)}
+                      />
+                    </div>
+                  )}
                 </Dragger>
               </div>
             </React.Fragment>

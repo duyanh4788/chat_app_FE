@@ -114,7 +114,7 @@
       }
     }
     .my_chat::after {
-      content: '';
+      content: "";
       clear: both;
       display: table;
     }
@@ -163,6 +163,10 @@
   }
 }
 
+.ant-upload-list {
+  display: none !important;
+}
+
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #e5ebe73b !important;
 }
@@ -175,4 +179,14 @@
 .site_layout::-webkit-scrollbar-thumb {
   background: #e2dfdf;
   border-radius: 6px;
+}
+
+.images_review {
+  text-align: left;
+  max-width: 250px;
+  max-height: 250px;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 5px;
+  margin-left: 5px;
 }
