@@ -9,6 +9,12 @@ export const selectLoading = createSelector(
   state => state.loading,
 );
 
+export const selectLoadingPaging = createSelector(
+  [selectChatApp],
+  state => state.loadingPaging,
+);
+
+
 export const selectListUsers = createSelector(
   [selectChatApp],
   state => state.listUsers,

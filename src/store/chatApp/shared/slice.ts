@@ -2,6 +2,7 @@ import { createSlice } from 'store/core/@reduxjs/toolkit';
 
 export interface ChatAppState {
   loading: boolean;
+  loadingPaging: boolean;
   listUsers: any;
   convertStation: any;
   getListMessages: any;
@@ -10,6 +11,7 @@ export interface ChatAppState {
 
 export const initialState: ChatAppState = {
   loading: false,
+  loadingPaging: false,
   listUsers: {},
   convertStation: null,
   getListMessages: {},
@@ -32,14 +34,14 @@ const ChatAppSlice = createSlice({
     },
 
     getListMessages(state, action) {
-      state.loading = true;
+      state.loadingPaging = true;
     },
     getListMessagesSuccess(state, action) {
-      state.loading = false;
+      state.loadingPaging = false;
       state.getListMessages = action.payload;
     },
     getListMessagesFail(state, action) {
-      state.loading = false;
+      state.loadingPaging = false;
     },
 
     postNewMessage(state, action) {
@@ -90,6 +92,7 @@ const ChatAppSlice = createSlice({
 
     clearData(state) {
       state.loading = false;
+      state.loadingPaging = false;
       state.listUsers = {};
       state.convertStation = {};
       state.getListMessages = {};

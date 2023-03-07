@@ -26,6 +26,7 @@ import {
   Button,
   Upload,
   Image,
+  Spin,
 } from 'antd';
 import {
   RollbackOutlined,
@@ -35,6 +36,7 @@ import {
   SmileOutlined,
   UploadOutlined,
   CloseCircleTwoTone,
+  LoadingOutlined,
 } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -69,6 +71,7 @@ export const Chatapp = () => {
     saga: ChatAppSaga,
   });
   const loading = useSelector(ChatAppSelector.selectLoading);
+  const loadingPaging = useSelector(ChatAppSelector.selectLoadingPaging);
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
@@ -475,6 +478,15 @@ export const Chatapp = () => {
                 className="site_layout"
                 onScroll={handleScrollListMessages}
               >
+                {loadingPaging && (
+                  <div style={{ textAlign: 'center' }}>
+                    <Spin
+                      indicator={
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      }
+                    />
+                  </div>
+                )}
                 {renderMessage()}
               </Content>
               <div className="form_chat">
