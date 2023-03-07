@@ -23,3 +23,8 @@ export const selectListMessages = createSelector(
   [selectChatApp],
   state => state.listMessages,
 );
+
+export const selectUploadAWS = createSelector(
+  [selectChatApp],
+  state => state.uploadAWS,
+);

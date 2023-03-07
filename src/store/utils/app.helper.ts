@@ -105,8 +105,13 @@ export class AppHelper {
 
   static checkLinkHttp(text: string) {
     if (_.isEmpty(text)) return null;
-    if (text.indexOf('http://') === 0 || text.indexOf('https://') === 0)
-      return true;
+    if (text.indexOf('http://') === 0 || text.indexOf('https://') === 0) return true;
+    else return false;
+  }
+
+  static checkLinkAWS(text: string) {
+    if (_.isEmpty(text)) return null;
+    if (text.includes('cloudfront.net')) return true;
     else return false;
   }
 

@@ -43,4 +43,7 @@ export class ChatAppHttp {
 
   public changeStatusoffline = (id: string): Promise<any> =>
     this.request.post(ChatAppApi.CHANGE_STATUS_OFFLINE, id);
+
+  public postUploadAWS3 = (data: FormData): Promise<any> =>
+    this.request.post(ChatAppApi.UPLOAD_AWS_S3, data);
 }

@@ -4,6 +4,7 @@ export const ChatAppApi = {
   GET_LIST_MESSAGE: '/getListMessages',
   NEW_MESSAGE: '/newMessage',
   CHANGE_STATUS_OFFLINE: '/changeStatusoffline',
+  UPLOAD_AWS_S3: '/upload-aws3',
 };
 
 export const REPONSE_CONSTANT = {
@@ -17,11 +18,13 @@ export const REPONSE_CONSTANT = {
   NEW_MESSAGE_FAIL: 'NEW_MESSAGE_FAIL',
   CHANGE_STATUS_OFFLINE_SUCCESS: 'CHANGE_STATUS_OFFLINE_SUCCESS',
   CHANGE_STATUS_OFFLINE_FAIL: 'CHANGE_STATUS_OFFLINE_FAIL',
+  UPLOAD_AWS_S3_SUCCESS: 'UPLOAD_AWS_S3_SUCCESS',
+  UPLOAD_AWS_S3_FAIL: 'UPLOAD_AWS_S3_FAIL',
 };
 
 export const REPONSE_MESSAGE = {
-  LIST_USER_SUCCESS: 'Lấy danh sách thành công',
-  LIST_USER_FAIL: 'Lấy danh sách thất bại',
-  LIST_MESSAGE_SUCCESS: 'Lấy danh sách thành công',
-  LIST_MESSAGE_FAIL: 'Lấy danh sách thất bại',
+  LIST_USER_SUCCESS: 'get list successfully.',
+  LIST_USER_FAIL: 'get list failed.',
+  LIST_MESSAGE_SUCCESS: 'get list successfully.',
+  LIST_MESSAGE_FAIL: 'get list failed.',
 };

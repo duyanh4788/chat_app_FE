@@ -16,14 +16,28 @@ import {
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Menu, Breadcrumb, Input, Tooltip, Avatar, Button } from 'antd';
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Input,
+  Tooltip,
+  Avatar,
+  Button,
+  Upload,
+  Image,
+  message,
+} from 'antd';
 import {
   RollbackOutlined,
   UserOutlined,
   SendOutlined,
   HeatMapOutlined,
   SmileOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
+import type { RcFile, UploadProps } from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
@@ -39,6 +53,7 @@ import { configResponse } from 'store/services/request';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
+const { Dragger } = Upload;
 
 export const Chatapp = () => {
   const authHttp = new ChatAppHttp();
@@ -55,16 +70,19 @@ export const Chatapp = () => {
   });
   const loading = useSelector(ChatAppSelector.selectLoading);
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
+  const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const [listUsers, setListUsers] = useState<any[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
   const [sendMessage, setSendMessage] = useState<any>(undefined);
   const [listMessages, setListMessages] = useState<any[]>([]);
+  const [fileUploadAWS, setFileUploadAWS] = useState<UploadFile[]>([]);
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
   const socket: any = useRef();
   const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
+
   useEffect(() => {
     async function initListUser() {
       try {
@@ -93,6 +111,10 @@ export const Chatapp = () => {
           openNotifi(400, payload);
           break;
         case ChatAppSlice.actions.changeStatusofflineFail.type:
+          openNotifi(400, payload);
+          break;
+        case ChatAppSlice.actions.postUploadAWS3Fail.type:
+          console.log(payload);
           openNotifi(400, payload);
           break;
         default:
@@ -183,6 +205,21 @@ export const Chatapp = () => {
     }
   }, [errorAcknow]);
 
+  useEffect(() => {
+    function initResponseUploadAWS(data: string) {
+      if (_.isEmpty(data)) return;
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        { ...getValueFromChat(), text: data },
+        acknowLedGements,
+      );
+      dispatch(ChatAppSlice.actions.clearUploadAWS3());
+      setFileUploadAWS([]);
+    }
+    initResponseUploadAWS(uploadAWS);
+  }, [uploadAWS]);
+
   const handleSelectUser = (friend: any) => {
     setMyFriend(friend);
     dispatch(
@@ -200,7 +237,7 @@ export const Chatapp = () => {
     dispatch(
       ChatAppSlice.actions.postNewMessage({
         ...getValueFromChat(),
-        text: sendMessage,
+        text: !_.isEmpty(uploadAWS) ? uploadAWS : sendMessage,
       }),
     );
   };
@@ -256,6 +293,20 @@ export const Chatapp = () => {
     setSendMessage('');
   };
 
+  const renderCheckTypeMessages = (text: string) => {
+    if (!_.isEmpty(text) && !AppHelper.checkLinkHttp(text)) {
+      return <p className="message_text">{text}</p>;
+    } else if (!AppHelper.checkLinkAWS(text)) {
+      return (
+        <a href={text} target="_blank" className="message_text">
+          {text}
+        </a>
+      );
+    } else {
+      return <Image width="100%" src={text} className="message_text" />;
+    }
+  };
+
   const renderMessage = () => {
     if (!_.isEmpty(convertStation) && listMessages.length === 0) {
       return (
@@ -272,16 +323,7 @@ export const Chatapp = () => {
             return (
               <div className="my_chat" key={idx}>
                 <div className="message_box">
-                  <p className="message_text">
-                    {!_.isEmpty(row.text) &&
-                    !AppHelper.checkLinkHttp(row.text) ? (
-                      row.text
-                    ) : (
-                      <a href={row.text} target="_blank">
-                        {row.text}
-                      </a>
-                    )}
-                  </p>
+                  {renderCheckTypeMessages(row.text)}
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
                 <Avatar className="bg_green avatar_img">
@@ -302,16 +344,7 @@ export const Chatapp = () => {
                     : ''}
                 </Avatar>
                 <div className="message_box">
-                  <p className="message_text">
-                    {!_.isEmpty(row.text) &&
-                    !AppHelper.checkLinkHttp(row.text) ? (
-                      row.text
-                    ) : (
-                      <a href={row.text} target="_blank">
-                        {row.text}
-                      </a>
-                    )}
-                  </p>
+                  {renderCheckTypeMessages(row.text)}
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
               </div>
@@ -319,6 +352,29 @@ export const Chatapp = () => {
           }
         });
     }
+  };
+
+  const handleChangeUploadAWS3: UploadProps['onChange'] = ({
+    fileList: newFileList,
+  }) => {
+    setFileUploadAWS(newFileList);
+  };
+
+  const postUploadAWS3 = (file: RcFile) => {
+    const fromData = new FormData();
+    fromData.append('file', file);
+    dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
+  };
+
+  const propsDrag: UploadProps = {
+    listType: 'picture',
+    fileList: fileUploadAWS,
+    openFileDialogOnClick: false,
+    onChange: () => handleChangeUploadAWS3,
+    beforeUpload: file => {
+      postUploadAWS3(file);
+      return false;
+    },
   };
 
   return (
@@ -398,33 +454,49 @@ export const Chatapp = () => {
             <React.Fragment>
               <Content className="site_layout">{renderMessage()}</Content>
               <div className="form_chat">
-                <Input
-                  placeholder="Enter Message"
-                  value={sendMessage}
-                  onChange={e => setSendMessage(e.target.value)}
-                  onPressEnter={onSendMessage}
-                  onFocus={e => setNotiFyTitle('Chat App')}
-                  suffix={
-                    <React.Fragment>
-                      <Tooltip title="Send Message">
-                        <SendOutlined
-                          type="info-circle"
-                          style={{
-                            color: 'rgba(0,0,0,.45)',
-                            marginRight: '10px',
+                <Dragger {...propsDrag}>
+                  <Input
+                    placeholder="Enter Message"
+                    value={sendMessage}
+                    onChange={e => setSendMessage(e.target.value)}
+                    onPressEnter={onSendMessage}
+                    onFocus={e => setNotiFyTitle('Chat App')}
+                    suffix={
+                      <React.Fragment>
+                        <Upload
+                          action=""
+                          listType="picture"
+                          fileList={fileUploadAWS}
+                          onChange={handleChangeUploadAWS3}
+                          beforeUpload={file => {
+                            postUploadAWS3(file);
+                            return false;
                           }}
-                          onClick={onSendMessage}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Share Location">
-                        <HeatMapOutlined
-                          type="info-circle"
-                          onClick={shareLocation}
-                        />
-                      </Tooltip>
-                    </React.Fragment>
-                  }
-                />
+                        >
+                          {fileUploadAWS.length >= 1 ? null : (
+                            <UploadOutlined style={{ cursor: 'pointer' }} />
+                          )}
+                        </Upload>
+                        <Tooltip title="Send Message">
+                          <SendOutlined
+                            type="info-circle"
+                            style={{
+                              color: 'rgba(0,0,0,.45)',
+                              marginRight: '10px',
+                            }}
+                            onClick={onSendMessage}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Share Location">
+                          <HeatMapOutlined
+                            type="info-circle"
+                            onClick={shareLocation}
+                          />
+                        </Tooltip>
+                      </React.Fragment>
+                    }
+                  />
+                </Dragger>
               </div>
             </React.Fragment>
           ) : (

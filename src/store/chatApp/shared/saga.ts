@@ -55,6 +55,17 @@ export function* changeStatusoffline(api, action) {
   }
 }
 
+export function* postUploadAWS3(api, action) {
+  const resPonse = yield call(api.postUploadAWS3, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.postUploadAWS3Success(data));
+  } catch (error) {
+    yield put(actions.postUploadAWS3Fail(_.get(error, 'message')));
+  }
+}
+
+
 export function* ChatAppSaga() {
   yield all([
     yield takeLatest(
@@ -76,6 +87,11 @@ export function* ChatAppSaga() {
     yield takeLatest(
       actions.getListMessages.type,
       getListMessages,
+      chatApptRequest,
+    ),
+    yield takeLatest(
+      actions.postUploadAWS3.type,
+      postUploadAWS3,
       chatApptRequest,
     ),
   ]);
