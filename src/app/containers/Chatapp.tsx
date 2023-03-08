@@ -202,7 +202,7 @@ export const Chatapp = () => {
   }, [errorAcknow]);
 
   const handleAutoScroll = (type: boolean) => {
-    let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
+    let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (!_.isEmpty(myRow) && listMessages?.length <= 9 && !type) {
       setTimeout(() => {
         myRow.scrollTop = myRow.scrollHeight;
@@ -369,7 +369,7 @@ export const Chatapp = () => {
   };
 
   const handleScrollListMessages = () => {
-    let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
+    let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (myRow.scrollTop < 1 && getListMessages.skip) {
       dispatch(
         ChatAppSlice.actions.getListMessages({
