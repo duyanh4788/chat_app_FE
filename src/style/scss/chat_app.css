@@ -67,8 +67,6 @@
   padding: 20px;
   overflow: auto;
   background: #dae3d77a;
-  clear: both;
-  float: left;
 }
 
 .ant-layout .site_layout .member_chat {
