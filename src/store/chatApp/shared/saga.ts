@@ -65,6 +65,16 @@ export function* postUploadAWS3(api, action) {
   }
 }
 
+export function* removeUploadAWS3(api, action) {
+  const resPonse = yield call(api.removeUploadAWS3, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.removeUploadAWS3Success(data));
+  } catch (error) {
+    yield put(actions.removeUploadAWS3Fail(_.get(error, 'message')));
+  }
+}
+
 
 export function* ChatAppSaga() {
   yield all([
@@ -92,6 +102,11 @@ export function* ChatAppSaga() {
     yield takeLatest(
       actions.postUploadAWS3.type,
       postUploadAWS3,
+      chatApptRequest,
+    ),
+    yield takeLatest(
+      actions.removeUploadAWS3.type,
+      removeUploadAWS3,
       chatApptRequest,
     ),
   ]);

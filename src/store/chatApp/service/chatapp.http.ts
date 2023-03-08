@@ -48,4 +48,7 @@ export class ChatAppHttp {
 
   public postUploadAWS3 = (data: FormData): Promise<any> =>
     this.request.post(ChatAppApi.UPLOAD_AWS_S3, data);
+
+  public removeUploadAWS3 = (idImage: any): Promise<any> =>
+    this.request.post(ChatAppApi.REMOVE_IMG_AWS3, idImage);
 }

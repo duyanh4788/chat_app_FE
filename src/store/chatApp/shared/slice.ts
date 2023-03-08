@@ -86,6 +86,16 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
+    removeUploadAWS3(state, action) {
+      state.loading = true;
+    },
+    removeUploadAWS3Success(state, action) {
+      state.loading = false;
+    },
+    removeUploadAWS3Fail(state, action) {
+      state.loading = false;
+    },
+
     clearUploadAWS3(state) {
       state.uploadAWS = {};
     },

@@ -39,7 +39,6 @@ import {
   LoadingOutlined,
 } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
@@ -50,15 +49,12 @@ import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
 import { AuthContext } from 'app/components/AuthContextApi';
-import { ChatAppHttp } from 'store/chatApp/service/chatapp.http';
-import { configResponse } from 'store/services/request';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 const { Dragger } = Upload;
 
 export const Chatapp = () => {
-  const authHttp = new ChatAppHttp();
   const userAuthContext = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -75,6 +71,7 @@ export const Chatapp = () => {
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
+  const getListUsers = useSelector(ChatAppSelector.selectListUsers);
   const [listUsers, setListUsers] = useState<any[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
@@ -88,35 +85,25 @@ export const Chatapp = () => {
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
-    async function initListUser() {
-      try {
-        const data = await authHttp.getListUsers();
-        const result = configResponse(data);
-        if (!_.isEmpty(result) && result.length) {
-          setListUsers(result);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          openNotifi(400, error.message);
-        }
-      }
-    }
-    initListUser();
+    dispatch(ChatAppSlice.actions.getListUsers());
+
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       switch (type) {
+        case ChatAppSlice.actions.removeUploadAWS3Success.type:
+          setFromDataUploadAWS3(undefined);
+          break;
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
           break;
         case ChatAppSlice.actions.getListMessagesFail.type:
           openNotifi(400, payload);
           break;
-        case ChatAppSlice.actions.changeStatusofflineFail.type:
+        case ChatAppSlice.actions.postUploadAWS3Fail.type:
           openNotifi(400, payload);
           break;
-        case ChatAppSlice.actions.postUploadAWS3Fail.type:
-          console.log(payload);
-          openNotifi(400, payload);
+        case ChatAppSlice.actions.removeUploadAWS3Fail.type:
+          setFromDataUploadAWS3(undefined);
           break;
         default:
           break;
@@ -131,11 +118,6 @@ export const Chatapp = () => {
       setSendMessage(undefined);
       setErrorAcknow(undefined);
       setMyFriend(null);
-      dispatch(
-        ChatAppSlice.actions.changeStatusoffline({
-          id: _.get(userAuthContext, '_id'),
-        }),
-      );
     };
   }, []);
 
@@ -173,9 +155,10 @@ export const Chatapp = () => {
   }, [PORT_SOCKET, userAuthContext]);
 
   useEffect(() => {
-    if (!_.isEmpty(listUsers)) {
+    if (!_.isEmpty(getListUsers)) {
+      setListUsers(getListUsers);
       socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: any) => {
-        let newList: any[] = listUsers.filter(
+        let newList: any[] = getListUsers.filter(
           ({ _id }) => _id !== dataUser._id,
         );
         newList.push(dataUser);
@@ -184,7 +167,7 @@ export const Chatapp = () => {
       socket.current.on(
         SOCKET_COMMIT.CHANGE_STATUS_OFFLINE,
         (dataUser: any) => {
-          let newList: any[] = listUsers.filter(
+          let newList: any[] = getListUsers.filter(
             ({ _id }) => _id !== dataUser._id,
           );
           newList.push(dataUser);
@@ -192,7 +175,7 @@ export const Chatapp = () => {
         },
       );
     }
-  }, [listUsers]);
+  }, [getListUsers]);
 
   useEffect(() => {
     let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
@@ -235,12 +218,6 @@ export const Chatapp = () => {
     if (error) {
       return setErrorAcknow(error);
     }
-    dispatch(
-      ChatAppSlice.actions.postNewMessage({
-        ...getValueFromChat(),
-        text: !_.isEmpty(uploadAWS) ? uploadAWS : sendMessage,
-      }),
-    );
   };
 
   const getValueFromChat = () => {
@@ -279,12 +256,6 @@ export const Chatapp = () => {
     }
     navigator.geolocation.getCurrentPosition(position => {
       const linkLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
-      dispatch(
-        ChatAppSlice.actions.postNewMessage({
-          ...getValueFromChat(),
-          text: linkLocation,
-        }),
-      );
       socket.current.emit(
         SOCKET_COMMIT.SEND_MESSAGE,
         userAuthContext,
@@ -540,7 +511,13 @@ export const Chatapp = () => {
                       <CloseCircleTwoTone
                         style={{ marginLeft: '5px' }}
                         twoToneColor="#00152900"
-                        onClick={() => setFromDataUploadAWS3(undefined)}
+                        onClick={() =>
+                          dispatch(
+                            ChatAppSlice.actions.removeUploadAWS3({
+                              idImage: uploadAWS,
+                            }),
+                          )
+                        }
                       />
                     </div>
                   )}
