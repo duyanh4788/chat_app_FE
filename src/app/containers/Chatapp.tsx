@@ -178,10 +178,7 @@ export const Chatapp = () => {
   }, [getListUsers]);
 
   useEffect(() => {
-    let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
-    if (!_.isEmpty(myRow)) {
-      myRow.scrollTop = myRow.scrollHeight;
-    }
+    handleAutoScroll(false);
     function initListMsg(msg: any) {
       if (!msg || (msg && !msg.listMessages?.length)) return;
       if (!listMessages.length) {
@@ -203,6 +200,20 @@ export const Chatapp = () => {
       openNotifi(400, errorAcknow);
     }
   }, [errorAcknow]);
+
+  const handleAutoScroll = (type: boolean) => {
+    let myRow: HTMLInputElement | any = document.querySelector('.site_layout');
+    if (!_.isEmpty(myRow) && listMessages?.length <= 9 && !type) {
+      setTimeout(() => {
+        myRow.scrollTop = myRow.scrollHeight;
+      }, 100);
+    }
+    if (type) {
+      setTimeout(() => {
+        myRow.scrollTop = myRow.scrollHeight;
+      }, 100);
+    }
+  };
 
   const handleSelectUser = (friend: any) => {
     setMyFriend(friend);
@@ -247,6 +258,7 @@ export const Chatapp = () => {
         acknowLedGements,
       );
     }
+    handleAutoScroll(true);
     return resetFromChat();
   };
 
