@@ -206,12 +206,12 @@ export const Chatapp = () => {
     if (!_.isEmpty(myRow) && listMessages?.length <= 9 && !type) {
       setTimeout(() => {
         myRow.scrollTop = myRow.scrollHeight;
-      }, 100);
+      }, 200);
     }
     if (type) {
       setTimeout(() => {
         myRow.scrollTop = myRow.scrollHeight;
-      }, 100);
+      }, 200);
     }
   };
 
