@@ -27,6 +27,7 @@ import {
   Upload,
   Image,
   Spin,
+  Badge,
 } from 'antd';
 import {
   RollbackOutlined,
@@ -49,6 +50,8 @@ import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
 import { AuthContext } from 'app/components/AuthContextApi';
+import { ModalUpdateUser } from 'app/components/ModalUpdateUser';
+import { LocalStorageService } from 'store/services/localStorage';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -58,6 +61,10 @@ export const Chatapp = () => {
   const userAuthContext = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const local = new LocalStorageService();
+  const userInfor = local.getItem('_info');
+
   useInjectReducer({
     key: ChatAppSlice.sliceKey,
     reducer: ChatAppSlice.reducer,
@@ -80,6 +87,7 @@ export const Chatapp = () => {
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<any>(undefined);
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const socket: any = useRef();
   const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
@@ -93,6 +101,11 @@ export const Chatapp = () => {
         case ChatAppSlice.actions.removeUploadAWS3Success.type:
           setFromDataUploadAWS3(undefined);
           break;
+        case AuthSlice.actions.updateInfoSuccess.type:
+          dispatch(AuthSlice.actions.getUserById(_.get(userInfor, 'id')));
+          setIsModalOpen(false);
+          resetFromChat();
+          break;
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
           break;
@@ -104,6 +117,9 @@ export const Chatapp = () => {
           break;
         case ChatAppSlice.actions.removeUploadAWS3Fail.type:
           setFromDataUploadAWS3(undefined);
+          break;
+        case AuthSlice.actions.updateInfoFail.type:
+          openNotifi(400, payload);
           break;
         default:
           break;
@@ -219,7 +235,8 @@ export const Chatapp = () => {
     setMyFriend(friend);
     if (
       !convertStation ||
-      (convertStation && convertStation.members.includes(friend._id) === false)
+      (convertStation &&
+        convertStation?.members?.includes(friend._id) === false)
     ) {
       dispatch(
         ChatAppSlice.actions.saveConvertStation({
@@ -325,7 +342,10 @@ export const Chatapp = () => {
                   {renderCheckTypeMessages(row.text)}
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
-                <Avatar className="bg_green avatar_img">
+                <Avatar
+                  className="bg_green avatar_img"
+                  src={_.get(userAuthContext, 'avatar')}
+                >
                   {!_.isEmpty(_.get(userAuthContext, 'fullName'))
                     ? AppHelper.convertFullName(
                         _.get(userAuthContext, 'fullName'),
@@ -337,7 +357,14 @@ export const Chatapp = () => {
           } else {
             return (
               <div className="member_chat" key={idx}>
-                <Avatar className="bg_green avatar_img">
+                <Avatar
+                  className="bg_green avatar_img"
+                  src={
+                    convertStation.avataReciver !== ''
+                      ? convertStation.avataReciver
+                      : null
+                  }
+                >
                   {!_.isEmpty(myFriend)
                     ? AppHelper.convertFullName(_.get(myFriend, 'fullName'))
                     : ''}
@@ -362,6 +389,11 @@ export const Chatapp = () => {
     });
     reader.readAsDataURL(file);
     dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
+  };
+
+  const handleUpDateInfo = (avatar: string, fullName: string, _id: string) => {
+    const payload = { avatar, fullName, _id };
+    dispatch(AuthSlice.actions.updateInfo(payload));
   };
 
   const propsDrag: UploadProps = {
@@ -422,12 +454,30 @@ export const Chatapp = () => {
                       className="subMenu"
                       onClick={() => handleSelectUser(row)}
                     >
-                      <span>
-                        <Avatar size={20} className="bg_green">
+                      <Badge
+                        dot
+                        style={{
+                          backgroundColor: '#52c41a',
+                          width: '10px',
+                          height: '10px',
+                          display:
+                            notiFyTitleRef.current === 'Chat App' ||
+                            !notiFyTitleRef.current
+                              ? 'none'
+                              : 'block',
+                        }}
+                        offset={[15, 10]}
+                      >
+                        <Avatar
+                          size={20}
+                          className="bg_green"
+                          src={row.avatar !== '' ? row.avatar : null}
+                        >
                           {AppHelper.convertFullName(row.fullName)}
                         </Avatar>
                         <span className="account">{row.fullName}</span>
-                      </span>
+                      </Badge>
+
                       <SmileOutlined
                         style={{
                           color: row.isOnline ? '#108ee9' : '#e91010',
@@ -443,14 +493,15 @@ export const Chatapp = () => {
         </Sider>
         <Layout>
           <Header className="site_info">
-            <Breadcrumb className="avatar">
-              <Breadcrumb.Item>
-                <Avatar className="bg_green">
-                  <Avatar className="bg_green">
-                    {AppHelper.convertFullName(
-                      _.get(userAuthContext, 'fullName'),
-                    )}
-                  </Avatar>
+            <Breadcrumb className="avatar" style={{ cursor: 'pointer' }}>
+              <Breadcrumb.Item onClick={() => setIsModalOpen(true)}>
+                <Avatar
+                  className="bg_green"
+                  src={_.get(userAuthContext, 'avatar')}
+                >
+                  {AppHelper.convertFullName(
+                    _.get(userAuthContext, 'fullName'),
+                  )}
                 </Avatar>
                 <span className="account">
                   {_.get(userAuthContext, 'fullName')}
@@ -484,7 +535,10 @@ export const Chatapp = () => {
                     value={sendMessage}
                     onChange={e => setSendMessage(e.target.value)}
                     onPressEnter={onSendMessage}
-                    onFocus={e => setNotiFyTitle('Chat App')}
+                    onFocus={e => {
+                      setNotiFyTitle('Chat App');
+                      notiFyTitleRef.current = undefined;
+                    }}
                     suffix={
                       <React.Fragment>
                         <Upload
@@ -550,6 +604,22 @@ export const Chatapp = () => {
           <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
         </Layout>
       </Layout>
+      <ModalUpdateUser
+        isModalOpen={isModalOpen}
+        handleOk={() => setIsModalOpen(false)}
+        handleCancel={() => {
+          setIsModalOpen(false);
+          if (uploadAWS) {
+            dispatch(
+              ChatAppSlice.actions.removeUploadAWS3({
+                idImage: uploadAWS,
+              }),
+            );
+          }
+        }}
+        handleUploadAWS3Modal={handleUploadAWS3}
+        handleUpDateInfo={handleUpDateInfo}
+      />
     </React.Fragment>
   );
 };

@@ -1,5 +1,5 @@
 import { AuthApi } from 'store/auth/constants/auth.constant';
-import { SignInModel, SignUpModel } from 'store/model/Auth.model';
+import { SignInModel, SignUpModel, UpdateUser } from 'store/model/Auth.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
@@ -25,6 +25,14 @@ export class AuthHttp {
     };
   };
 
+  private configUpdateInfor = (user: UpdateUser) => {
+    return {
+      fullName: user.fullName,
+      avatar: user.avatar,
+      _id: user._id,
+    };
+  };
+
   public signInUser = (data: SignInModel): Promise<any> => {
     return this.request.post(AuthApi.SIGN_IN, {
       ...this.configSingIn(data),
@@ -43,4 +51,9 @@ export class AuthHttp {
 
   public changeStatusOnline = (id: string): Promise<any> =>
     this.request.post(AuthApi.CHANGE_STATUS_IS_ONLINE, id);
+
+  public updateInfo = (body: any): Promise<any> => {
+    const config = this.configUpdateInfor(body);
+    return this.request.put(AuthApi.UPDATE_INFOR, config);
+  }
 }

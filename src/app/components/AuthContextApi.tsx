@@ -45,6 +45,7 @@ export const AuthContextProvider = ({ children }) => {
     }
     handleUser(infoUser);
   }, []);
+
   return (
     <AuthContext.Provider value={userById}>{children}</AuthContext.Provider>
   );

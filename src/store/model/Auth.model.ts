@@ -9,3 +9,9 @@ export interface SignInModel {
   account: string;
   passWord: string;
 }
+
+export interface UpdateUser {
+  fullName: string;
+  avatar: string;
+  _id: string;
+}
