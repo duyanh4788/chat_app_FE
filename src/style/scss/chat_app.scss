@@ -17,6 +17,8 @@
     }
   }
   .site_info {
+    display: flex;
+    justify-content: center;
     .avatar {
       margin: 20px 0;
       .bg_green {

@@ -217,12 +217,17 @@ export const Chatapp = () => {
 
   const handleSelectUser = (friend: any) => {
     setMyFriend(friend);
-    dispatch(
-      ChatAppSlice.actions.saveConvertStation({
-        reciverId: _.get(friend, '_id'),
-        senderId: _.get(userAuthContext, '_id'),
-      }),
-    );
+    if (
+      !convertStation ||
+      (convertStation && convertStation.members.includes(friend._id) === false)
+    ) {
+      dispatch(
+        ChatAppSlice.actions.saveConvertStation({
+          reciverId: _.get(friend, '_id'),
+          senderId: _.get(userAuthContext, '_id'),
+        }),
+      );
+    }
   };
 
   const acknowLedGements = (error: any) => {
