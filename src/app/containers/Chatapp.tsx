@@ -454,20 +454,7 @@ export const Chatapp = () => {
                       className="subMenu"
                       onClick={() => handleSelectUser(row)}
                     >
-                      <Badge
-                        dot
-                        style={{
-                          backgroundColor: '#52c41a',
-                          width: '10px',
-                          height: '10px',
-                          display:
-                            notiFyTitleRef.current === 'Chat App' ||
-                            !notiFyTitleRef.current
-                              ? 'none'
-                              : 'block',
-                        }}
-                        offset={[15, 10]}
-                      >
+                      <span>
                         <Avatar
                           size={20}
                           className="bg_green"
@@ -475,8 +462,22 @@ export const Chatapp = () => {
                         >
                           {AppHelper.convertFullName(row.fullName)}
                         </Avatar>
+                        <Badge
+                          dot
+                          style={{
+                            backgroundColor: '#52c41a',
+                            width: '10px',
+                            height: '10px',
+                            display:
+                              notiFyTitleRef.current === 'Chat App' ||
+                              !notiFyTitleRef.current
+                                ? 'none'
+                                : 'block',
+                          }}
+                          offset={[-8, -5]}
+                        />
                         <span className="account">{row.fullName}</span>
-                      </Badge>
+                      </span>
 
                       <SmileOutlined
                         style={{
@@ -609,7 +610,7 @@ export const Chatapp = () => {
         handleOk={() => setIsModalOpen(false)}
         handleCancel={() => {
           setIsModalOpen(false);
-          if (uploadAWS) {
+          if (!_.isEmpty(uploadAWS)) {
             dispatch(
               ChatAppSlice.actions.removeUploadAWS3({
                 idImage: uploadAWS,
