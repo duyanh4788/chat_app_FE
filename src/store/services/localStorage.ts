@@ -46,7 +46,7 @@ export class LocalStorageService {
     return this;
   }
 
-  public getItem(key: string): string | null {
+  public getItem(key: string): string | number | null {
     const value: any = localStorage.getItem(key);
     if (value === null || value === 'undefined') return null;
     return JSON.parse(value);
@@ -58,7 +58,7 @@ export class LocalStorageService {
 
   public expiredToken(tokenExpirendTime: number): boolean {
     if (tokenExpirendTime) {
-      return +tokenExpirendTime < new Date().getTime();
+      return +tokenExpirendTime * 1000 < new Date().getTime();
     }
     return false;
   }

@@ -1,11 +1,11 @@
-import apisauce, { ApiResponse } from 'apisauce';
+import apisauce, { ApiResponse, ApisauceInstance } from 'apisauce';
 import { isEmpty, get, snakeCase } from 'lodash';
 import { LocalStorageService, LocalStorageKey } from './localStorage';
 
 export class HttpRequest {
-  request: any;
-  localService: any;
-  constructor(APIEndpoint) {
+  request: ApisauceInstance;
+  localService: LocalStorageService;
+  constructor(APIEndpoint: string | any) {
     this.localService = new LocalStorageService();
     this.request = apisauce.create({
       baseURL: APIEndpoint,

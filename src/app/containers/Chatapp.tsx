@@ -573,7 +573,7 @@ export const Chatapp = () => {
                       </React.Fragment>
                     }
                   />
-                  {formDataUploadAWS3 && (
+                  {formDataUploadAWS3 && !isModalOpen && (
                     <div className="images_review">
                       <Image
                         src={formDataUploadAWS3}

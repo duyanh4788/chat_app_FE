@@ -4,6 +4,7 @@ export const AuthApi = {
   GET_USER_BY_ID: '/getUserById/',
   CHANGE_STATUS_IS_ONLINE: '/changeStatusOnline',
   UPDATE_INFOR: '/update-infor',
+  LOGIN_FB: '/login-fb',
 };
 
 export const REPONSE_CONSTANT = {
@@ -17,6 +18,8 @@ export const REPONSE_CONSTANT = {
   CHANGE_STATUS_IS_ONLINE_FAIL: 'CHANGE_STATUS_IS_ONLINE_FAIL',
   UPDATE_INFOR_SUCCESS: 'UPDATE_INFOR_SUCCESS',
   UPDATE_INFOR_FAIL: 'UPDATE_INFOR_FAIL',
+  LOGIN_FB_SUCCESS: 'LOGIN_FB_SUCCESS',
+  LOGIN_FB_FAIL: 'LOGIN_FB_FAIL',
 };
 
 export const REPONSE_MESSAGE = {

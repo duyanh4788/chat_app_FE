@@ -6,7 +6,7 @@ import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthConst from 'store/auth/constants/auth.constant';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Tabs } from 'antd';
 import { AppLoading } from 'store/utils/Apploading';
 import { SignUpUser } from '../components/SignUpUser';
@@ -20,7 +20,6 @@ const { TabPane } = Tabs;
 
 export const MainRomChat = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
@@ -33,14 +32,17 @@ export const MainRomChat = () => {
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
+        case AuthSlice.actions.signUpWithFBSuccess.type:
           local.setAuth({
             toKen: _.get(payload, 'toKen'),
             id: _.get(payload, '_id'),
           });
           openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
           history.push('/chatApp');
+          window.location.reload();
           break;
         case AuthSlice.actions.signUpUserFail.type:
+        case AuthSlice.actions.signUpWithFBFail.type:
           openNotifi(400, payload);
           break;
         case AuthSlice.actions.sigInUserFail.type:

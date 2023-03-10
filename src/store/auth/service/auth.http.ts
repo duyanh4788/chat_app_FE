@@ -1,10 +1,11 @@
+import { ApisauceInstance } from 'apisauce';
 import { AuthApi } from 'store/auth/constants/auth.constant';
 import { SignInModel, SignUpModel, UpdateUser } from 'store/model/Auth.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
 export class AuthHttp {
-  request: any;
+  request: ApisauceInstance;
   constructor(endPoint = ApiRouter.CHAT_APP_API) {
     this.request = new HttpRequest(endPoint).request;
   }
@@ -41,6 +42,12 @@ export class AuthHttp {
 
   public signUpUser = (data: SignUpModel): Promise<any> => {
     return this.request.post(AuthApi.SIGN_UP, {
+      ...this.configSignUp(data),
+    });
+  };
+
+  public signUpWithFB = (data: SignUpModel): Promise<any> => {
+    return this.request.post(AuthApi.LOGIN_FB, {
       ...this.configSignUp(data),
     });
   };

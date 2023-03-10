@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Upload, Button, Image } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Modal, Input, Upload, Button, Image, Avatar } from 'antd';
+import {
+  UploadOutlined,
+  UserOutlined,
+  MailOutlined,
+  AccountBookOutlined,
+} from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as _ from 'lodash';
 import { RcFile } from 'antd/lib/upload';
 import { AppLoading } from 'store/utils/Apploading';
+import { AppHelper } from 'store/utils/app.helper';
 
 interface Props {
   isModalOpen: boolean;
@@ -53,8 +59,8 @@ export function ModalUpdateUser(props: Props) {
 
   return (
     <Modal
-      title="Info User"
-      visible={isModalOpen}
+      title="INFOR USER"
+      open={isModalOpen}
       onOk={() => handleUpDateInfo(uploadAWS, fullName, userInfor._id)}
       onCancel={handleCancel}
     >
@@ -66,11 +72,14 @@ export function ModalUpdateUser(props: Props) {
           alignItems: 'center',
         }}
       >
-        <Image
+        <Avatar
+          shape="square"
+          size={140}
           src={!_.isEmpty(uploadAWS) ? uploadAWS : avatar}
-          width={200}
-          style={{ borderRadius: '10px' }}
-        />
+          style={{ fontSize: '100px', marginBottom: '10px' }}
+        >
+          {AppHelper.convertFullName(fullName)}
+        </Avatar>
         <Upload
           action=""
           showUploadList={false}
@@ -80,23 +89,24 @@ export function ModalUpdateUser(props: Props) {
             return false;
           }}
         >
-          <div style={{ marginLeft: 8 }}>
-            <Button icon={<UploadOutlined />}>Upload Avatar</Button>
-          </div>
+          <Button shape="circle" icon={<UploadOutlined />} />
         </Upload>
       </div>
-      <div style={{ marginBottom: 24 }}>
-        <label>Account:</label>
-        <Input value={account} />
-      </div>
-      <div style={{ marginBottom: 24 }}>
-        <label>Email:</label>
-        <Input value={email} />
-      </div>
-      <div>
-        <label>FullName:</label>
-        <Input value={fullName} onChange={e => setFullName(e.target.value)} />
-      </div>
+      <Input
+        className="mg-bottom"
+        prefix={<UserOutlined className="site-form-item-icon" />}
+        value={account}
+      />
+      <Input
+        className="mg-bottom"
+        prefix={<MailOutlined className="site-form-item-icon" />}
+        value={email}
+      />
+      <Input
+        prefix={<AccountBookOutlined className="site-form-item-icon" />}
+        value={fullName}
+        onChange={e => setFullName(e.target.value)}
+      />
     </Modal>
   );
 }

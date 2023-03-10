@@ -1,10 +1,11 @@
+import { ApisauceInstance } from 'apisauce';
 import { ChatAppApi } from 'store/chatApp/constants/chatapp.constant';
 import { ConvertStation, MessagesModel } from 'store/model/ChatApp.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
 export class ChatAppHttp {
-  request: any;
+  request: ApisauceInstance;
   constructor(endPoint = ApiRouter.CHAT_APP_API) {
     this.request = new HttpRequest(endPoint).request;
   }

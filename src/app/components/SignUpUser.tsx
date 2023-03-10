@@ -17,6 +17,7 @@ import {
   MailOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
+import FacebookLogin from 'react-facebook-login';
 
 export function SignUpUser() {
   useInjectReducer({
@@ -44,6 +45,17 @@ export function SignUpUser() {
   const onFinish = values => {
     dispatch(AuthSlice.actions.signUpUser(values));
   };
+
+  const responseFacebook = response => {
+    const payload = {
+      email: response.email,
+      fullName: response.name,
+      account: response.email.split('@')[0] + '_' + response.id,
+      passWord: response.accessToken,
+    };
+    dispatch(AuthSlice.actions.signUpWithFB(payload));
+  };
+
   return (
     <div className="form_input">
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
@@ -99,6 +111,13 @@ export function SignUpUser() {
           )}
         </Form.Item>
       </Form>
+      <FacebookLogin
+        appId="167142142781205"
+        fields="name,email,picture"
+        cssClass="my-facebook-button-class"
+        icon="fa-facebook"
+        callback={responseFacebook}
+      />
     </div>
   );
 }
