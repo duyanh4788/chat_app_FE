@@ -36,6 +36,16 @@ export function* signUpWithFB(api, action) {
   }
 }
 
+export function* signUpWithGG(api, action) {
+  const resPonse = yield call(api.signUpWithGG, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.signUpWithGGSuccess(data));
+  } catch (error) {
+    yield put(actions.signUpWithGGFail(_.get(error, 'message')));
+  }
+}
+
 export function* getUserById(api, action) {
   const resPonse = yield call(api.getUserById, action.payload);
   try {
@@ -71,6 +81,7 @@ export function* AuthSaga() {
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
     yield takeLatest(actions.signUpWithFB.type, signUpWithFB, authRequest),
+    yield takeLatest(actions.signUpWithGG.type, signUpWithGG, authRequest),
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),
     yield takeLatest(
       actions.updateInfo.type,

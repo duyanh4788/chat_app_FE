@@ -46,10 +46,12 @@ export class AuthHttp {
     });
   };
 
-  public signUpWithFB = (data: SignUpModel): Promise<any> => {
-    return this.request.post(AuthApi.LOGIN_FB, {
-      ...this.configSignUp(data),
-    });
+  public signUpWithFB = (data: any): Promise<any> => {
+    return this.request.post(AuthApi.LOGIN_FB, {});
+  };
+
+  public signUpWithGG = (data: any): Promise<any> => {
+    return this.request.post(AuthApi.LOGIN_GG, {});
   };
 
   public getUserById = (id: string): Promise<any> => {

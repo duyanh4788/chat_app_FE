@@ -37,21 +37,21 @@ export function SignInUser() {
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
         <Form.Item
           name="account"
-          rules={[{ required: true, message: 'Vui lòng nhập tài khoản' }]}
+          rules={[{ required: true, message: 'please input account.' }]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Nhập tài khoản"
+            placeholder="input account"
           />
         </Form.Item>
         <Form.Item
           name="passWord"
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+          rules={[{ required: true, message: 'please input password.' }]}
         >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Nhập mật khẩu"
+            placeholder="input password"
           />
         </Form.Item>
 
@@ -66,11 +66,25 @@ export function SignInUser() {
                   .length
               }
             >
-              Đăng nhập
+              Sign In
             </Button>
           )}
         </Form.Item>
       </Form>
+      <div style={{ display: 'flex' }}>
+        <button
+          className="loginBtn loginBtn--facebook"
+          onClick={() => dispatch(AuthSlice.actions.signUpWithFB({}))}
+        >
+          Login with Facebook
+        </button>
+        <button
+          className="loginBtn loginBtn--google"
+          onClick={() => dispatch(AuthSlice.actions.signUpWithGG({}))}
+        >
+          Login with Google
+        </button>
+      </div>
     </div>
   );
 }

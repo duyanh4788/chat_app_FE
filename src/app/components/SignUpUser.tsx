@@ -17,7 +17,6 @@ import {
   MailOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
-import FacebookLogin from 'react-facebook-login';
 
 export function SignUpUser() {
   useInjectReducer({
@@ -46,54 +45,44 @@ export function SignUpUser() {
     dispatch(AuthSlice.actions.signUpUser(values));
   };
 
-  const responseFacebook = response => {
-    const payload = {
-      email: response.email,
-      fullName: response.name,
-      account: response.email.split('@')[0] + '_' + response.id,
-      passWord: response.accessToken,
-    };
-    dispatch(AuthSlice.actions.signUpWithFB(payload));
-  };
-
   return (
     <div className="form_input">
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
         <Form.Item
           name="account"
-          rules={[{ required: true, message: 'Vui lòng nhập tài khoản!' }]}
+          rules={[{ required: true, message: 'please input account.' }]}
         >
           <Input
             prefix={<UserAddOutlined className="site-form-item-icon" />}
-            placeholder="Nhập tài khoản"
+            placeholder="input account"
           />
         </Form.Item>
         <Form.Item
           name="passWord"
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+          rules={[{ required: true, message: 'please input password.' }]}
         >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Nhập mật khẩu"
+            placeholder="input password"
           />
         </Form.Item>
         <Form.Item
           name="fullName"
-          rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
+          rules={[{ required: true, message: 'please input your name.' }]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Nhập họ tên"
+            placeholder="input your name"
           />
         </Form.Item>
         <Form.Item
           name="email"
-          rules={[{ required: true, message: 'Vui lòng nhập Email!' }]}
+          rules={[{ required: true, message: 'please input email.' }]}
         >
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
-            placeholder="Nhập Email"
+            placeholder="input email"
           />
         </Form.Item>
         <Form.Item shouldUpdate>
@@ -106,18 +95,11 @@ export function SignUpUser() {
                   .length
               }
             >
-              Đăng Ký
+              Sign Up
             </Button>
           )}
         </Form.Item>
       </Form>
-      <FacebookLogin
-        appId="167142142781205"
-        fields="name,email,picture"
-        cssClass="my-facebook-button-class"
-        icon="fa-facebook"
-        callback={responseFacebook}
-      />
     </div>
   );
 }
