@@ -40,6 +40,18 @@ const AuthSlice = createSlice({
       state.loading = false;
     },
 
+    activeAuthCode(state, action) {
+      state.loading = true;
+    },
+    activeAuthCodeSuccess(state, action) {
+      state.loading = false;
+      console.log(action)
+      state.success = action.payload;
+    },
+    activeAuthCodeFail(state, action) {
+      state.loading = false;
+    },
+
     signUpWithFB(state, action) {
       state.loading = true;
     },

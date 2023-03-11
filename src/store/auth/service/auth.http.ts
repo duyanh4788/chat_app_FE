@@ -65,4 +65,7 @@ export class AuthHttp {
     const config = this.configUpdateInfor(body);
     return this.request.put(AuthApi.UPDATE_INFOR, config);
   }
+  public activeAuthCode = (code: string): Promise<any> => {
+    return this.request.get(`${AuthApi.ACTIVE_AUTH_CODE}/${code}`);
+  }
 }

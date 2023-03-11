@@ -49,7 +49,7 @@ export function configResponse(response: ApiResponse<any>): any {
     }
   }
   const { data, code, message } = response.data;
-  if (code === 400 || code === 500) {
+  if (code === 400 || code === 500 || response.status === 401) {
     throw new Error(message);
   }
   if (code === 200) {

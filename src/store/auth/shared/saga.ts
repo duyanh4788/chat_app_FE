@@ -26,6 +26,16 @@ export function* signUpUser(api, action) {
   }
 }
 
+export function* activeAuthCode(api, action) {
+  const resPonse = yield call(api.activeAuthCode, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.activeAuthCodeSuccess(data));
+  } catch (error) {
+    yield put(actions.activeAuthCodeFail(_.get(error, 'message')));
+  }
+}
+
 export function* signUpWithFB(api, action) {
   const resPonse = yield call(api.signUpWithFB, action.payload);
   try {
@@ -80,6 +90,7 @@ export function* AuthSaga() {
   yield all([
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
+    yield takeLatest(actions.activeAuthCode.type, activeAuthCode, authRequest),
     yield takeLatest(actions.signUpWithFB.type, signUpWithFB, authRequest),
     yield takeLatest(actions.signUpWithGG.type, signUpWithGG, authRequest),
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),

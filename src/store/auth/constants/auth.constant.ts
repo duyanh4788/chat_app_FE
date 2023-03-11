@@ -1,6 +1,7 @@
 export const AuthApi = {
   SIGN_IN: '/signIn',
   SIGN_UP: '/signUp',
+  ACTIVE_AUTH_CODE: '/active',
   GET_USER_BY_ID: '/getUserById/',
   CHANGE_STATUS_IS_ONLINE: '/changeStatusOnline',
   UPDATE_INFOR: '/update-infor',
@@ -23,6 +24,8 @@ export const REPONSE_CONSTANT = {
   LOGIN_FB_FAIL: 'LOGIN_FB_FAIL',
   LOGIN_GG_SUCCESS: 'LOGIN_GG_SUCCESS',
   LOGIN_GG_FAIL: 'LOGIN_GG_FAIL',
+  ACTIVE_AUTH_CODE_SUCCESS: 'ACTIVE_AUTH_CODE_SUCCESS',
+  ACTIVE_AUTH_CODE_FAIL: 'ACTIVE_AUTH_CODE_FAIL',
 };
 
 export const REPONSE_MESSAGE = {
