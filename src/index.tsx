@@ -7,7 +7,7 @@ import './style/scss/chat_app.css';
 import './style/scss/main_form.css';
 import 'antd/dist/antd.css';
 import { AuthContextProvider } from 'app/components/AuthContextApi';
-import { Chatapp, MainRomChat } from 'router/lazyRouting';
+import { Chatapp, MainRomChat, Password } from 'router/lazyRouting';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 const ConnectedApp = () => (
@@ -17,6 +17,7 @@ const ConnectedApp = () => (
         <AuthContextProvider>
           <Route path="/" exact component={MainRomChat} />
           <Route path="/chatApp" exact component={Chatapp} />
+          <Route path="/password" exact component={Password} />
         </AuthContextProvider>
       </Switch>
     </Provider>

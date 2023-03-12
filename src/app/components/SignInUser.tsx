@@ -9,7 +9,7 @@ import {
   useInjectReducer,
   useInjectSaga,
 } from 'store/core/@reduxjs/redux-injectors';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Tooltip, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../../images/logo.png';
 
@@ -69,6 +69,11 @@ export function SignInUser() {
               Sign In
             </Button>
           )}
+        </Form.Item>
+        <Form.Item>
+          <Tooltip title="Forgot Password">
+            <Typography.Link href="password">Forgot Password</Typography.Link>
+          </Tooltip>
         </Form.Item>
       </Form>
       <div style={{ display: 'flex' }}>

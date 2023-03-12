@@ -45,10 +45,42 @@ const AuthSlice = createSlice({
     },
     activeAuthCodeSuccess(state, action) {
       state.loading = false;
-      console.log(action)
       state.success = action.payload;
     },
     activeAuthCodeFail(state, action) {
+      state.loading = false;
+    },
+
+    forgotPassword(state, action) {
+      state.loading = true;
+    },
+    forgotPasswordSuccess(state, action) {
+      state.loading = false;
+      state.success = action.payload;
+    },
+    forgotPasswordFail(state, action) {
+      state.loading = false;
+    },
+
+    resetPassword(state, action) {
+      state.loading = true;
+    },
+    resetPasswordSuccess(state, action) {
+      state.loading = false;
+      state.success = action.payload;
+    },
+    resetPasswordFail(state, action) {
+      state.loading = false;
+    },
+
+    resendOrderForgotPassword(state, action) {
+      state.loading = true;
+    },
+    resendOrderForgotPasswordSuccess(state, action) {
+      state.loading = false;
+      state.success = action.payload;
+    },
+    resendOrderForgotPasswordFail(state, action) {
       state.loading = false;
     },
 

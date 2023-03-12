@@ -12,3 +12,9 @@ export const Chatapp = lazyLoad(
   module => module.Chatapp,
   LoaderFallBack(),
 );
+
+export const Password = lazyLoad(
+  () => import('app'),
+  module => module.PassWord,
+  LoaderFallBack(),
+);

@@ -36,6 +36,36 @@ export function* activeAuthCode(api, action) {
   }
 }
 
+export function* forgotPassword(api, action) {
+  const resPonse = yield call(api.forgotPassword, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.forgotPasswordSuccess(data));
+  } catch (error) {
+    yield put(actions.forgotPasswordFail(_.get(error, 'message')));
+  }
+}
+
+export function* resendOrderForgotPassword(api, action) {
+  const resPonse = yield call(api.resendOrderForgotPassword, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.resendOrderForgotPasswordSuccess(data));
+  } catch (error) {
+    yield put(actions.resendOrderForgotPasswordFail(_.get(error, 'message')));
+  }
+}
+
+export function* resetPassword(api, action) {
+  const resPonse = yield call(api.resetPassword, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.resetPasswordSuccess(data));
+  } catch (error) {
+    yield put(actions.resetPasswordFail(_.get(error, 'message')));
+  }
+}
+
 export function* signUpWithFB(api, action) {
   const resPonse = yield call(api.signUpWithFB, action.payload);
   try {
@@ -91,6 +121,9 @@ export function* AuthSaga() {
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
     yield takeLatest(actions.activeAuthCode.type, activeAuthCode, authRequest),
+    yield takeLatest(actions.forgotPassword.type, forgotPassword, authRequest),
+    yield takeLatest(actions.resendOrderForgotPassword.type, resendOrderForgotPassword, authRequest),
+    yield takeLatest(actions.resetPassword.type, resetPassword, authRequest),
     yield takeLatest(actions.signUpWithFB.type, signUpWithFB, authRequest),
     yield takeLatest(actions.signUpWithGG.type, signUpWithGG, authRequest),
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),

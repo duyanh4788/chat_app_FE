@@ -38,7 +38,7 @@
   border-radius: 10px;
   width: 460px;
   padding: 20px;
-  height: 300px;
+  height: 350px;
 }
 
 .main_form .form_input .logo {
@@ -89,6 +89,43 @@
   -webkit-animation: spin 2s linear infinite;
   /* Safari */
   animation: spin 2s linear infinite;
+}
+
+.main_form .form_password {
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+          box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+  border-radius: 10px;
+  width: 460px;
+  padding: 20px;
+  height: 450px;
+}
+
+.main_form .form_password .logo {
+  text-align: center;
+}
+
+.main_form .form_password .logo .logo_img {
+  width: 50px;
+  height: 50px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+.main_form .form_password .ant-form-inline {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.main_form .form_password .ant-form-item-control-input {
+  text-align: center;
+}
+
+.main_form .form_password .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 @-webkit-keyframes spin {

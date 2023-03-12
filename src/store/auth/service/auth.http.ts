@@ -34,6 +34,14 @@ export class AuthHttp {
     };
   };
 
+  private configResetPassWord = (body: any) => {
+    return {
+      email: body.email,
+      newPassWord: body.newPassWord,
+      authCode: body.authCode,
+    };
+  };
+
   public signInUser = (data: SignInModel): Promise<any> => {
     return this.request.post(AuthApi.SIGN_IN, {
       ...this.configSingIn(data),
@@ -64,8 +72,21 @@ export class AuthHttp {
   public updateInfo = (body: any): Promise<any> => {
     const config = this.configUpdateInfor(body);
     return this.request.put(AuthApi.UPDATE_INFOR, config);
-  }
+  };
+
   public activeAuthCode = (code: string): Promise<any> => {
     return this.request.get(`${AuthApi.ACTIVE_AUTH_CODE}/${code}`);
-  }
+  };
+
+  public forgotPassword = (email: any): Promise<any> => {
+    return this.request.post(AuthApi.FORGOT_PW, email);
+  };
+
+  public resendOrderForgotPassword = (email: any): Promise<any> => {
+    return this.request.post(AuthApi.RESEND_ORDER_RESET_PASSWORD, email);
+  };
+
+  public resetPassword = (body: any): Promise<any> => {
+    return this.request.post(AuthApi.RESET_PASSWORD, this.configResetPassWord(body));
+  };
 }
