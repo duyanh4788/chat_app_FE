@@ -5,10 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as _ from 'lodash';
 import * as AuthSlice from 'store/auth/shared/slice';
 import { AuthSaga } from 'store/auth/shared/saga';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from 'store/core/@reduxjs/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button, Tooltip, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../../images/logo.png';
@@ -35,19 +32,13 @@ export function SignInUser() {
         <img src={logo} alt={logo} className="logo_img" />
       </div>
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
-        <Form.Item
-          name="account"
-          rules={[{ required: true, message: 'please input account.' }]}
-        >
+        <Form.Item name="account" rules={[{ required: true, message: 'please input account.' }]}>
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="input account"
           />
         </Form.Item>
-        <Form.Item
-          name="passWord"
-          rules={[{ required: true, message: 'please input password.' }]}
-        >
+        <Form.Item name="passWord" rules={[{ required: true, message: 'please input password.' }]}>
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
@@ -61,10 +52,8 @@ export function SignInUser() {
               htmlType="submit"
               disabled={
                 !form.isFieldsTouched(true) ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
-              }
-            >
+                !!form.getFieldsError().filter(({ errors }) => errors.length).length
+              }>
               Sign In
             </Button>
           )}
@@ -81,14 +70,12 @@ export function SignInUser() {
       <div style={{ display: 'flex' }}>
         <button
           className="loginBtn loginBtn--facebook"
-          onClick={() => dispatch(AuthSlice.actions.signUpWithFB({}))}
-        >
+          onClick={() => dispatch(AuthSlice.actions.signUpWithFB({}))}>
           Login with Facebook
         </button>
         <button
           className="loginBtn loginBtn--google"
-          onClick={() => dispatch(AuthSlice.actions.signUpWithGG({}))}
-        >
+          onClick={() => dispatch(AuthSlice.actions.signUpWithGG({}))}>
           Login with Google
         </button>
       </div>

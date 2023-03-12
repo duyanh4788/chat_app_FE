@@ -122,20 +122,16 @@ export function* AuthSaga() {
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
     yield takeLatest(actions.activeAuthCode.type, activeAuthCode, authRequest),
     yield takeLatest(actions.forgotPassword.type, forgotPassword, authRequest),
-    yield takeLatest(actions.resendOrderForgotPassword.type, resendOrderForgotPassword, authRequest),
+    yield takeLatest(
+      actions.resendOrderForgotPassword.type,
+      resendOrderForgotPassword,
+      authRequest,
+    ),
     yield takeLatest(actions.resetPassword.type, resetPassword, authRequest),
     yield takeLatest(actions.signUpWithFB.type, signUpWithFB, authRequest),
     yield takeLatest(actions.signUpWithGG.type, signUpWithGG, authRequest),
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),
-    yield takeLatest(
-      actions.updateInfo.type,
-      updateInfo,
-      authRequest,
-    ),
-    yield takeLatest(
-      actions.changeStatusOnline.type,
-      changeStatusOnline,
-      authRequest,
-    ),
+    yield takeLatest(actions.updateInfo.type, updateInfo, authRequest),
+    yield takeLatest(actions.changeStatusOnline.type, changeStatusOnline, authRequest),
   ]);
 }

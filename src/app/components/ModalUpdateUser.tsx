@@ -1,11 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Upload, Button, Image, Avatar } from 'antd';
-import {
-  UploadOutlined,
-  UserOutlined,
-  MailOutlined,
-  AccountBookOutlined,
-} from '@ant-design/icons';
+import { Modal, Input, Upload, Button, Avatar } from 'antd';
+import { UploadOutlined, UserOutlined, MailOutlined, AccountBookOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
@@ -23,13 +19,7 @@ interface Props {
 }
 
 export function ModalUpdateUser(props: Props) {
-  const {
-    isModalOpen,
-    handleOk,
-    handleCancel,
-    handleUploadAWS3Modal,
-    handleUpDateInfo,
-  } = props;
+  const { isModalOpen, handleOk, handleCancel, handleUploadAWS3Modal, handleUpDateInfo } = props;
   const loading = useSelector(AuthSelector.selectLoading);
   const userInfor = useSelector(AuthSelector.selectUserById);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
@@ -62,22 +52,19 @@ export function ModalUpdateUser(props: Props) {
       title="INFOR USER"
       open={isModalOpen}
       onOk={() => handleUpDateInfo(uploadAWS, fullName, userInfor._id)}
-      onCancel={handleCancel}
-    >
+      onCancel={handleCancel}>
       {loading && <AppLoading loading />}
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Avatar
           shape="square"
           size={140}
           src={!_.isEmpty(uploadAWS) ? uploadAWS : avatar}
-          style={{ fontSize: '100px', marginBottom: '10px' }}
-        >
+          style={{ fontSize: '100px', marginBottom: '10px' }}>
           {AppHelper.convertFullName(fullName)}
         </Avatar>
         <Upload
@@ -87,8 +74,7 @@ export function ModalUpdateUser(props: Props) {
           beforeUpload={file => {
             handleUploadAWS3Modal(file);
             return false;
-          }}
-        >
+          }}>
           <Button shape="circle" icon={<UploadOutlined />} />
         </Upload>
       </div>

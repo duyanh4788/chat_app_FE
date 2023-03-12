@@ -1,20 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import * as _ from 'lodash';
 import * as AuthSlice from 'store/auth/shared/slice';
 import { AuthSaga } from 'store/auth/shared/saga';
 import { useHistory } from 'react-router-dom';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from 'store/core/@reduxjs/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button, Tooltip, Typography } from 'antd';
-import {
-  MailOutlined,
-  RollbackOutlined,
-  CodeOutlined,
-  LockOutlined,
-} from '@ant-design/icons';
+import { MailOutlined, RollbackOutlined, CodeOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../../images/logo.png';
 import { RootStore } from 'store/configStore';
 import { Unsubscribe } from 'redux';
@@ -96,23 +88,14 @@ export const PassWord = () => {
 
   return (
     <div className="main_form">
-      <div
-        className={
-          showFromPassWord
-            ? 'form_input form_password'
-            : 'form_input form_sign_in'
-        }
-      >
+      <div className={showFromPassWord ? 'form_input form_password' : 'form_input form_sign_in'}>
         <h1>Reset password</h1>
         <div className="logo">
           <img src={logo} alt={logo} className="logo_img" />
         </div>
         <Form form={form} name="horizontal_login" onFinish={onFinish}>
           {fromPanel === TypeFromPassWord.PASSWORD ? (
-            <Form.Item
-              name="email"
-              rules={[{ required: true, message: 'please input email.' }]}
-            >
+            <Form.Item name="email" rules={[{ required: true, message: 'please input email.' }]}>
               <Input
                 prefix={<MailOutlined className="site-form-item-icon" />}
                 placeholder="input email."
@@ -120,10 +103,7 @@ export const PassWord = () => {
               />
             </Form.Item>
           ) : (
-            <Form.Item
-              name="authCode"
-              rules={[{ required: true, message: 'please input code.' }]}
-            >
+            <Form.Item name="authCode" rules={[{ required: true, message: 'please input code.' }]}>
               <Input
                 prefix={<CodeOutlined className="site-form-item-icon" />}
                 placeholder={'input code.'}
@@ -135,8 +115,7 @@ export const PassWord = () => {
             <React.Fragment>
               <Form.Item
                 name="newPassWord"
-                rules={[{ required: true, message: 'please input password.' }]}
-              >
+                rules={[{ required: true, message: 'please input password.' }]}>
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   placeholder="please input password."
@@ -152,14 +131,11 @@ export const PassWord = () => {
                         return Promise.resolve();
                       }
                       return Promise.reject(
-                        new Error(
-                          'The two passwords that you entered do not match!',
-                        ),
+                        new Error('The two passwords that you entered do not match!'),
                       );
                     },
                   }),
-                ]}
-              >
+                ]}>
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   placeholder="input password."
@@ -175,10 +151,8 @@ export const PassWord = () => {
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(true) ||
-                  !!form.getFieldsError().filter(({ errors }) => errors.length)
-                    .length
-                }
-              >
+                  !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                }>
                 {fromPanel === TypeFromPassWord.PASSWORD ? 'Order' : 'Confirm'}
               </Button>
             )}
@@ -188,8 +162,7 @@ export const PassWord = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-            }}
-          >
+            }}>
             <Tooltip title="home">
               {fromPanel === TypeFromPassWord.PASSWORD ? (
                 <Typography.Link href="/">
@@ -215,8 +188,7 @@ export const PassWord = () => {
                   }
                   setFromPanel(TypeFromPassWord.AUTHCODE);
                   setShowFromPassWord(true);
-                }}
-              >
+                }}>
                 you have code
               </Typography.Text>
               <Typography.Text
@@ -230,8 +202,7 @@ export const PassWord = () => {
                       }),
                     );
                   }
-                }}
-              >
+                }}>
                 Didn't recevie a code?
               </Typography.Text>
             </span>

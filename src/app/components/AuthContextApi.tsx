@@ -7,10 +7,7 @@ import * as _ from 'lodash';
 import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import { AuthSaga } from 'store/auth/shared/saga';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from 'store/core/@reduxjs/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { LocalStorageService } from 'store/services/localStorage';
 import { openNotifi } from 'store/utils/Notification';
 
@@ -46,7 +43,5 @@ export const AuthContextProvider = ({ children }) => {
     handleUser(infoUser);
   }, []);
 
-  return (
-    <AuthContext.Provider value={userById}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={userById}>{children}</AuthContext.Provider>;
 };

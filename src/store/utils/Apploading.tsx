@@ -23,11 +23,7 @@ export const LoaderFallBack = () => ({
 export function AppLoading({ loading }) {
   return (
     <LoadingWrapper>
-      <Spin
-        indicator={
-          <GithubFilled style={{ fontSize: 50, color: '#222260' }} spin />
-        }
-      />
+      <Spin indicator={<GithubFilled style={{ fontSize: 50, color: '#222260' }} spin />} />
     </LoadingWrapper>
   );
 }

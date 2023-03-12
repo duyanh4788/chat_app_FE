@@ -81,9 +81,7 @@ export class AppHelper {
 
   static formmatDateTimeChat(dateTime) {
     if (!dateTime) return '-';
-    if (
-      moment(dateTime).format('DD-MM-YYYY') === AppHelper.getToDate(new Date())
-    ) {
+    if (moment(dateTime).format('DD-MM-YYYY') === AppHelper.getToDate(new Date())) {
       return 'Hôm nay' + ' ' + AppHelper.formTimer(dateTime);
     }
     return moment(dateTime).format('DD-MM-YYYY - HH:mm');
@@ -150,10 +148,7 @@ export class AppHelper {
   static getCurrentTimeAndDate(times): string {
     const today = new Date(times);
     const day = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate();
-    const month =
-      today.getMonth() + 1 >= 10
-        ? today.getMonth() + 1
-        : '0' + (today.getMonth() + 1);
+    const month = today.getMonth() + 1 >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1);
     const year = today.getFullYear();
     const date = ' Ngày ' + day + ' Tháng ' + month + ' Năm ' + year;
     const minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
@@ -275,11 +270,7 @@ export class AppHelper {
     return new RegExp(/^[^\s]+(\s+[^\s]+)*$/);
   }
 
-  static setPagiClient(
-    list: any[],
-    pagi: any,
-    setState: (setList?) => void,
-  ): any {
+  static setPagiClient(list: any[], pagi: any, setState: (setList?) => void): any {
     if (!list.length || _.isEmpty(pagi)) {
       return {
         data: [],
@@ -310,14 +301,10 @@ export class AppHelper {
     if (!list.length || _.isEmpty(pagi)) return null;
     const searchTable = list.filter((item: any) => {
       return (
-        (item.name &&
-          item.name.toLowerCase().includes(keySearch.toLowerCase())) ||
-        (item.code &&
-          item.code.toLowerCase().includes(keySearch.toLowerCase())) ||
-        (item.description &&
-          item.description.toLowerCase().includes(keySearch.toLowerCase())) ||
-        (item.full_name &&
-          item.full_name.toLowerCase().includes(keySearch.toLowerCase()))
+        (item.name && item.name.toLowerCase().includes(keySearch.toLowerCase())) ||
+        (item.code && item.code.toLowerCase().includes(keySearch.toLowerCase())) ||
+        (item.description && item.description.toLowerCase().includes(keySearch.toLowerCase())) ||
+        (item.full_name && item.full_name.toLowerCase().includes(keySearch.toLowerCase()))
       );
     });
     return AppHelper.setPagiClient(searchTable, pagi, setState);
@@ -338,8 +325,7 @@ export class AppHelper {
 
   static disableF5(canReload: boolean, e: any): void {
     if (!canReload && !e) return;
-    if ((e.which || e.keyCode) === 116 || (e.which || e.keyCode) === 82)
-      e.preventDefault();
+    if ((e.which || e.keyCode) === 116 || (e.which || e.keyCode) === 82) e.preventDefault();
   }
 
   static parseBODDate = (date?: string) => {
@@ -371,9 +357,7 @@ export class AppHelper {
   }
 
   static searchVNEntity = (multi: string, keyword: string): number => {
-    return AppHelper.nonAccentVietnamese(multi).indexOf(
-      AppHelper.nonAccentVietnamese(keyword),
-    );
+    return AppHelper.nonAccentVietnamese(multi).indexOf(AppHelper.nonAccentVietnamese(keyword));
   };
 
   static formatTimeSlots(timeSlot: any, keys: string[]): string {

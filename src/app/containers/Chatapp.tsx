@@ -11,10 +11,7 @@ import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from 'store/core/@reduxjs/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
 import {
   Layout,
@@ -174,22 +171,15 @@ export const Chatapp = () => {
     if (!_.isEmpty(getListUsers)) {
       setListUsers(getListUsers);
       socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: any) => {
-        let newList: any[] = getListUsers.filter(
-          ({ _id }) => _id !== dataUser._id,
-        );
+        let newList: any[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListUsers(newList);
       });
-      socket.current.on(
-        SOCKET_COMMIT.CHANGE_STATUS_OFFLINE,
-        (dataUser: any) => {
-          let newList: any[] = getListUsers.filter(
-            ({ _id }) => _id !== dataUser._id,
-          );
-          newList.push(dataUser);
-          setListUsers(newList);
-        },
-      );
+      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: any) => {
+        let newList: any[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
+        newList.push(dataUser);
+        setListUsers(newList);
+      });
     }
   }, [getListUsers]);
 
@@ -235,8 +225,7 @@ export const Chatapp = () => {
     setMyFriend(friend);
     if (
       !convertStation ||
-      (convertStation &&
-        convertStation?.members?.includes(friend._id) === false)
+      (convertStation && convertStation?.members?.includes(friend._id) === false)
     ) {
       dispatch(
         ChatAppSlice.actions.saveConvertStation({
@@ -342,14 +331,9 @@ export const Chatapp = () => {
                   {renderCheckTypeMessages(row.text)}
                   <span className="time">{format(row.createdAt)}</span>
                 </div>
-                <Avatar
-                  className="bg_green avatar_img"
-                  src={_.get(userAuthContext, 'avatar')}
-                >
+                <Avatar className="bg_green avatar_img" src={_.get(userAuthContext, 'avatar')}>
                   {!_.isEmpty(_.get(userAuthContext, 'fullName'))
-                    ? AppHelper.convertFullName(
-                        _.get(userAuthContext, 'fullName'),
-                      )
+                    ? AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))
                     : ''}
                 </Avatar>
               </div>
@@ -359,12 +343,7 @@ export const Chatapp = () => {
               <div className="member_chat" key={idx}>
                 <Avatar
                   className="bg_green avatar_img"
-                  src={
-                    convertStation.avataReciver !== ''
-                      ? convertStation.avataReciver
-                      : null
-                  }
-                >
+                  src={convertStation.avataReciver !== '' ? convertStation.avataReciver : null}>
                   {!_.isEmpty(myFriend)
                     ? AppHelper.convertFullName(_.get(myFriend, 'fullName'))
                     : ''}
@@ -411,8 +390,7 @@ export const Chatapp = () => {
       dispatch(
         ChatAppSlice.actions.getListMessages({
           conversationId: _.get(convertStation, '_id'),
-          skip:
-            getListMessages && getListMessages.skip ? getListMessages.skip : 10,
+          skip: getListMessages && getListMessages.skip ? getListMessages.skip : 10,
         }),
       );
       return;
@@ -426,11 +404,7 @@ export const Chatapp = () => {
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={(e: boolean) => setCollapsed(e)}
-        >
+        <Sider collapsible collapsed={collapsed} onCollapse={(e: boolean) => setCollapsed(e)}>
           <div className="sider_btn">
             <Button
               className="btn_back"
@@ -438,8 +412,7 @@ export const Chatapp = () => {
               onClick={() => {
                 localStorage.clear();
                 history.push('/');
-              }}
-            >
+              }}>
               Back
             </Button>
           </div>
@@ -449,17 +422,12 @@ export const Chatapp = () => {
                 listUsers
                   .filter(item => item._id !== _.get(userAuthContext, '_id'))
                   .map((row, idx) => (
-                    <Menu.Item
-                      key={idx}
-                      className="subMenu"
-                      onClick={() => handleSelectUser(row)}
-                    >
+                    <Menu.Item key={idx} className="subMenu" onClick={() => handleSelectUser(row)}>
                       <span>
                         <Avatar
                           size={20}
                           className="bg_green"
-                          src={row.avatar !== '' ? row.avatar : null}
-                        >
+                          src={row.avatar !== '' ? row.avatar : null}>
                           {AppHelper.convertFullName(row.fullName)}
                         </Avatar>
                         <Badge
@@ -469,8 +437,7 @@ export const Chatapp = () => {
                             width: '10px',
                             height: '10px',
                             display:
-                              notiFyTitleRef.current === 'Chat App' ||
-                              !notiFyTitleRef.current
+                              notiFyTitleRef.current === 'Chat App' || !notiFyTitleRef.current
                                 ? 'none'
                                 : 'block',
                           }}
@@ -496,35 +463,19 @@ export const Chatapp = () => {
           <Header className="site_info">
             <Breadcrumb className="avatar" style={{ cursor: 'pointer' }}>
               <Breadcrumb.Item onClick={() => setIsModalOpen(true)}>
-                <Avatar
-                  className="bg_green"
-                  src={_.get(userAuthContext, 'avatar')}
-                >
-                  {AppHelper.convertFullName(
-                    _.get(userAuthContext, 'fullName'),
-                  )}
+                <Avatar className="bg_green" src={_.get(userAuthContext, 'avatar')}>
+                  {AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))}
                 </Avatar>
-                <span className="account">
-                  {_.get(userAuthContext, 'fullName')}
-                </span>
+                <span className="account">{_.get(userAuthContext, 'fullName')}</span>
               </Breadcrumb.Item>
             </Breadcrumb>
           </Header>
-          {convertStation &&
-          convertStation._id &&
-          convertStation.members.length ? (
+          {convertStation && convertStation._id && convertStation.members.length ? (
             <React.Fragment>
-              <Content
-                className="site_layout"
-                onScroll={handleScrollListMessages}
-              >
+              <Content className="site_layout" onScroll={handleScrollListMessages}>
                 {loadingPaging && (
                   <div style={{ textAlign: 'center' }}>
-                    <Spin
-                      indicator={
-                        <LoadingOutlined style={{ fontSize: 24 }} spin />
-                      }
-                    />
+                    <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
                   </div>
                 )}
                 {renderMessage()}
@@ -548,11 +499,8 @@ export const Chatapp = () => {
                           beforeUpload={file => {
                             handleUploadAWS3(file);
                             return false;
-                          }}
-                        >
-                          <UploadOutlined
-                            style={{ cursor: 'pointer', marginRight: '10px' }}
-                          />
+                          }}>
+                          <UploadOutlined style={{ cursor: 'pointer', marginRight: '10px' }} />
                         </Upload>
                         <Tooltip title="Send Message">
                           <SendOutlined
@@ -565,10 +513,7 @@ export const Chatapp = () => {
                           />
                         </Tooltip>
                         <Tooltip title="Share Location">
-                          <HeatMapOutlined
-                            type="info-circle"
-                            onClick={shareLocation}
-                          />
+                          <HeatMapOutlined type="info-circle" onClick={shareLocation} />
                         </Tooltip>
                       </React.Fragment>
                     }

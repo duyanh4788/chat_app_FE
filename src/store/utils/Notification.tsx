@@ -6,10 +6,6 @@ export const openNotifi = (status: number, message: string) => {
   notification.open({
     duration: 5,
     message,
-    icon: (
-      <SmileOutlined
-        style={{ color: status === 200 ? '#108ee9' : '#e91010' }}
-      />
-    ),
+    icon: <SmileOutlined style={{ color: status === 200 ? '#108ee9' : '#e91010' }} />,
   });
 };

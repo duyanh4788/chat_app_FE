@@ -6,17 +6,9 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as _ from 'lodash';
 import { AuthSaga } from 'store/auth/shared/saga';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from 'store/core/@reduxjs/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button } from 'antd';
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
+import { UserOutlined, LockOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
 
 export function SignUpUser() {
   useInjectReducer({
@@ -48,38 +40,26 @@ export function SignUpUser() {
   return (
     <div className="form_input">
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
-        <Form.Item
-          name="account"
-          rules={[{ required: true, message: 'please input account.' }]}
-        >
+        <Form.Item name="account" rules={[{ required: true, message: 'please input account.' }]}>
           <Input
             prefix={<UserAddOutlined className="site-form-item-icon" />}
             placeholder="input account"
           />
         </Form.Item>
-        <Form.Item
-          name="passWord"
-          rules={[{ required: true, message: 'please input password.' }]}
-        >
+        <Form.Item name="passWord" rules={[{ required: true, message: 'please input password.' }]}>
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="input password"
           />
         </Form.Item>
-        <Form.Item
-          name="fullName"
-          rules={[{ required: true, message: 'please input your name.' }]}
-        >
+        <Form.Item name="fullName" rules={[{ required: true, message: 'please input your name.' }]}>
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="input your name"
           />
         </Form.Item>
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: 'please input email.' }]}
-        >
+        <Form.Item name="email" rules={[{ required: true, message: 'please input email.' }]}>
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
             placeholder="input email"
@@ -91,10 +71,8 @@ export function SignUpUser() {
               htmlType="submit"
               disabled={
                 !form.isFieldsTouched(true) ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
-              }
-            >
+                !!form.getFieldsError().filter(({ errors }) => errors.length).length
+              }>
               Sign Up
             </Button>
           )}

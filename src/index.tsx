@@ -7,12 +7,7 @@ import './style/scss/chat_app.css';
 import './style/scss/main_form.css';
 import 'antd/dist/antd.css';
 import { AuthContextProvider } from 'app/components/AuthContextApi';
-import {
-  Chatapp,
-  MainRomChat,
-  Password,
-  TermsOfService,
-} from 'router/lazyRouting';
+import { Chatapp, MainRomChat, Password, TermsOfService } from 'router/lazyRouting';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 const ConnectedApp = () => (

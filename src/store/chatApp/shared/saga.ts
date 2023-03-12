@@ -75,39 +75,14 @@ export function* removeUploadAWS3(api, action) {
   }
 }
 
-
 export function* ChatAppSaga() {
   yield all([
-    yield takeLatest(
-      actions.changeStatusoffline.type,
-      changeStatusoffline,
-      chatApptRequest,
-    ),
+    yield takeLatest(actions.changeStatusoffline.type, changeStatusoffline, chatApptRequest),
     yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
-    yield takeLatest(
-      actions.postNewMessage.type,
-      postNewMessage,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.saveConvertStation.type,
-      saveConvertStation,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.getListMessages.type,
-      getListMessages,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.postUploadAWS3.type,
-      postUploadAWS3,
-      chatApptRequest,
-    ),
-    yield takeLatest(
-      actions.removeUploadAWS3.type,
-      removeUploadAWS3,
-      chatApptRequest,
-    ),
+    yield takeLatest(actions.postNewMessage.type, postNewMessage, chatApptRequest),
+    yield takeLatest(actions.saveConvertStation.type, saveConvertStation, chatApptRequest),
+    yield takeLatest(actions.getListMessages.type, getListMessages, chatApptRequest),
+    yield takeLatest(actions.postUploadAWS3.type, postUploadAWS3, chatApptRequest),
+    yield takeLatest(actions.removeUploadAWS3.type, removeUploadAWS3, chatApptRequest),
   ]);
 }

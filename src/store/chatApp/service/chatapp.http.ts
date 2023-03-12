@@ -26,8 +26,7 @@ export class ChatAppHttp {
     };
   };
 
-  public getListUsers = (): Promise<any> =>
-    this.request.get(ChatAppApi.LIST_USER);
+  public getListUsers = (): Promise<any> => this.request.get(ChatAppApi.LIST_USER);
 
   public saveConvertStation = (data: ConvertStation): Promise<any> =>
     this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
@@ -36,8 +35,7 @@ export class ChatAppHttp {
 
   public getListMessages = (sernderId: any): Promise<any> => {
     return this.request.post(ChatAppApi.GET_LIST_MESSAGE, sernderId);
-  }
-
+  };
 
   public postNewMessage = (data: MessagesModel): Promise<any> =>
     this.request.post(ChatAppApi.NEW_MESSAGE, {

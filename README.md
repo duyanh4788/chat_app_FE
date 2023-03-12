@@ -99,15 +99,15 @@ There’s also a <a href="https://vimeo.com/168648012">fantastic video</a> on ho
 5.  Run `npm run install & yarn install` in order to install dependencies.<br />
 6.  Run `npm start & yarn start` in order to install dependencies.<br />
     _At this point you can see the example app at `http://localhost:3000`._
-  Now you're ready to rumble!
+    Now you're ready to rumble!
 
 > You can run with docker or docker-compose <br
-  `$ docker build -t sample:dev .` <br>
-  `$ docker run -it  --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true sample:dev` <br>
-  or
-  `$ docker-compose up -d --build` <br>
-  `$ docker-compose stop` <br>
+> `$ docker build -t sample:dev .` <br> > `$ docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true sample:dev` <br>
+> or
+> `$ docker-compose up -d --build` <br> > `$ docker-compose stop` <br>
+
 ## Deployment
+
 1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
 2.  Clone this repo using `git clone --depth=1 git@github.com:duyanh4788/chat_app_FE.git || https://github.com/duyanh4788/chat_app_FE.git`
 3.  Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
@@ -118,6 +118,7 @@ There’s also a <a href="https://vimeo.com/168648012">fantastic video</a> on ho
 > Config IIS Service to deployment as link below https://inthetechpit.com/2019/06/13/handle-client-side-routes-with-iis-on-page-refresh-react-app/
 
 Quick scaffolding First install the URL Rewrite module on the IIS Server. Then create a web.config file for your App or create a new one with code as shown below:
+
 ```
   <?xml version="1.0" encoding="UTF-8"?>
   <configuration>
@@ -137,13 +138,13 @@ Quick scaffolding First install the URL Rewrite module on the IIS Server. Then c
     </system.webServer>
   </configuration>
 ```
-> Dockerizing Production Mode <br>
-  `$ docker build -f Dockerfile.prod -t sample:prod .`<br>
-  `$ docker run -it --rm -p 1337:80 sample:prod` <br>
-  or
-  `$ docker-compose -f docker-compose.prod.yml up -d --build`
+
+> Dockerizing Production Mode <br> > `$ docker build -f Dockerfile.prod -t sample:prod .`<br> > `$ docker run -it --rm -p 1337:80 sample:prod` <br>
+> or
+> `$ docker-compose -f docker-compose.prod.yml up -d --build`
 
 ## Release Production URL Reference
+
   <div align="left">
     <strong>
       <a href="https://chat-app-fe.vercel.app/">https://chat-app-fe.vercel.app/</a>
