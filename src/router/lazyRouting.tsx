@@ -18,3 +18,9 @@ export const Password = lazyLoad(
   module => module.PassWord,
   LoaderFallBack(),
 );
+
+export const TermsOfService = lazyLoad(
+  () => import('app'),
+  module => module.TermsOfService,
+  LoaderFallBack(),
+);

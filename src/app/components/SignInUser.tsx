@@ -30,7 +30,7 @@ export function SignInUser() {
   };
 
   return (
-    <div className="form_input form_sign_in ">
+    <div className="form_input form_sign_in">
       <div className="logo">
         <img src={logo} alt={logo} className="logo_img" />
       </div>
@@ -54,7 +54,6 @@ export function SignInUser() {
             placeholder="input password"
           />
         </Form.Item>
-
         <Form.Item shouldUpdate>
           {() => (
             <Button
@@ -76,6 +75,9 @@ export function SignInUser() {
           </Tooltip>
         </Form.Item>
       </Form>
+      <Typography.Link href="termsOfService" style={{ marginBottom: '10px' }}>
+        Terms of Service ChatApp
+      </Typography.Link>
       <div style={{ display: 'flex' }}>
         <button
           className="loginBtn loginBtn--facebook"
