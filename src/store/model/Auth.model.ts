@@ -14,4 +14,6 @@ export interface UpdateUser {
   fullName: string;
   avatar: string;
   _id: string;
+  type2FA: string;
+  twoFA: boolean;
 }

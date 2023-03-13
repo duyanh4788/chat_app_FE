@@ -31,6 +31,8 @@ export class AuthHttp {
       fullName: user.fullName,
       avatar: user.avatar,
       _id: user._id,
+      type2FA: user.type2FA,
+      twoFA: user.twoFA,
     };
   };
 

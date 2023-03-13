@@ -370,8 +370,21 @@ export const Chatapp = () => {
     dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
   };
 
-  const handleUpDateInfo = (avatar: string, fullName: string, _id: string) => {
-    const payload = { avatar, fullName, _id };
+  const handleUpDateInfo = (
+    avatar: string,
+    fullName: string,
+    _id: string,
+    twoFA: boolean,
+    type2FAValue: number,
+  ) => {
+    const type2FA = type2FAValue === 1 ? 'AUTH_CODE' : 'PASSPORT';
+    const payload = {
+      avatar: !_.isEmpty(avatar) ? avatar : '',
+      fullName,
+      _id,
+      twoFA: !!twoFA,
+      type2FA: twoFA ? type2FA : '',
+    };
     dispatch(AuthSlice.actions.updateInfo(payload));
   };
 
