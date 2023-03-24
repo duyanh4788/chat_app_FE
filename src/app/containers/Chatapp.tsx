@@ -49,6 +49,7 @@ import { format } from 'timeago.js';
 import { AuthContext } from 'app/components/AuthContextApi';
 import { ModalUpdateUser } from 'app/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
+import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -94,6 +95,11 @@ export const Chatapp = () => {
 
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
+      if (payload === TOKEN_EXPRIED) {
+        openNotifi(400, payload);
+        local.clearLocalStorage();
+        return history.push('/');
+      }
       switch (type) {
         case ChatAppSlice.actions.removeUploadAWS3Success.type:
           setFromDataUploadAWS3(undefined);

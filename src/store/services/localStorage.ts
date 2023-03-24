@@ -52,7 +52,7 @@ export class LocalStorageService {
     return JSON.parse(value);
   }
 
-  static clearLocalStorage() {
+  public clearLocalStorage() {
     localStorage.clear();
   }
 

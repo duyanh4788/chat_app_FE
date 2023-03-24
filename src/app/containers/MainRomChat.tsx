@@ -15,6 +15,7 @@ import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { openNotifi } from 'store/utils/Notification';
 import { LocalStorageService } from 'store/services/localStorage';
+import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 
 const { TabPane } = Tabs;
 
@@ -59,6 +60,10 @@ export const MainRomChat = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
+      if (payload === TOKEN_EXPRIED) {
+        openNotifi(400, payload);
+        return;
+      }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
