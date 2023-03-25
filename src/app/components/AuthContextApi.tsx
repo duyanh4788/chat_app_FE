@@ -37,7 +37,7 @@ export const AuthContextProvider = ({ children }) => {
       }
       if (!_.isEmpty(user)) {
         dispatch(AuthSlice.actions.getUserById(_.get(user, 'id')));
-        return;
+        return history.push('/chatApp');
       }
     }
     handleUser(infoUser);
