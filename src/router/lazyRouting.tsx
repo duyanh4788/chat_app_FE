@@ -24,3 +24,9 @@ export const TermsOfService = lazyLoad(
   module => module.TermsOfService,
   LoaderFallBack(),
 );
+
+export const PrivacyPolicy = lazyLoad(
+  () => import('app'),
+  module => module.PrivacyPolicy,
+  LoaderFallBack(),
+);
