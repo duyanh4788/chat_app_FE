@@ -4,6 +4,7 @@ build
 dist
 node_modules
 stats.json
+api
 .pnp
 .pnp.js
 .env
