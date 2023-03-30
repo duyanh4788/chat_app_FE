@@ -5,22 +5,22 @@
   background-attachment: fixed;
   background-size: cover;
   -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
   -webkit-transition: left 0.4s ease;
   transition: left 0.4s ease;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-line-pack: distribute;
-  align-content: space-around;
+      align-content: space-around;
   -ms-flex-pack: distribute;
-  justify-content: space-around;
+      justify-content: space-around;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 
 .main_form h1 {
@@ -31,14 +31,14 @@
 
 .main_form .form_input {
   -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
-  box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+          box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
   border-radius: 10px;
   width: 460px;
   padding: 20px;
-  height: 390px;
+  height: 430px;
 }
 
 .main_form .form_input .logo {
@@ -55,7 +55,7 @@
 
 .main_form .form_input .ant-form-inline {
   -ms-flex-pack: distribute;
-  justify-content: space-around;
+      justify-content: space-around;
 }
 
 .main_form .form_input .ant-form-item-control-input {
@@ -72,11 +72,11 @@
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .main_form .form_sign_in .logo {
@@ -93,10 +93,10 @@
 
 .main_form .form_password {
   -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
-  box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+          box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
   border-radius: 10px;
   width: 460px;
   padding: 20px;
@@ -117,7 +117,7 @@
 
 .main_form .form_password .ant-form-inline {
   -ms-flex-pack: distribute;
-  justify-content: space-around;
+      justify-content: space-around;
 }
 
 .main_form .form_password .ant-form-item-control-input {
@@ -128,30 +128,17 @@
   border-color: rgba(255, 255, 255, 0.18);
 }
 
-.terms_of_service {
-  width: 100%;
-  height: 100vh;
-  background: url(../../images/2.png);
-  background-attachment: fixed;
-  background-size: cover;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  -webkit-transition: left 0.4s ease;
-  transition: left 0.4s ease;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  padding: 0 100px;
+.main_form .terms_of_service {
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+          box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
+  border-radius: 10px;
+  max-width: 600px;
+  padding: 20px;
+  max-height: 600px;
+  overflow-y: scroll;
 }
 
 @-webkit-keyframes spin {
@@ -166,18 +153,18 @@
 @keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   100% {
     -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }
 
 /* Shared */
 .loginBtn {
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+          box-sizing: border-box;
   position: relative;
   cursor: pointer;
   margin: 0.2em;
@@ -192,9 +179,9 @@
 }
 
 .loginBtn:before {
-  content: '';
+  content: "";
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+          box-sizing: border-box;
   position: absolute;
   top: 0;
   left: 0;
@@ -208,7 +195,7 @@
 
 .loginBtn:active {
   -webkit-box-shadow: inset 0 0 0 32px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 0 0 32px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 0 0 32px rgba(0, 0, 0, 0.1);
 }
 
 /* Facebook */
@@ -222,8 +209,7 @@
 
 .loginBtn--facebook:before {
   border-right: #364e92 1px solid;
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px
-    no-repeat;
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png") 6px 6px no-repeat;
 }
 
 .loginBtn--facebook:hover,
@@ -240,12 +226,22 @@
 
 .loginBtn--google:before {
   border-right: #bb3f30 1px solid;
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px
-    no-repeat;
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png") 6px 6px no-repeat;
 }
 
 .loginBtn--google:hover,
 .loginBtn--google:focus {
   background: #e74b37;
+}
+
+.terms_of_service::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #f5f5f5;
+}
+
+.terms_of_service::-webkit-scrollbar-thumb {
+  background: #e2dfdf;
+  border-radius: 6px;
 }
 /*# sourceMappingURL=main_form.css.map */

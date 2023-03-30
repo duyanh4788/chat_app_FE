@@ -92,6 +92,7 @@ export const Chatapp = () => {
 
   useEffect(() => {
     dispatch(ChatAppSlice.actions.getListUsers());
+    document.addEventListener('paste', handlePasteImage);
 
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
@@ -108,6 +109,11 @@ export const Chatapp = () => {
           dispatch(AuthSlice.actions.getUserById(_.get(userInfor, 'id')));
           setIsModalOpen(false);
           resetFromChat();
+          break;
+        case AuthSlice.actions.getUserByIdFail.type:
+          openNotifi(400, payload);
+          local.clearLocalStorage();
+          history.push('/');
           break;
         case ChatAppSlice.actions.getListUsersFail.type:
           openNotifi(400, payload);
@@ -137,6 +143,7 @@ export const Chatapp = () => {
       setSendMessage(undefined);
       setErrorAcknow(undefined);
       setMyFriend(null);
+      document.removeEventListener('paste', handlePasteImage);
     };
   }, []);
 
@@ -376,6 +383,30 @@ export const Chatapp = () => {
     dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
   };
 
+  const handlePasteImage = (evt: ClipboardEvent) => {
+    const clipboardItems = evt.clipboardData?.items;
+    if (!clipboardItems) {
+      return;
+    }
+    const items = Array.from(clipboardItems).filter(item => {
+      return /^image\//.test(item.type);
+    });
+    if (items.length === 0) {
+      return;
+    }
+    const item = items[0];
+    const blob: any = item.getAsFile();
+    let file = new File([blob as Blob], 'file name', {
+      type: 'image/jpeg',
+      lastModified: new Date().getTime(),
+    });
+    const fileInput = document.querySelector<HTMLInputElement>('#file_input');
+    if (fileInput) {
+      setTimeout(() => setSendMessage(undefined));
+      handleUploadAWS3(file as RcFile);
+    }
+  };
+
   const handleUpDateInfo = (
     avatar: string,
     fullName: string,
@@ -502,6 +533,7 @@ export const Chatapp = () => {
               <div className="form_chat">
                 <Dragger {...propsDrag}>
                   <Input
+                    id="file_input"
                     placeholder="Enter Message"
                     value={sendMessage}
                     onChange={e => setSendMessage(e.target.value)}
@@ -547,13 +579,14 @@ export const Chatapp = () => {
                       <CloseCircleTwoTone
                         style={{ marginLeft: '5px' }}
                         twoToneColor="#00152900"
-                        onClick={() =>
+                        onClick={() => {
+                          setSendMessage(undefined);
                           dispatch(
                             ChatAppSlice.actions.removeUploadAWS3({
                               idImage: uploadAWS,
                             }),
-                          )
-                        }
+                          );
+                        }}
                       />
                     </div>
                   )}

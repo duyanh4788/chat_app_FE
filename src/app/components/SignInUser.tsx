@@ -67,6 +67,9 @@ export function SignInUser() {
       <Typography.Link href="termsOfService" style={{ marginBottom: '10px' }}>
         Terms of Service ChatApp
       </Typography.Link>
+      <Typography.Link href="privacyPolicy" style={{ marginBottom: '10px' }}>
+        Privacy Policy ChatApp
+      </Typography.Link>
       <div style={{ display: 'flex' }}>
         <button
           className="loginBtn loginBtn--facebook"
