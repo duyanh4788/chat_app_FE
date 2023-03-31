@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Upload, Button, Avatar, Switch, Radio, Space } from 'antd';
+import { Modal, Input, Upload, Button, Avatar, Switch, Radio, Space, Skeleton } from 'antd';
 import { UploadOutlined, UserOutlined, MailOutlined, AccountBookOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import * as AuthSelector from 'store/auth/shared/selectors';
@@ -29,6 +29,7 @@ export function ModalUpdateUser(props: Props) {
   const loading = useSelector(AuthSelector.selectLoading);
   const userInfor = useSelector(AuthSelector.selectUserById);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
+  const loadingImage = useSelector(ChatAppSelector.selectLoadingImage);
 
   const [avatar, setAvatar] = useState<string>('');
   const [account, setAccount] = useState<string>('');
@@ -80,13 +81,17 @@ export function ModalUpdateUser(props: Props) {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        <Avatar
-          shape="square"
-          size={140}
-          src={!_.isEmpty(uploadAWS) ? uploadAWS : avatar}
-          style={{ fontSize: '100px', marginBottom: '10px' }}>
-          {AppHelper.convertFullName(fullName)}
-        </Avatar>
+        {loadingImage ? (
+          <Skeleton active style={{ width: '140px' }} />
+        ) : (
+          <Avatar
+            shape="square"
+            size={140}
+            src={!_.isEmpty(uploadAWS) ? uploadAWS : avatar}
+            style={{ fontSize: '100px', marginBottom: '10px' }}>
+            {AppHelper.convertFullName(fullName)}
+          </Avatar>
+        )}
         <Upload
           action=""
           showUploadList={false}

@@ -2,6 +2,7 @@ import { createSlice } from 'store/core/@reduxjs/toolkit';
 
 export interface ChatAppState {
   loading: boolean;
+  loadingImage: boolean;
   loadingPaging: boolean;
   listUsers: any;
   convertStation: any;
@@ -11,6 +12,7 @@ export interface ChatAppState {
 
 export const initialState: ChatAppState = {
   loading: false,
+  loadingImage: false,
   loadingPaging: false,
   listUsers: {},
   convertStation: null,
@@ -76,14 +78,14 @@ const ChatAppSlice = createSlice({
     },
 
     postUploadAWS3(state, action) {
-      state.loading = true;
+      state.loadingImage = true;
     },
     postUploadAWS3Success(state, action) {
-      state.loading = false;
+      state.loadingImage = false;
       state.uploadAWS = action.payload;
     },
     postUploadAWS3Fail(state, action) {
-      state.loading = false;
+      state.loadingImage = false;
     },
 
     removeUploadAWS3(state, action) {

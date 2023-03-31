@@ -8,6 +8,8 @@ export const selectLoading = createSelector([selectChatApp], state => state.load
 
 export const selectLoadingPaging = createSelector([selectChatApp], state => state.loadingPaging);
 
+export const selectLoadingImage = createSelector([selectChatApp], state => state.loadingImage);
+
 export const selectListUsers = createSelector([selectChatApp], state => state.listUsers);
 
 export const selectConvertStation = createSelector([selectChatApp], state => state.convertStation);
