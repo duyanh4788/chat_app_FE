@@ -29,7 +29,7 @@ const ChatAppSlice = createSlice({
     },
     getListUsersSuccess(state, action) {
       state.loading = false;
-      state.listUsers = action.payload;
+      state.listUsers = action.payload.data;
     },
     getListUsersFail(state, action) {
       state.loading = false;
@@ -40,7 +40,7 @@ const ChatAppSlice = createSlice({
     },
     getListMessagesSuccess(state, action) {
       state.loadingPaging = false;
-      state.getListMessages = action.payload;
+      state.getListMessages = action.payload.data;
     },
     getListMessagesFail(state, action) {
       state.loadingPaging = false;
@@ -61,7 +61,7 @@ const ChatAppSlice = createSlice({
     },
     saveConvertStationSuccess(state, action) {
       state.loading = false;
-      state.convertStation = action.payload;
+      state.convertStation = action.payload.data;
     },
     saveConvertStationFail(state, action) {
       state.loading = false;
@@ -82,7 +82,7 @@ const ChatAppSlice = createSlice({
     },
     postUploadAWS3Success(state, action) {
       state.loadingImage = false;
-      state.uploadAWS = action.payload;
+      state.uploadAWS = action.payload.data;
     },
     postUploadAWS3Fail(state, action) {
       state.loadingImage = false;

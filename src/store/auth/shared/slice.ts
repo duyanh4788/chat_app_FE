@@ -23,7 +23,7 @@ const AuthSlice = createSlice({
     },
     sigInUserSuccess(state, action) {
       state.loading = false;
-      state.userById = action.payload;
+      state.userById = action.payload.data;
     },
     sigInUserFail(state, action) {
       state.loading = false;
@@ -34,7 +34,7 @@ const AuthSlice = createSlice({
     },
     signUpUserSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.message;
     },
     signUpUserFail(state, action) {
       state.loading = false;
@@ -45,7 +45,7 @@ const AuthSlice = createSlice({
     },
     activeAuthCodeSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.message;
     },
     activeAuthCodeFail(state, action) {
       state.loading = false;
@@ -56,7 +56,7 @@ const AuthSlice = createSlice({
     },
     forgotPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.message;
     },
     forgotPasswordFail(state, action) {
       state.loading = false;
@@ -67,7 +67,7 @@ const AuthSlice = createSlice({
     },
     resetPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.message;
     },
     resetPasswordFail(state, action) {
       state.loading = false;
@@ -78,7 +78,7 @@ const AuthSlice = createSlice({
     },
     resendOrderForgotPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.message;
     },
     resendOrderForgotPasswordFail(state, action) {
       state.loading = false;
@@ -109,7 +109,7 @@ const AuthSlice = createSlice({
     },
     getUserByIdSuccess(state, action) {
       state.loading = false;
-      state.userById = action.payload;
+      state.userById = action.payload.data;
     },
     getUserByIdFail(state, action) {
       state.loading = false;

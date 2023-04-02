@@ -96,8 +96,10 @@ export const Chatapp = () => {
 
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
-      if (payload === TOKEN_EXPRIED) {
-        openNotifi(400, payload);
+      if (!payload) return;
+      const { data, message } = payload;
+      if (message === TOKEN_EXPRIED) {
+        openNotifi(400, message);
         local.clearLocalStorage();
         return history.push('/');
       }
@@ -167,9 +169,11 @@ export const Chatapp = () => {
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
       return openNotifi(200, message);
     });
-    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (message: string) => {
-      notiFyTitleRef.current = message;
-      return setNotiFyTitle(message);
+    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (obJectNotify: any) => {
+      notiFyTitleRef.current = obJectNotify;
+      if (obJectNotify.reciverId === _.get(userAuthContext, '_id')) {
+        return setNotiFyTitle(obJectNotify.message);
+      }
     });
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
@@ -178,7 +182,7 @@ export const Chatapp = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
       socket.current.disconnect();
     };
-  }, [PORT_SOCKET, userAuthContext]);
+  }, [PORT_SOCKET]);
 
   useEffect(() => {
     if (!_.isEmpty(getListUsers)) {
@@ -480,19 +484,17 @@ export const Chatapp = () => {
                           src={row.avatar !== '' ? row.avatar : null}>
                           {AppHelper.convertFullName(row.fullName)}
                         </Avatar>
-                        <Badge
-                          dot
-                          style={{
-                            backgroundColor: '#52c41a',
-                            width: '10px',
-                            height: '10px',
-                            display:
-                              notiFyTitleRef.current === 'Chat App' || !notiFyTitleRef.current
-                                ? 'none'
-                                : 'block',
-                          }}
-                          offset={[-8, -5]}
-                        />
+                        {row.isNewMsg && (
+                          <Badge
+                            dot
+                            style={{
+                              backgroundColor: '#52c41a',
+                              width: '10px',
+                              height: '10px',
+                            }}
+                            offset={[-8, -5]}
+                          />
+                        )}
                         <span className="account">{row.fullName}</span>
                       </span>
 

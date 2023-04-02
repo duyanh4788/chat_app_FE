@@ -50,19 +50,20 @@ export const PassWord = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
+      const { message } = payload;
       switch (type) {
         case AuthSlice.actions.forgotPasswordSuccess.type:
-          openNotifi(200, payload);
+          openNotifi(200, message);
           setFromPanel(TypeFromPassWord.AUTHCODE);
           setShowFromPassWord(true);
           break;
         case AuthSlice.actions.resendOrderForgotPasswordSuccess.type:
-          openNotifi(200, payload);
+          openNotifi(200, message);
           setFromPanel(TypeFromPassWord.AUTHCODE);
           setShowFromPassWord(true);
           break;
         case AuthSlice.actions.resetPasswordSuccess.type:
-          openNotifi(200, payload);
+          openNotifi(200, message);
           history.push('/');
           break;
         case AuthSlice.actions.forgotPasswordFail.type:

@@ -53,6 +53,6 @@ export function configResponse(response: ApiResponse<any>): any {
     throw new Error(message);
   }
   if (code === 200) {
-    return data;
+    return { data, message };
   }
 }

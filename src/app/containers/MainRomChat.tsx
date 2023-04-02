@@ -60,31 +60,32 @@ export const MainRomChat = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
-      if (payload === TOKEN_EXPRIED) {
+      const { data, message } = payload;
+      if (message === TOKEN_EXPRIED) {
         openNotifi(400, payload);
         return;
       }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
-          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
+          openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
           break;
         case AuthSlice.actions.activeAuthCodeSuccess.type:
           setTabsPanel('1');
-          openNotifi(200, payload);
+          openNotifi(200, message);
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
           local.setAuth({
-            toKen: _.get(payload, 'toKen'),
-            id: _.get(payload, '_id'),
+            toKen: _.get(data, 'toKen'),
+            id: _.get(data, '_id'),
           });
-          openNotifi(200, AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
+          openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
           history.push('/chatApp');
           window.location.reload();
           break;
         case AuthSlice.actions.signUpWithFBSuccess.type:
         case AuthSlice.actions.signUpWithGGSuccess.type:
-          window.location.href = payload;
+          window.location.href = data;
           break;
         case AuthSlice.actions.signUpUserFail.type:
         case AuthSlice.actions.signUpWithFBFail.type:
