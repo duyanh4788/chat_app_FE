@@ -182,7 +182,7 @@ export const Chatapp = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
       socket.current.disconnect();
     };
-  }, [PORT_SOCKET]);
+  }, [PORT_SOCKET, userAuthContext]);
 
   useEffect(() => {
     if (!_.isEmpty(getListUsers)) {
