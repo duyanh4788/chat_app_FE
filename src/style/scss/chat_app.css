@@ -245,6 +245,7 @@
 }
 
 .images_review {
+  overflow: hidden;
   text-align: left;
   max-width: 250px;
   max-height: 250px;

@@ -406,7 +406,6 @@ export const Chatapp = () => {
     });
     const fileInput = document.querySelector<HTMLInputElement>('#file_input');
     if (fileInput) {
-      setTimeout(() => setSendMessage(undefined));
       handleUploadAWS3(file as RcFile);
     }
   };
