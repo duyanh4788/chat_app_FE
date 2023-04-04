@@ -163,7 +163,9 @@ export const Chatapp = () => {
   useEffect(() => {
     socket.current = io(PORT_SOCKET, {
       transports: ['websocket'],
-      upgrade: false,
+      auth: {
+        Authorization: _.get(userInfor, 'toKen'),
+      },
     });
     socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
@@ -177,6 +179,11 @@ export const Chatapp = () => {
     });
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
+    });
+    socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
+      local.clearLocalStorage();
+      setNotiFyTitle('AUTHORIZATION_INVALID');
+      return history.push('/');
     });
     return () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);

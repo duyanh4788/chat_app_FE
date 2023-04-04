@@ -10,4 +10,5 @@ export const SOCKET_COMMIT = {
   CHANGE_STATUS_OFFLINE: 'change_status_offline',
   CHANGE_STATUS_ISNEWMSG: 'change_status_isnewmsg',
   DISCONNECTED: 'disconnected',
+  CONNECT_ERROR: 'connect_error',
 };
