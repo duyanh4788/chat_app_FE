@@ -91,9 +91,7 @@ export const Chatapp = () => {
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
-    const handleBeforeUnload = e => {
-      e.preventDefault();
-      e.returnValue = '';
+    const handleBeforeUnload = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
     };
 
