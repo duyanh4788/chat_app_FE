@@ -156,7 +156,7 @@ export const Chatapp = () => {
   }, []);
 
   useEffect(() => {
-    if (!_.isEmpty(convertStation) && !listMessages.length) {
+    if (!_.isEmpty(convertStation)) {
       dispatch(
         ChatAppSlice.actions.getListMessages({
           conversationId: _.get(convertStation, '_id'),
