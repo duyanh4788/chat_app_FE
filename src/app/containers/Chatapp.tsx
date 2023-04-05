@@ -241,17 +241,19 @@ export const Chatapp = () => {
     let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (!_.isEmpty(myRow) && listMessages?.length <= 9 && !type) {
       setTimeout(() => {
-        myRow.scrollTop = myRow.scrollHeight;
+        myRow.scrollTop = myRow?.scrollHeight;
       }, 200);
     }
     if (type) {
       setTimeout(() => {
-        myRow.scrollTop = myRow.scrollHeight;
+        myRow.scrollTop = myRow?.scrollHeight;
       }, 200);
     }
   };
 
   const handleSelectUser = (friend: any) => {
+    handleAutoScroll(true);
+    setListMessages([]);
     setMyFriend(friend);
     if (
       !convertStation ||
@@ -459,6 +461,9 @@ export const Chatapp = () => {
           skip: getListMessages && getListMessages.skip ? getListMessages.skip : 10,
         }),
       );
+      setTimeout(() => {
+        myRow.scrollTop = 5;
+      }, 200);
       return;
     }
   };
