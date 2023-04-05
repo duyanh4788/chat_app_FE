@@ -109,7 +109,7 @@ export class AppHelper {
 
   static checkLinkAWS(text: string) {
     if (_.isEmpty(text)) return null;
-    if (text.includes('cloudfront.net')) return true;
+    if (text.includes('cloudfront.net') || text.includes('/public/images/')) return true;
     else return false;
   }
 
