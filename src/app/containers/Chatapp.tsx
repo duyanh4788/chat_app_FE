@@ -91,6 +91,13 @@ export const Chatapp = () => {
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
+    const handleBeforeUnload = e => {
+      e.preventDefault();
+      e.returnValue = '';
+      socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
     dispatch(ChatAppSlice.actions.getListUsers());
     document.addEventListener('paste', handlePasteImage);
 
@@ -146,6 +153,7 @@ export const Chatapp = () => {
       setErrorAcknow(undefined);
       setMyFriend(null);
       document.removeEventListener('paste', handlePasteImage);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
