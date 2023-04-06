@@ -57,7 +57,7 @@ const { SubMenu } = Menu;
 const { Dragger } = Upload;
 
 export const Chatapp = () => {
-  const userAuthContext = useContext(AuthContext);
+  const userAuthContext: any = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -92,6 +92,10 @@ export const Chatapp = () => {
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
 
   useEffect(() => {
+    if (_.isEmpty(userInfor)) {
+      history.push('/');
+    }
+
     const handleBeforeUnload = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
     };

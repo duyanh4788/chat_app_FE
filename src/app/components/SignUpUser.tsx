@@ -9,8 +9,13 @@ import { AuthSaga } from 'store/auth/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
+import { openNotifi } from 'store/utils/Notification';
+import { LocalStorageService } from 'store/services/localStorage';
 
 export function SignUpUser() {
+  const local = new LocalStorageService();
+  const userInfor = local.getItem('_info');
+
   useInjectReducer({
     key: AuthSlice.sliceKey,
     reducer: AuthSlice.reducer,
@@ -34,6 +39,10 @@ export function SignUpUser() {
   }, [success]);
 
   const onFinish = values => {
+    if (!_.isEmpty(userInfor)) {
+      openNotifi(400, 'please refresh page and logout, so you can login with orther account');
+      return;
+    }
     dispatch(AuthSlice.actions.signUpUser(values));
   };
 
