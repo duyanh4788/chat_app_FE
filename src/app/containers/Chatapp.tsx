@@ -350,7 +350,7 @@ export const Chatapp = () => {
         </a>
       );
     } else {
-      return <Image width="100%" src={text} className="message_text" />;
+      return <Image src={text} className="images_text" />;
     }
   };
 

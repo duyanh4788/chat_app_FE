@@ -70,6 +70,12 @@
         padding: 5px 20px;
         display: inline-block;
         max-width: 80%;
+        .ant-image {
+          display: flex !important;
+        }
+        .images_text {
+          max-width: 200px;
+        }
         .message_text {
           width: 100%;
           letter-spacing: 0;
@@ -101,6 +107,12 @@
         padding: 5px 20px;
         display: inline-block;
         max-width: 80%;
+        .ant-image {
+          display: flex !important;
+        }
+        .images_text {
+          max-width: 200px;
+        }
         .message_text {
           width: 100%;
           letter-spacing: 0;
