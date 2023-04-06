@@ -50,6 +50,7 @@ import { AuthContext } from 'app/components/AuthContextApi';
 import { ModalUpdateUser } from 'app/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
 import { TOKEN_EXPRIED } from 'store/commom/common.contants';
+import { isDeveloperment } from 'index';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -186,9 +187,14 @@ export const Chatapp = () => {
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
-    socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
-      local.clearLocalStorage();
-      setNotiFyTitle('AUTHORIZATION_INVALID');
+    if (isDeveloperment) {
+      socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
+        local.clearLocalStorage();
+        setNotiFyTitle('AUTHORIZATION_INVALID');
+        return history.push('/');
+      });
+    }
+    socket.current.on(SOCKET_COMMIT.DISCONNECTED, (data: any) => {
       return history.push('/');
     });
     return () => {

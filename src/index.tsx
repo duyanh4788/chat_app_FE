@@ -9,6 +9,8 @@ import 'antd/dist/antd.css';
 import { AuthContextProvider } from 'app/components/AuthContextApi';
 import { Chatapp, MainRomChat, Password, PrivacyPolicy, TermsOfService } from 'router/lazyRouting';
 
+export const isDeveloperment = process.env.NODE_ENV === 'development' ? true : false;
+
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 const ConnectedApp = () => (
   <BrowserRouter>
