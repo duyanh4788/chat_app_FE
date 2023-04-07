@@ -51,6 +51,7 @@ import { ModalUpdateUser } from 'app/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
 import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 import { isDeveloperment } from 'index';
+import { ModalQrCode } from 'app/components/ModalQrCode';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -87,6 +88,7 @@ export const Chatapp = () => {
   const [myFriend, setMyFriend] = useState<any>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [qrCode, setQrCode] = useState<boolean>(false);
   const socket: any = useRef();
   const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
@@ -633,9 +635,14 @@ export const Chatapp = () => {
       </Layout>
       <ModalUpdateUser
         isModalOpen={isModalOpen}
-        handleOk={() => setIsModalOpen(false)}
+        handleOk={() => {
+          setIsModalOpen(false);
+          setQrCode(false);
+        }}
+        handleQrCode={value => setQrCode(value)}
         handleCancel={() => {
           setIsModalOpen(false);
+          setQrCode(false);
           if (!_.isEmpty(uploadAWS)) {
             dispatch(
               ChatAppSlice.actions.removeUploadAWS3({
@@ -646,6 +653,11 @@ export const Chatapp = () => {
         }}
         handleUploadAWS3Modal={handleUploadAWS3}
         handleUpDateInfo={handleUpDateInfo}
+      />
+      <ModalQrCode
+        qrCode={qrCode}
+        handleOk={() => setQrCode(false)}
+        handleCancel={() => setQrCode(false)}
       />
     </React.Fragment>
   );

@@ -15,6 +15,7 @@ interface Props {
   handleOk: () => void;
   handleCancel: () => void;
   handleUploadAWS3Modal: (files: RcFile) => void;
+  handleQrCode: (isBol: boolean) => void;
   handleUpDateInfo: (
     avatar: string,
     account: string,
@@ -25,7 +26,14 @@ interface Props {
 }
 
 export function ModalUpdateUser(props: Props) {
-  const { isModalOpen, handleOk, handleCancel, handleUploadAWS3Modal, handleUpDateInfo } = props;
+  const {
+    isModalOpen,
+    handleOk,
+    handleCancel,
+    handleUploadAWS3Modal,
+    handleUpDateInfo,
+    handleQrCode,
+  } = props;
   const loading = useSelector(AuthSelector.selectLoading);
   const userInfor = useSelector(AuthSelector.selectUserById);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
@@ -67,6 +75,11 @@ export function ModalUpdateUser(props: Props) {
       setType2FA(1);
     };
   }, [userInfor, uploadAWS]);
+
+  const handleType2FaApp = e => {
+    setType2FA(e.target.value);
+    handleQrCode(true);
+  };
 
   return (
     <Modal
@@ -118,10 +131,7 @@ export function ModalUpdateUser(props: Props) {
         value={fullName}
         onChange={e => setFullName(e.target.value)}
       />
-      <Radio.Group
-        style={{ marginTop: '20px' }}
-        onChange={e => setType2FA(e.target.value)}
-        value={type2FA}>
+      <Radio.Group style={{ marginTop: '20px' }} onChange={handleType2FaApp} value={type2FA}>
         <Space direction="vertical">
           <Switch
             checkedChildren="TWO 2FA"
