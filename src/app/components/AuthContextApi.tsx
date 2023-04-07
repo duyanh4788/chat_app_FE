@@ -36,7 +36,7 @@ export const AuthContextProvider = ({ children }) => {
         return history.push('/');
       }
       if (!_.isEmpty(user)) {
-        dispatch(AuthSlice.actions.getUserById(_.get(user, 'id')));
+        dispatch(AuthSlice.actions.getUserById({ id: _.get(user, 'id') }));
         return history.push('/chatApp');
       }
     }

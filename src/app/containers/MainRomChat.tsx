@@ -37,13 +37,10 @@ export const MainRomChat = () => {
         const toKen = getUrlToken?.split('?_id=')[0];
         const id = getUrlToken?.split('?_id=')[1];
         if (toKen && id) {
-          local.setAuth({
-            toKen,
-            id,
-          });
-          window.location.reload();
+          local.setAuth({ toKen, id });
+          dispatch(AuthSlice.actions.getUserById({ id, toKen }));
+          history.push('/chatApp');
         }
-        history.push('/chatApp');
         return;
       }
       const getUrlAuthCode = searchParams.get('authCode');

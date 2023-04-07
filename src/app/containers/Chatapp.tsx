@@ -120,7 +120,7 @@ export const Chatapp = () => {
           setFromDataUploadAWS3(undefined);
           break;
         case AuthSlice.actions.updateInfoSuccess.type:
-          dispatch(AuthSlice.actions.getUserById(_.get(userInfor, 'id')));
+          dispatch(AuthSlice.actions.getUserById({ id: _.get(userInfor, 'id') }));
           setIsModalOpen(false);
           resetFromChat();
           break;
