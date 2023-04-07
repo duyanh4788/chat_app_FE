@@ -41,9 +41,9 @@ export const MainRomChat = () => {
             toKen,
             id,
           });
-          history.push('/chatApp');
           window.location.reload();
         }
+        history.push('/chatApp');
         return;
       }
       const getUrlAuthCode = searchParams.get('authCode');
@@ -111,7 +111,6 @@ export const MainRomChat = () => {
         });
         openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
         history.push('/chatApp');
-        window.location.reload();
         break;
       case 201:
       case 202:

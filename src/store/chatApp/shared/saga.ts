@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import { ChatAppHttp } from '../service/chatapp.http';
 import { configResponse } from 'store/services/request';
 
-const chatApptRequest = new ChatAppHttp();
 export function* getListUsers(api, action) {
   const resPonse = yield call(api.getListUsers, action.payload);
   try {
@@ -76,6 +75,7 @@ export function* removeUploadAWS3(api, action) {
 }
 
 export function* ChatAppSaga() {
+  const chatApptRequest = new ChatAppHttp();
   yield all([
     yield takeLatest(actions.changeStatusoffline.type, changeStatusoffline, chatApptRequest),
     yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
