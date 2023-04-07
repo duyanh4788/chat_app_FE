@@ -1,15 +1,16 @@
 export const AuthApi = {
-  SIGN_IN: '/signIn',
-  SIGN_UP: '/signUp',
-  ACTIVE_AUTH_CODE: '/active',
-  GET_USER_BY_ID: '/getUserById/',
-  CHANGE_STATUS_IS_ONLINE: '/changeStatusOnline',
-  UPDATE_INFOR: '/update-infor',
-  LOGIN_FB: '/login-fb',
-  LOGIN_GG: '/login-gg',
-  FORGOT_PW: '/order-reset-password',
-  RESEND_ORDER_RESET_PASSWORD: '/resend-order-reset-password',
-  RESET_PASSWORD: '/reset-password',
+  SIGN_IN: '/users/signIn',
+  SIGN_IN_WITH_CODE: '/users/signin-withcode',
+  SIGN_UP: '/users/signUp',
+  ACTIVE_AUTH_CODE: '/users/active',
+  GET_USER_BY_ID: '/users/getUserById/',
+  CHANGE_STATUS_IS_ONLINE: '/users/changeStatusOnline',
+  UPDATE_INFOR: '/users/update-infor',
+  LOGIN_FB: '/users/login-fb',
+  LOGIN_GG: '/users/login-gg',
+  FORGOT_PW: '/users/order-reset-password',
+  RESEND_ORDER_RESET_PASSWORD: '/users/resend-order-reset-password',
+  RESET_PASSWORD: '/users/reset-password',
 };
 
 export const REPONSE_CONSTANT = {

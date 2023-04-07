@@ -16,6 +16,16 @@ export function* sigInUser(api, action) {
   }
 }
 
+export function* sigInUserWithCode(api, action) {
+  const resPonse = yield call(api.sigInUserWithCode, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.sigInUserWithCodeSuccess(data));
+  } catch (error) {
+    yield put(actions.sigInUserWithCodeFail(_.get(error, 'message')));
+  }
+}
+
 export function* signUpUser(api, action) {
   const resPonse = yield call(api.signUpUser, action.payload);
   try {
@@ -119,6 +129,7 @@ export function* updateInfo(api, action) {
 export function* AuthSaga() {
   yield all([
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
+    yield takeLatest(actions.sigInUserWithCode.type, sigInUserWithCode, authRequest),
     yield takeLatest(actions.signUpUser.type, signUpUser, authRequest),
     yield takeLatest(actions.activeAuthCode.type, activeAuthCode, authRequest),
     yield takeLatest(actions.forgotPassword.type, forgotPassword, authRequest),

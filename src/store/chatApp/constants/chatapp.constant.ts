@@ -1,11 +1,11 @@
 export const ChatAppApi = {
-  LIST_USER: '/listUser',
-  SAVE_CONVERT_STATION: '/saveConvertStation',
-  GET_LIST_MESSAGE: '/getListMessages',
-  NEW_MESSAGE: '/newMessage',
-  CHANGE_STATUS_OFFLINE: '/changeStatusoffline',
-  UPLOAD_AWS_S3: '/upload-aws3',
-  REMOVE_IMG_AWS3: '/remove-img-aws3',
+  LIST_USER: '/users/listUser',
+  SAVE_CONVERT_STATION: '/convertStations/saveConvertStation',
+  GET_LIST_MESSAGE: '/messages/getListMessages',
+  NEW_MESSAGE: '/messages/newMessage',
+  CHANGE_STATUS_OFFLINE: '/users/changeStatusoffline',
+  UPLOAD_AWS_S3: '/images/upload-aws3',
+  REMOVE_IMG_AWS3: '/images/remove-img-aws3',
 };
 
 export const REPONSE_CONSTANT = {

@@ -7,12 +7,16 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { AuthSaga } from 'store/auth/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button, Tooltip, Typography } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 import logo from '../../images/logo.png';
 import { LocalStorageService } from 'store/services/localStorage';
 import { openNotifi } from 'store/utils/Notification';
 
-export function SignInUser() {
+interface Props {
+  setFromAuth: (isBol: boolean) => void;
+}
+
+export function SignInUser({ setFromAuth }: Props) {
   const local = new LocalStorageService();
   const userInfor = local.getItem('_info');
   useInjectReducer({
@@ -71,15 +75,24 @@ export function SignInUser() {
         </Form.Item>
         <Form.Item shouldUpdate>
           {() => (
-            <Button
-              type="primary"
-              htmlType="submit"
-              disabled={
-                !form.isFieldsTouched(true) ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length).length
-              }>
-              Sign In
-            </Button>
+            <>
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={
+                  !form.isFieldsTouched(true) ||
+                  !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                }>
+                Sign In
+              </Button>
+              <Tooltip title="You have code login">
+                <CheckCircleTwoTone
+                  twoToneColor="#52c41a"
+                  onClick={() => setFromAuth(true)}
+                  style={{ marginLeft: '10px' }}
+                />
+              </Tooltip>
+            </>
           )}
         </Form.Item>
         <Form.Item>

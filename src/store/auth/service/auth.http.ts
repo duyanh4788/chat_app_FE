@@ -50,6 +50,10 @@ export class AuthHttp {
     });
   };
 
+  public sigInUserWithCode = (authCode: string): Promise<any> => {
+    return this.request.post(AuthApi.SIGN_IN_WITH_CODE, authCode);
+  };
+
   public signUpUser = (data: SignUpModel): Promise<any> => {
     return this.request.post(AuthApi.SIGN_UP, {
       ...this.configSignUp(data),

@@ -7,7 +7,8 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthConst from 'store/auth/constants/auth.constant';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tabs } from 'antd';
+import { Input, Tabs, Tooltip } from 'antd';
+import { CodeOutlined, RollbackOutlined } from '@ant-design/icons';
 import { AppLoading } from 'store/utils/Apploading';
 import { SignUpUser } from '../components/SignUpUser';
 import { SignInUser } from '../components/SignInUser';
@@ -25,6 +26,7 @@ export const MainRomChat = () => {
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
+  const [fromAuth, setFromAuth] = useState<boolean>(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export const MainRomChat = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
-      const { data, message } = payload;
+      const { data, message, code } = payload;
       if (message === TOKEN_EXPRIED) {
         openNotifi(400, payload);
         return;
@@ -75,13 +77,8 @@ export const MainRomChat = () => {
           openNotifi(200, message);
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
-          local.setAuth({
-            toKen: _.get(data, 'toKen'),
-            id: _.get(data, '_id'),
-          });
-          openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
-          history.push('/chatApp');
-          window.location.reload();
+        case AuthSlice.actions.sigInUserWithCodeSuccess.type:
+          handleLogin(data, message, code);
           break;
         case AuthSlice.actions.signUpWithFBSuccess.type:
         case AuthSlice.actions.signUpWithGGSuccess.type:
@@ -92,6 +89,7 @@ export const MainRomChat = () => {
           openNotifi(400, payload);
           break;
         case AuthSlice.actions.sigInUserFail.type:
+        case AuthSlice.actions.sigInUserWithCodeFail.type:
         case AuthSlice.actions.activeAuthCodeFail.type:
           openNotifi(400, payload);
           break;
@@ -104,19 +102,63 @@ export const MainRomChat = () => {
     };
   }, []);
 
+  const handleLogin = (data: any, message: string, code: number) => {
+    switch (code) {
+      case 200:
+        local.setAuth({
+          toKen: _.get(data, 'toKen'),
+          id: _.get(data, '_id'),
+        });
+        openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
+        history.push('/chatApp');
+        window.location.reload();
+        break;
+      case 201:
+      case 202:
+        openNotifi(code, message);
+        setFromAuth(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleLoginWithCode = e => {
+    if (e.target.value.length === 6) {
+      dispatch(AuthSlice.actions.sigInUserWithCode({ authCode: e.target.value }));
+    }
+  };
+
   return (
     <div className="main_form">
       {loading && <AppLoading loading />}
       <div>
         <h1>Chat App</h1>
-        <Tabs activeKey={tabsPanel} centered onChange={e => setTabsPanel(e)}>
-          <TabPane tab={<p>SignIn</p>} key="1">
-            <SignInUser />
-          </TabPane>
-          <TabPane tab={<p>SingUp</p>} key="2">
-            <SignUpUser />
-          </TabPane>
-        </Tabs>
+        {fromAuth ? (
+          <div className="form_input form_auth">
+            <div style={{ width: '100%' }}>
+              <Input
+                prefix={<CodeOutlined className="site-form-item-icon" />}
+                placeholder={'input code.'}
+                onChange={handleLoginWithCode}
+              />
+              <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                <Tooltip title="home">
+                  <RollbackOutlined onClick={() => setFromAuth(false)} />
+                </Tooltip>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Tabs activeKey={tabsPanel} centered onChange={e => setTabsPanel(e)}>
+            <TabPane tab={<p>SignIn</p>} key="1">
+              <SignInUser setFromAuth={setFromAuth} />
+            </TabPane>
+            <TabPane tab={<p>SingUp</p>} key="2">
+              <SignUpUser />
+            </TabPane>
+          </Tabs>
+        )}
       </div>
     </div>
   );

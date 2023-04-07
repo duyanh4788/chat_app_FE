@@ -58,12 +58,6 @@
     }
   }
   .form_password {
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: rgba(142, 142, 142, 0.19) 0px 6px 15px 0px;
-    border-radius: 10px;
-    width: 460px;
-    padding: 20px;
     height: 450px;
     .logo {
       text-align: center;
@@ -83,6 +77,11 @@
     .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
       border-color: rgba(255, 255, 255, 0.18);
     }
+  }
+  .form_auth {
+    height: 150px;
+    display: flex;
+    align-items: center;
   }
   .terms_of_service {
     backdrop-filter: blur(6px);
