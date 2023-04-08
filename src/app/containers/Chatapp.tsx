@@ -201,7 +201,7 @@ export const Chatapp = () => {
       });
     }
     socket.current.on(SOCKET_COMMIT.DISCONNECTED, (data: any) => {
-      return history.push('/');
+      return history.push('/outTab');
     });
     return () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
@@ -496,7 +496,7 @@ export const Chatapp = () => {
                 localStorage.clear();
                 history.push('/');
               }}>
-              Back
+              Log out
             </Button>
           </div>
           <Menu theme="dark" defaultSelectedKeys={['sub1']} mode="inline">

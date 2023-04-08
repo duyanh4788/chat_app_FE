@@ -30,3 +30,9 @@ export const PrivacyPolicy = lazyLoad(
   module => module.PrivacyPolicy,
   LoaderFallBack(),
 );
+
+export const OutTab = lazyLoad(
+  () => import('app'),
+  module => module.OutTab,
+  LoaderFallBack(),
+);

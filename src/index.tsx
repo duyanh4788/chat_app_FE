@@ -7,7 +7,14 @@ import './style/scss/chat_app.css';
 import './style/scss/main_form.css';
 import 'antd/dist/antd.css';
 import { AuthContextProvider } from 'app/components/AuthContextApi';
-import { Chatapp, MainRomChat, Password, PrivacyPolicy, TermsOfService } from 'router/lazyRouting';
+import {
+  Chatapp,
+  MainRomChat,
+  Password,
+  PrivacyPolicy,
+  TermsOfService,
+  OutTab,
+} from 'router/lazyRouting';
 
 export const isDeveloperment = process.env.NODE_ENV === 'development' ? true : false;
 
@@ -22,6 +29,7 @@ const ConnectedApp = () => (
           <Route path="/password" exact component={Password} />
           <Route path="/termsOfService" exact component={TermsOfService} />
           <Route path="/privacyPolicy" exact component={PrivacyPolicy} />
+          <Route path="/outTab" exact component={OutTab} />
         </AuthContextProvider>
       </Switch>
     </Provider>

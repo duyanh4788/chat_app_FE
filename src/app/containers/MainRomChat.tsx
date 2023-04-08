@@ -106,7 +106,6 @@ export const MainRomChat = () => {
           toKen: _.get(data, 'toKen'),
           id: _.get(data, '_id'),
         });
-        openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_IN_SUCCESS);
         history.push('/chatApp');
         break;
       case 201:

@@ -83,6 +83,13 @@
     display: flex;
     align-items: center;
   }
+  .form_outtab {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+  }
   .terms_of_service {
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.18);
