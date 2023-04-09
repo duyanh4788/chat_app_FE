@@ -85,7 +85,7 @@ export function ModalUpdateUser(props: Props) {
     <Modal
       title="INFOR USER"
       open={isModalOpen}
-      onOk={() => handleUpDateInfo(avatar, fullName, userInfor._id, twoFA, type2FA)}
+      onOk={() => handleUpDateInfo(avatar, fullName, userInfor._id as string, twoFA, type2FA)}
       onCancel={handleCancel}>
       {loading && <AppLoading loading />}
       <div

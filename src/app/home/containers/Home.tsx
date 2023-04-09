@@ -10,8 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input, Tabs, Tooltip } from 'antd';
 import { CodeOutlined, RollbackOutlined } from '@ant-design/icons';
 import { AppLoading } from 'store/utils/Apploading';
-import { SignUpUser } from '../components/SignUpUser';
-import { SignInUser } from '../components/SignInUser';
+import { SignUpUser } from '../component/SignUpUser';
+import { SignInUser } from '../component/SignInUser';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { openNotifi } from 'store/utils/Notification';
@@ -20,7 +20,7 @@ import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 
 const { TabPane } = Tabs;
 
-export const MainRomChat = () => {
+export const Home = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const local = new LocalStorageService();

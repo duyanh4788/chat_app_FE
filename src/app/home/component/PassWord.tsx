@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button, Tooltip, Typography } from 'antd';
 import { MailOutlined, RollbackOutlined, CodeOutlined, LockOutlined } from '@ant-design/icons';
-import logo from '../../images/logo.png';
+import logo from '../../../images/logo.png';
 import { RootStore } from 'store/configStore';
 import { Unsubscribe } from 'redux';
 import { openNotifi } from 'store/utils/Notification';

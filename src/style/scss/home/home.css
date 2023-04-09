@@ -1,7 +1,7 @@
 .main_form {
   width: 100%;
   height: 100vh;
-  background: url(../../images/2.png);
+  background: url(../../../images/2.png);
   background-attachment: fixed;
   background-size: cover;
   -webkit-backdrop-filter: blur(8px);
@@ -262,4 +262,4 @@
   background: #e2dfdf;
   border-radius: 6px;
 }
-/*# sourceMappingURL=main_form.css.map */
+/*# sourceMappingURL=home.css.map */

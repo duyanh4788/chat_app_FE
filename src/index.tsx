@@ -3,18 +3,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { RootStore } from './store/configStore';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import './style/scss/chat_app.css';
-import './style/scss/main_form.css';
+import './style/scss/home/home.css';
+import './style/scss/chatapp/chat_app.css';
 import 'antd/dist/antd.css';
-import { AuthContextProvider } from 'app/components/AuthContextApi';
-import {
-  Chatapp,
-  MainRomChat,
-  Password,
-  PrivacyPolicy,
-  TermsOfService,
-  OutTab,
-} from 'router/lazyRouting';
+import { Chatapp, Home, Password, PrivacyPolicy, TermsOfService, OutTab } from 'router/lazyRouting';
+import { AuthContextProvider } from 'app/authContext/AuthContextApi';
 
 export const isDeveloperment = process.env.NODE_ENV === 'development' ? true : false;
 
@@ -24,7 +17,7 @@ const ConnectedApp = () => (
     <Provider store={RootStore}>
       <Switch>
         <AuthContextProvider>
-          <Route path="/" exact component={MainRomChat} />
+          <Route path="/" exact component={Home} />
           <Route path="/chatApp" exact component={Chatapp} />
           <Route path="/password" exact component={Password} />
           <Route path="/termsOfService" exact component={TermsOfService} />

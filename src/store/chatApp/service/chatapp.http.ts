@@ -1,6 +1,6 @@
 import { ApisauceInstance } from 'apisauce';
 import { ChatAppApi } from 'store/chatApp/constants/chatapp.constant';
-import { ConvertStation, MessagesModel } from 'store/model/ChatApp.model';
+import { PostConvertStation, Messages } from 'store/model/ChatApp.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
@@ -10,7 +10,7 @@ export class ChatAppHttp {
     this.request = new HttpRequest(endPoint).request;
   }
 
-  private configNewMessage = (message: MessagesModel) => {
+  private configNewMessage = (message: Messages) => {
     return {
       conversationId: message.conversationId,
       senderId: message.senderId,
@@ -19,7 +19,7 @@ export class ChatAppHttp {
     };
   };
 
-  private configConverStation = (users: ConvertStation) => {
+  private configConverStation = (users: PostConvertStation) => {
     return {
       senderId: users.senderId,
       reciverId: users.reciverId,
@@ -28,7 +28,7 @@ export class ChatAppHttp {
 
   public getListUsers = (): Promise<any> => this.request.get(ChatAppApi.LIST_USER);
 
-  public saveConvertStation = (data: ConvertStation): Promise<any> =>
+  public saveConvertStation = (data: PostConvertStation): Promise<any> =>
     this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
       ...this.configConverStation(data),
     });
@@ -37,7 +37,7 @@ export class ChatAppHttp {
     return this.request.post(ChatAppApi.GET_LIST_MESSAGE, sernderId);
   };
 
-  public postNewMessage = (data: MessagesModel): Promise<any> =>
+  public postNewMessage = (data: Messages): Promise<any> =>
     this.request.post(ChatAppApi.NEW_MESSAGE, {
       ...this.configNewMessage(data),
     });

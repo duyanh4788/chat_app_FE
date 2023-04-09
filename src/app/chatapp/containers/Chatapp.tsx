@@ -13,29 +13,7 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import {
-  Layout,
-  Menu,
-  Breadcrumb,
-  Input,
-  Tooltip,
-  Avatar,
-  Button,
-  Upload,
-  Image,
-  Spin,
-  Badge,
-} from 'antd';
-import {
-  RollbackOutlined,
-  UserOutlined,
-  SendOutlined,
-  HeatMapOutlined,
-  SmileOutlined,
-  UploadOutlined,
-  CloseCircleTwoTone,
-  LoadingOutlined,
-} from '@ant-design/icons';
+import { Layout, Breadcrumb, Avatar, Upload, Image } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
@@ -46,19 +24,21 @@ import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { format } from 'timeago.js';
-import { AuthContext } from 'app/components/AuthContextApi';
-import { ModalUpdateUser } from 'app/components/ModalUpdateUser';
+import { ModalUpdateUser } from 'app/chatapp/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
 import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 import { isDeveloperment } from 'index';
-import { ModalQrCode } from 'app/components/ModalQrCode';
+import { ModalQrCode } from 'app/chatapp/components/ModalQrCode';
+import { AuthContext } from 'app/authContext/AuthContextApi';
+import { ListUsers } from '../components/ListUsers';
+import { Users } from 'store/model/Users.model';
+import { ListMessages, Messages } from 'store/model/ChatApp.model';
+import { RenderListMessages } from '../components/RenderListMessages';
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
-const { Dragger } = Upload;
+const { Header, Content, Footer } = Layout;
 
 export const Chatapp = () => {
-  const userAuthContext: any = useContext(AuthContext);
+  const userAuthContext: Users = useContext(AuthContext);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -74,19 +54,18 @@ export const Chatapp = () => {
     saga: ChatAppSaga,
   });
   const loading = useSelector(ChatAppSelector.selectLoading);
-  const loadingPaging = useSelector(ChatAppSelector.selectLoadingPaging);
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
   const getListUsers = useSelector(ChatAppSelector.selectListUsers);
-  const [listUsers, setListUsers] = useState<any[]>([]);
-  const [collapsed, setCollapsed] = useState(false);
-  const [errorAcknow, setErrorAcknow] = useState<any>(undefined);
-  const [sendMessage, setSendMessage] = useState<any>(undefined);
-  const [listMessages, setListMessages] = useState<any[]>([]);
-  const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<any>(undefined);
-  const [myFriend, setMyFriend] = useState<any>(null);
-  const [notiFyTitle, setNotiFyTitle] = useState<any>('Chat App');
+  const [listUsers, setListUsers] = useState<Users[]>([]);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [errorAcknow, setErrorAcknow] = useState<string | undefined>(undefined);
+  const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
+  const [listMessages, setListMessages] = useState<Messages[]>([]);
+  const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);
+  const [myFriend, setMyFriend] = useState<Users | null>(null);
+  const [notiFyTitle, setNotiFyTitle] = useState<string>('Chat App');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [qrCode, setQrCode] = useState<boolean>(false);
   const socket: any = useRef();
@@ -190,7 +169,7 @@ export const Chatapp = () => {
         return setNotiFyTitle(obJectNotify.message);
       }
     });
-    socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: any) => {
+    socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: Messages) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
     if (isDeveloperment) {
@@ -212,13 +191,13 @@ export const Chatapp = () => {
   useEffect(() => {
     if (!_.isEmpty(getListUsers)) {
       setListUsers(getListUsers);
-      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: any) => {
+      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: Users) => {
         let newList: any[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListUsers(newList);
       });
-      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: any) => {
-        let newList: any[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
+      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: Users) => {
+        let newList: Users[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListUsers(newList);
       });
@@ -227,7 +206,7 @@ export const Chatapp = () => {
 
   useEffect(() => {
     handleAutoScroll(false);
-    function initListMsg(msg: any) {
+    function initListMsg(msg: ListMessages) {
       if (!msg || (msg && !msg.listMessages?.length)) return;
       if (!listMessages.length) {
         setListMessages(msg.listMessages);
@@ -263,13 +242,13 @@ export const Chatapp = () => {
     }
   };
 
-  const handleSelectUser = (friend: any) => {
+  const handleSelectUser = (friend: Users) => {
     handleAutoScroll(true);
     setListMessages([]);
     setMyFriend(friend);
     if (
       !convertStation ||
-      (convertStation && convertStation?.members?.includes(friend._id) === false)
+      (convertStation && convertStation?.members?.includes(friend._id as string) === false)
     ) {
       dispatch(
         ChatAppSlice.actions.saveConvertStation({
@@ -280,7 +259,7 @@ export const Chatapp = () => {
     }
   };
 
-  const acknowLedGements = (error: any) => {
+  const acknowLedGements = (error: string) => {
     if (error) {
       return setErrorAcknow(error);
     }
@@ -295,7 +274,7 @@ export const Chatapp = () => {
     };
   };
 
-  const onSendMessage = (event: any) => {
+  const onSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
     if (sendMessage) {
       socket.current.emit(
@@ -333,6 +312,7 @@ export const Chatapp = () => {
         acknowLedGements,
       );
     });
+    handleAutoScroll(true);
   };
 
   const resetFromChat = () => {
@@ -342,73 +322,12 @@ export const Chatapp = () => {
     dispatch(ChatAppSlice.actions.clearUploadAWS3());
   };
 
-  const renderCheckTypeMessages = (text: string) => {
-    if (!_.isEmpty(text) && !AppHelper.checkLinkHttp(text)) {
-      return <p className="message_text">{text}</p>;
-    } else if (!AppHelper.checkLinkAWS(text)) {
-      return (
-        <a href={text} target="_blank" className="message_text">
-          {text}
-        </a>
-      );
-    } else {
-      return <Image src={text} className="images_text" />;
-    }
-  };
-
-  const renderMessage = () => {
-    if (!_.isEmpty(convertStation) && listMessages.length === 0) {
-      return (
-        <div className="box_chat_empty">
-          <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
-        </div>
-      );
-    }
-    if (!_.isEmpty(convertStation) && listMessages.length) {
-      return listMessages
-        .filter(({ conversationId }) => conversationId === convertStation._id)
-        .map((row, idx) => {
-          if (row.senderId === _.get(userAuthContext, '_id')) {
-            return (
-              <div className="my_chat" key={idx}>
-                <div className="message_box">
-                  {renderCheckTypeMessages(row.text)}
-                  <span className="time">{format(row.createdAt)}</span>
-                </div>
-                <Avatar className="bg_green avatar_img" src={_.get(userAuthContext, 'avatar')}>
-                  {!_.isEmpty(_.get(userAuthContext, 'fullName'))
-                    ? AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))
-                    : ''}
-                </Avatar>
-              </div>
-            );
-          } else {
-            return (
-              <div className="member_chat" key={idx}>
-                <Avatar
-                  className="bg_green avatar_img"
-                  src={convertStation.avataReciver !== '' ? convertStation.avataReciver : null}>
-                  {!_.isEmpty(myFriend)
-                    ? AppHelper.convertFullName(_.get(myFriend, 'fullName'))
-                    : ''}
-                </Avatar>
-                <div className="message_box">
-                  {renderCheckTypeMessages(row.text)}
-                  <span className="time">{format(row.createdAt)}</span>
-                </div>
-              </div>
-            );
-          }
-        });
-    }
-  };
-
   const handleUploadAWS3 = (file: RcFile) => {
     const fromData = new FormData();
     fromData.append('file', file);
     let reader = new FileReader();
     reader.addEventListener('load', () => {
-      setFromDataUploadAWS3(reader.result);
+      setFromDataUploadAWS3(reader.result as string);
     });
     reader.readAsDataURL(file);
     dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
@@ -455,15 +374,6 @@ export const Chatapp = () => {
     dispatch(AuthSlice.actions.updateInfo(payload));
   };
 
-  const propsDrag: UploadProps = {
-    listType: 'picture',
-    openFileDialogOnClick: false,
-    beforeUpload: file => {
-      handleUploadAWS3(file);
-      return false;
-    },
-  };
-
   const handleScrollListMessages = () => {
     let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (myRow.scrollTop < 1 && getListMessages.skip) {
@@ -487,59 +397,13 @@ export const Chatapp = () => {
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}
-        <Sider collapsible collapsed={collapsed} onCollapse={(e: boolean) => setCollapsed(e)}>
-          <div className="sider_btn">
-            <Button
-              className="btn_back"
-              icon={<RollbackOutlined />}
-              onClick={() => {
-                localStorage.clear();
-                history.push('/');
-              }}>
-              Log out
-            </Button>
-          </div>
-          <Menu theme="dark" defaultSelectedKeys={['sub1']} mode="inline">
-            <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
-              {!_.isEmpty(listUsers) && listUsers.length ? (
-                listUsers
-                  .filter(item => item._id !== _.get(userAuthContext, '_id'))
-                  .map((row, idx) => (
-                    <Menu.Item key={idx} className="subMenu" onClick={() => handleSelectUser(row)}>
-                      <span>
-                        <Avatar
-                          size={20}
-                          className="bg_green"
-                          src={row.avatar !== '' ? row.avatar : null}>
-                          {AppHelper.convertFullName(row.fullName)}
-                        </Avatar>
-                        {row.isNewMsg && (
-                          <Badge
-                            dot
-                            style={{
-                              backgroundColor: '#52c41a',
-                              width: '10px',
-                              height: '10px',
-                            }}
-                            offset={[-8, -5]}
-                          />
-                        )}
-                        <span className="account">{row.fullName}</span>
-                      </span>
-
-                      <SmileOutlined
-                        style={{
-                          color: row.isOnline ? '#108ee9' : '#e91010',
-                        }}
-                      />
-                    </Menu.Item>
-                  ))
-              ) : (
-                <Menu.Item key="sub3">Không có thành viên</Menu.Item>
-              )}
-            </SubMenu>
-          </Menu>
-        </Sider>
+        <ListUsers
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          userAuthContext={userAuthContext}
+          listUsers={listUsers}
+          handleSelectUser={handleSelectUser}
+        />
         <Layout>
           <Header className="site_info">
             <Breadcrumb className="avatar" style={{ cursor: 'pointer' }}>
@@ -551,85 +415,28 @@ export const Chatapp = () => {
               </Breadcrumb.Item>
             </Breadcrumb>
           </Header>
-          {convertStation && convertStation._id && convertStation.members.length ? (
-            <React.Fragment>
-              <Content className="site_layout" onScroll={handleScrollListMessages}>
-                {loadingPaging && (
-                  <div style={{ textAlign: 'center' }}>
-                    <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-                  </div>
-                )}
-                {renderMessage()}
-              </Content>
-              <div className="form_chat">
-                <Dragger {...propsDrag}>
-                  <Input
-                    id="file_input"
-                    placeholder="Enter Message"
-                    value={sendMessage}
-                    onChange={e => setSendMessage(e.target.value)}
-                    onPressEnter={onSendMessage}
-                    onFocus={e => {
-                      setNotiFyTitle('Chat App');
-                      notiFyTitleRef.current = undefined;
-                    }}
-                    suffix={
-                      <React.Fragment>
-                        <Upload
-                          action=""
-                          listType="picture"
-                          beforeUpload={file => {
-                            handleUploadAWS3(file);
-                            return false;
-                          }}>
-                          <UploadOutlined style={{ cursor: 'pointer', marginRight: '10px' }} />
-                        </Upload>
-                        <Tooltip title="Send Message">
-                          <SendOutlined
-                            type="info-circle"
-                            style={{
-                              color: 'rgba(0,0,0,.45)',
-                              marginRight: '10px',
-                            }}
-                            onClick={onSendMessage}
-                          />
-                        </Tooltip>
-                        <Tooltip title="Share Location">
-                          <HeatMapOutlined type="info-circle" onClick={shareLocation} />
-                        </Tooltip>
-                      </React.Fragment>
-                    }
-                  />
-                  {formDataUploadAWS3 && !isModalOpen && (
-                    <div className="images_review">
-                      <Image
-                        src={formDataUploadAWS3}
-                        width={200}
-                        style={{ borderRadius: '10px' }}
-                      />
-                      <CloseCircleTwoTone
-                        style={{ marginLeft: '5px' }}
-                        twoToneColor="#00152900"
-                        onClick={() => {
-                          setSendMessage(undefined);
-                          dispatch(
-                            ChatAppSlice.actions.removeUploadAWS3({
-                              idImage: uploadAWS,
-                            }),
-                          );
-                        }}
-                      />
-                    </div>
-                  )}
-                </Dragger>
-              </div>
-            </React.Fragment>
+          {convertStation && convertStation._id && convertStation.members?.length ? (
+            <RenderListMessages
+              convertStation={convertStation}
+              userAuthContext={userAuthContext}
+              myFriend={myFriend}
+              listMessages={listMessages}
+              notiFyTitleRef={notiFyTitleRef}
+              sendMessage={sendMessage}
+              formDataUploadAWS3={formDataUploadAWS3}
+              isModalOpen={isModalOpen}
+              handleUploadAWS3={handleUploadAWS3}
+              handleScrollListMessages={handleScrollListMessages}
+              setSendMessage={setSendMessage}
+              setNotiFyTitle={setNotiFyTitle}
+              shareLocation={shareLocation}
+              onSendMessage={onSendMessage}
+            />
           ) : (
             <Content className="site_layout_empty">
               <span>Well Come Chat App</span>
             </Content>
           )}
-
           <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
         </Layout>
       </Layout>

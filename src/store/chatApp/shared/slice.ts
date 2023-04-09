@@ -1,12 +1,14 @@
 import { createSlice } from 'store/core/@reduxjs/toolkit';
+import { ConvertStations, ListMessages } from 'store/model/ChatApp.model';
+import { Users } from 'store/model/Users.model';
 
 export interface ChatAppState {
   loading: boolean;
   loadingImage: boolean;
   loadingPaging: boolean;
-  listUsers: any;
-  convertStation: any;
-  getListMessages: any;
+  listUsers: Users[];
+  convertStation: ConvertStations | undefined;
+  getListMessages: ListMessages | any;
   uploadAWS: any;
 }
 
@@ -14,8 +16,8 @@ export const initialState: ChatAppState = {
   loading: false,
   loadingImage: false,
   loadingPaging: false,
-  listUsers: {},
-  convertStation: null,
+  listUsers: [],
+  convertStation: undefined,
   getListMessages: {},
   uploadAWS: {},
 };
@@ -105,8 +107,8 @@ const ChatAppSlice = createSlice({
     clearData(state) {
       state.loading = false;
       state.loadingPaging = false;
-      state.listUsers = {};
-      state.convertStation = {};
+      state.listUsers = [];
+      state.convertStation = undefined;
       state.getListMessages = {};
       state.uploadAWS = {};
     },

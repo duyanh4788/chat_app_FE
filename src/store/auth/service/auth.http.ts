@@ -1,6 +1,6 @@
 import { ApisauceInstance } from 'apisauce';
 import { AuthApi } from 'store/auth/constants/auth.constant';
-import { SignInModel, SignUpModel, UpdateUser } from 'store/model/Auth.model';
+import { Users } from 'store/model/Users.model';
 import { HttpRequest } from 'store/services/request';
 import { ApiRouter } from 'store/services/request.constants';
 
@@ -10,14 +10,14 @@ export class AuthHttp {
     this.request = new HttpRequest(endPoint).request;
   }
 
-  private configSingIn = (user: SignInModel) => {
+  private configSingIn = (user: Users) => {
     return {
       account: user.account,
       passWord: user.passWord,
     };
   };
 
-  private configSignUp = (user: SignUpModel) => {
+  private configSignUp = (user: Users) => {
     return {
       account: user.account,
       passWord: user.passWord,
@@ -26,7 +26,7 @@ export class AuthHttp {
     };
   };
 
-  private configUpdateInfor = (user: UpdateUser) => {
+  private configUpdateInfor = (user: Users) => {
     return {
       fullName: user.fullName,
       avatar: user.avatar,
@@ -44,7 +44,7 @@ export class AuthHttp {
     };
   };
 
-  public signInUser = (data: SignInModel): Promise<any> => {
+  public signInUser = (data: Users): Promise<any> => {
     return this.request.post(AuthApi.SIGN_IN, {
       ...this.configSingIn(data),
     });
@@ -54,7 +54,7 @@ export class AuthHttp {
     return this.request.post(AuthApi.SIGN_IN_WITH_CODE, authCode);
   };
 
-  public signUpUser = (data: SignUpModel): Promise<any> => {
+  public signUpUser = (data: Users): Promise<any> => {
     return this.request.post(AuthApi.SIGN_UP, {
       ...this.configSignUp(data),
     });

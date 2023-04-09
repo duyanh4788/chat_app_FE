@@ -1,9 +1,9 @@
 import { lazyLoad } from './loadable';
 import { LoaderFallBack } from 'store/utils/Apploading';
 
-export const MainRomChat = lazyLoad(
+export const Home = lazyLoad(
   () => import('app'),
-  module => module.MainRomChat,
+  module => module.Home,
   LoaderFallBack(),
 );
 

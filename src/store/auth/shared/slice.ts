@@ -1,10 +1,11 @@
 import { createSlice } from 'store/core/@reduxjs/toolkit';
+import { Users } from 'store/model/Users.model';
 
 export interface AuthState {
   loading: boolean;
   success: any;
   error: any;
-  userById: any;
+  userById: Users;
 }
 
 export const initialState: AuthState = {

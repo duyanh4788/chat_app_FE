@@ -1,8 +1,8 @@
-import { Chatapp } from './containers/Chatapp';
-import { MainRomChat } from './containers/MainRomChat';
-import { OutTab } from './containers/OutTab';
-import { PassWord } from './containers/PassWord';
-import { PrivacyPolicy } from './containers/PrivacyPolicy';
-import { TermsOfService } from './containers/TermsOfService';
+import { Chatapp } from './chatapp/containers/Chatapp';
+import { OutTab } from './chatapp/containers/OutTab';
+import { PassWord } from './home/component/PassWord';
+import { Home } from './home/containers/Home';
+import { PrivacyPolicy } from './home/containers/PrivacyPolicy';
+import { TermsOfService } from './home/containers/TermsOfService';
 
-export { MainRomChat, Chatapp, PassWord, TermsOfService, PrivacyPolicy, OutTab };
+export { Home, Chatapp, PassWord, TermsOfService, PrivacyPolicy, OutTab };
