@@ -1,36 +1,41 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
-import { Layout, Menu, Avatar, Button, Badge } from 'antd';
-import { UserOutlined, SmileOutlined } from '@ant-design/icons';
+import { Menu, Avatar, Tooltip, Badge, Drawer } from 'antd';
+import { LogoutOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { AppHelper } from 'store/utils/app.helper';
 
-const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 interface Props {
-  collapsed: boolean;
+  drawer: boolean;
   userAuthContext: any;
   listUsers: any;
-  setCollapsed: (e: boolean) => void;
+  setDrawer: (e: boolean) => void;
   handleSelectUser: (row: any) => void;
 }
 
 export function RenderListUsers(props: Props) {
-  const { collapsed, setCollapsed, userAuthContext, listUsers, handleSelectUser } = props;
+  const { drawer, setDrawer, userAuthContext, listUsers, handleSelectUser } = props;
   const history = useHistory();
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={(e: boolean) => setCollapsed(e)}>
+    <Drawer
+      placement="left"
+      closable={false}
+      onClose={() => setDrawer(false)}
+      open={drawer}
+      getContainer={false}>
       <div className="sider_btn">
-        <Button
-          className="btn_back"
-          onClick={() => {
-            localStorage.clear();
-            history.push('/');
-          }}>
-          Log out
-        </Button>
+        <Tooltip title="logout">
+          <LogoutOutlined
+            onClick={() => {
+              localStorage.clear();
+              history.push('/');
+            }}
+            style={{ color: '#ffffff' }}
+          />
+        </Tooltip>
       </div>
       <Menu theme="dark" defaultSelectedKeys={['sub1']} mode="inline">
         <SubMenu key="sub1" icon={<UserOutlined />} title="My Friends">
@@ -73,6 +78,6 @@ export function RenderListUsers(props: Props) {
           )}
         </SubMenu>
       </Menu>
-    </Sider>
+    </Drawer>
   );
 }

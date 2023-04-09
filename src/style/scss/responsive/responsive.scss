@@ -1,0 +1,37 @@
+@mixin outtab {
+    .form_outtab {
+        padding: 10px;
+    }
+}
+@mixin mainform {
+    .main_form {
+        .terms_of_service {
+            max-width: 360px;
+            h1 {
+                font-size: 21px;
+                margin: 0;
+            }
+            h2 {
+                font-size: 16px;
+            }
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+@mixin pw2_h1_logo {
+    h1 {
+        margin: 0;
+    }
+    .logo {
+        margin-bottom: 5px;
+    }
+}
+
+@mixin finput_h1 {
+    h1 {
+        font-size: 30px;
+    }
+}

@@ -14,6 +14,7 @@ import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
 import { Layout, Breadcrumb, Avatar } from 'antd';
+import { AlignLeftOutlined } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
@@ -58,7 +59,7 @@ export const Chatapp = () => {
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
   const getListUsers = useSelector(ChatAppSelector.selectListUsers);
   const [listUsers, setListUsers] = useState<Users[]>([]);
-  const [collapsed, setCollapsed] = useState<boolean>(true);
+  const [drawer, setDrawer] = useState<boolean>(false);
   const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
   const [listMessages, setListMessages] = useState<Messages[]>([]);
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);
@@ -234,8 +235,8 @@ export const Chatapp = () => {
   };
 
   const handleSelectUser = (friend: Users) => {
-    handleAutoScroll(true);
     setListMessages([]);
+    setDrawer(false);
     setMyFriend(friend);
     if (
       !convertStation ||
@@ -248,6 +249,7 @@ export const Chatapp = () => {
         }),
       );
     }
+    handleAutoScroll(true);
   };
 
   const resetFromChat = () => {
@@ -332,22 +334,26 @@ export const Chatapp = () => {
       <Layout>
         {loading && <AppLoading loading />}
         <RenderListUsers
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
+          drawer={drawer}
+          setDrawer={setDrawer}
           userAuthContext={userAuthContext}
           listUsers={listUsers}
           handleSelectUser={handleSelectUser}
         />
         <Layout>
           <Header className="site_info">
-            <Breadcrumb className="avatar" style={{ cursor: 'pointer' }}>
-              <Breadcrumb.Item onClick={() => setIsModalOpen(true)}>
-                <Avatar className="bg_green" src={_.get(userAuthContext, 'avatar')}>
-                  {AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))}
-                </Avatar>
-                <span className="account">{_.get(userAuthContext, 'fullName')}</span>
-              </Breadcrumb.Item>
-            </Breadcrumb>
+            <div className="icon_drawer">
+              <AlignLeftOutlined onClick={() => setDrawer(true)} />
+            </div>
+            <div className="avatar">
+              <Avatar
+                className="bg_green"
+                src={_.get(userAuthContext, 'avatar')}
+                onClick={() => setIsModalOpen(true)}>
+                {AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))}
+              </Avatar>
+              <span className="account">{_.get(userAuthContext, 'fullName')}</span>
+            </div>
           </Header>
           {convertStation && convertStation._id && convertStation.members?.length ? (
             <RenderListMessages
@@ -372,7 +378,9 @@ export const Chatapp = () => {
               <span>Well Come Chat App</span>
             </Content>
           )}
-          <Footer>Vũ Duy Anh Design ©2021 Created Chat_App</Footer>
+          <Footer className={convertStation && convertStation._id && 'footer_chatapp'}>
+            Vũ Duy Anh Design ©2021 Created Chat_App
+          </Footer>
         </Layout>
       </Layout>
       <ModalUpdateUser

@@ -8,38 +8,31 @@
 }
 
 .ant-layout .sider_btn {
-  padding: 10px;
+  text-align: center;
 }
 
-.ant-layout .sider_btn .btn_back {
-  background-color: #001529;
-  color: #ffff;
-  outline: none;
-}
-
-.ant-layout .sider_btn .btn_back a {
-  color: #fff;
-  margin-left: 5px;
+.ant-layout .sider_btn span {
+  font-size: 18px;
 }
 
 .ant-layout .site_info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 
+.ant-layout .site_info .icon_drawer,
 .ant-layout .site_info .avatar {
-  margin: 20px 0;
+  width: 50%;
+  text-align: left;
 }
 
-.ant-layout .site_info .avatar .bg_green {
+.ant-layout .site_info .bg_green {
   background-color: #87d068;
+  cursor: pointer;
 }
 
-.ant-layout .site_info .avatar .account {
+.ant-layout .site_info .account {
   color: #ffffff;
   font-weight: bolder;
   margin-left: 5px;
@@ -66,10 +59,9 @@
 }
 
 .ant-layout .subMenu .account {
-  font-size: 13px;
+  font-size: 16px;
   color: #ffffff;
   font-weight: bolder;
-  margin-left: 5px;
 }
 
 .ant-layout .site_layout {
@@ -222,6 +214,19 @@
   background: #001529;
   text-align: center;
   color: #fff;
+  font-size: 20px;
+}
+
+.ant-layout .ant-layout-header {
+  padding-left: 20px;
+}
+
+.ant-layout .ant-layout-footer {
+  padding: 0 24px 15px 24px;
+}
+
+.ant-layout .footer_chatapp {
+  padding: 15px 24px 15px 24px;
 }
 
 .ant-layout .site_layout_empty {
@@ -236,6 +241,7 @@
           align-items: center;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+  border: 20px solid #001529;
 }
 
 .ant-layout .site_layout_empty span {
@@ -330,14 +336,66 @@
   margin-left: 5px !important;
 }
 
-@media (max-width: 375px) {
+.ant-drawer-content {
+  background: #001529 !important;
+}
+
+.ant-drawer-content .ant-menu .ant-menu-root .ant-menu-inline .ant-menu-dark {
+  width: 100% !important;
+}
+
+.ant-drawer-content .ant-drawer-body {
+  padding: 10px !important;
+}
+
+.ant-menu-submenu-title {
+  font-size: 18px !important;
+}
+
+@media (max-width: 540px) {
   .site_layout_empty span {
-    font-size: 25px !important;
+    font-size: 34px !important;
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 330px !important;
   }
   .ant-layout-footer {
-    font-size: 9px !important;
+    font-size: 14px !important;
   }
-  .sider_btn span {
+}
+
+@media (max-width: 414px) {
+  .site_layout_empty span {
+    font-size: 32px !important;
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 320px !important;
+  }
+  .ant-layout-footer {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .site_layout_empty span {
+    font-size: 30px !important;
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 300px !important;
+  }
+  .ant-layout-footer {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 280px) {
+  .site_layout_empty span {
+    font-size: 28px !important;
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 280px !important;
+  }
+  .ant-layout-footer {
     font-size: 10px !important;
   }
 }

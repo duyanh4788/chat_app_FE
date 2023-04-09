@@ -247,9 +247,68 @@
   border-radius: 6px;
 }
 
+@media (max-width: 540px) {
+  .form_outtab {
+    padding: 10px;
+  }
+  .main_form .terms_of_service {
+    max-width: 360px;
+  }
+  .main_form .terms_of_service h1 {
+    font-size: 21px;
+    margin: 0;
+  }
+  .main_form .terms_of_service h2 {
+    font-size: 16px;
+  }
+  .main_form .terms_of_service p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 414px) {
+  .form_input {
+    max-width: 320px;
+  }
+  .form_input h1 {
+    font-size: 30px;
+  }
+  .form_password {
+    max-height: 410px;
+  }
+  .form_password_2 {
+    max-height: 290px !important;
+  }
+  .form_password_2 h1 {
+    margin: 0;
+  }
+  .form_password_2 .logo {
+    margin-bottom: 5px;
+  }
+  .form_outtab {
+    padding: 10px;
+  }
+  .main_form .terms_of_service {
+    max-width: 360px;
+  }
+  .main_form .terms_of_service h1 {
+    font-size: 21px;
+    margin: 0;
+  }
+  .main_form .terms_of_service h2 {
+    font-size: 16px;
+  }
+  .main_form .terms_of_service p {
+    font-size: 14px;
+  }
+  .loginBtn {
+    font-size: 9px;
+  }
+}
+
 @media (max-width: 375px) {
   .form_input {
-    max-width: 300px;
+    max-width: 320px;
   }
   .form_input h1 {
     font-size: 30px;
@@ -258,32 +317,75 @@
     max-height: 410px !important;
   }
   .form_password_2 {
-    max-height: 290px !important;
+    max-height: 280px !important;
   }
   .form_password_2 h1 {
-    margin: 0 !important;
+    margin: 0;
   }
   .form_password_2 .logo {
-    margin-bottom: 5px !important;
+    margin-bottom: 5px;
   }
   .form_outtab {
-    padding: 10px !important;
+    padding: 10px;
   }
   .main_form .terms_of_service {
-    max-width: 340px;
+    max-width: 360px;
   }
   .main_form .terms_of_service h1 {
-    font-size: 20px;
+    font-size: 21px;
     margin: 0;
   }
   .main_form .terms_of_service h2 {
-    font-size: 15px;
+    font-size: 16px;
   }
   .main_form .terms_of_service p {
-    font-size: 13px;
+    font-size: 14px;
   }
   .loginBtn {
-    font-size: 8px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 280px) {
+  .form_input {
+    max-width: 250px;
+  }
+  .form_input h1 {
+    font-size: 20px;
+  }
+  .form_password {
+    max-height: 400px !important;
+  }
+  .form_password_2 {
+    max-height: 270px !important;
+  }
+  .form_password_2 h1 {
+    margin: 0;
+  }
+  .form_password_2 .logo {
+    margin-bottom: 5px;
+  }
+  .form_outtab p {
+    font-size: 11px;
+  }
+  .form_outtab span {
+    font-size: 13px;
+  }
+  .main_form .terms_of_service {
+    max-width: 360px;
+  }
+  .main_form .terms_of_service h1 {
+    font-size: 21px;
+    margin: 0;
+  }
+  .main_form .terms_of_service h2 {
+    font-size: 16px;
+  }
+  .main_form .terms_of_service p {
+    font-size: 14px;
+  }
+  .loginBtn {
+    font-size: 5px;
   }
 }
 /*# sourceMappingURL=home.css.map */

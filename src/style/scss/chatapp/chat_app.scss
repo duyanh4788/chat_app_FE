@@ -5,30 +5,26 @@
   backdrop-filter: blur(8px);
   height: 100vh;
   .sider_btn {
-    padding: 10px;
-    .btn_back {
-      background-color: #001529;
-      color: #ffff;
-      outline: none;
-      a {
-        color: #fff;
-        margin-left: 5px;
-      }
+    text-align: center;
+    span {
+      font-size: 18px;
     }
   }
   .site_info {
     display: flex;
-    justify-content: center;
+    .icon_drawer,
     .avatar {
-      margin: 20px 0;
-      .bg_green {
-        background-color: #87d068;
-      }
-      .account {
-        color: #ffffff;
-        font-weight: bolder;
-        margin-left: 5px;
-      }
+      width: 50%;
+      text-align: left;
+    }
+    .bg_green {
+      background-color: #87d068;
+      cursor: pointer;
+    }
+    .account {
+      color: #ffffff;
+      font-weight: bolder;
+      margin-left: 5px;
     }
   }
 
@@ -43,10 +39,9 @@
       background-color: #87d068;
     }
     .account {
-      font-size: 13px;
+      font-size: 16px;
       color: #ffffff;
       font-weight: bolder;
-      margin-left: 5px;
     }
   }
   .site_layout {
@@ -159,6 +154,16 @@
     background: #001529;
     text-align: center;
     color: #fff;
+    font-size: 20px;
+  }
+  .ant-layout-header {
+    padding-left: 20px;
+  }
+  .ant-layout-footer {
+    padding: 0 24px 15px 24px;
+  }
+  .footer_chatapp {
+    padding: 15px 24px 15px 24px;
   }
 }
 
@@ -169,6 +174,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border: 20px solid #001529;
   span {
     font-size: 50px;
     color: rgb(224, 220, 220);
@@ -258,18 +264,72 @@
   }
 }
 
+.ant-drawer-content {
+  background: #001529 !important;
+  .ant-menu .ant-menu-root .ant-menu-inline .ant-menu-dark {
+    width: 100% !important;
+  }
+  .ant-drawer-body {
+    padding: 10px !important;
+  }
+}
+
+.ant-menu-submenu-title {
+  font-size: 18px !important;
+}
+
+@media (max-width: 540px) {
+  .site_layout_empty {
+    span {
+      font-size: 34px !important;
+    }
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 330px !important;
+  }
+  .ant-layout-footer {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 414px) {
+  .site_layout_empty {
+    span {
+      font-size: 32px !important;
+    }
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 320px !important;
+  }
+  .ant-layout-footer {
+    font-size: 13px !important;
+  }
+}
+
 @media (max-width: 375px) {
   .site_layout_empty {
     span {
-      font-size: 25px !important;
+      font-size: 30px !important;
     }
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 300px !important;
   }
   .ant-layout-footer {
-    font-size: 9px !important;
+    font-size: 12px !important;
   }
-  .sider_btn {
+}
+
+@media (max-width: 280px) {
+  .site_layout_empty {
     span {
-      font-size: 10px !important;
+      font-size: 28px !important;
     }
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 280px !important;
+  }
+  .ant-layout-footer {
+    font-size: 10px !important;
   }
 }
