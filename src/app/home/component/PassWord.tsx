@@ -89,7 +89,14 @@ export const PassWord = () => {
 
   return (
     <div className="main_form">
-      <div className={showFromPassWord ? 'form_input form_password' : 'form_input form_sign_in'}>
+      <div
+        className={
+          showFromPassWord
+            ? 'form_input form_password'
+            : fromPanel === TypeFromPassWord.PASSWORD
+            ? 'form_input form_password_2'
+            : 'form_input form_sign_in'
+        }>
         <h1>Reset password</h1>
         <div className="logo">
           <img src={logo} alt={logo} className="logo_img" />

@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
 import { Layout, Menu, Avatar, Button, Badge } from 'antd';
-import { RollbackOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
+import { UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { AppHelper } from 'store/utils/app.helper';
 
 const { Sider } = Layout;
@@ -25,7 +25,6 @@ export function RenderListUsers(props: Props) {
       <div className="sider_btn">
         <Button
           className="btn_back"
-          icon={<RollbackOutlined />}
           onClick={() => {
             localStorage.clear();
             history.push('/');
@@ -62,6 +61,7 @@ export function RenderListUsers(props: Props) {
                   </span>
 
                   <SmileOutlined
+                    className="smile_icon"
                     style={{
                       color: row.isOnline ? '#108ee9' : '#e91010',
                     }}

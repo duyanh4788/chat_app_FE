@@ -47,27 +47,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    .logo {
-      text-align: center;
-      .logo_img {
-        width: 50px;
-        height: 50px;
-        -webkit-animation: spin 2s linear infinite; /* Safari */
-        animation: spin 2s linear infinite;
-      }
-    }
+  }
+  .form_sign_up {
+    max-height: 300px;
   }
   .form_password {
-    height: 450px;
-    .logo {
-      text-align: center;
-      .logo_img {
-        width: 50px;
-        height: 50px;
-        -webkit-animation: spin 2s linear infinite; /* Safari */
-        animation: spin 2s linear infinite;
-      }
-    }
+    max-height: 430px;
     .ant-form-inline {
       justify-content: space-around;
     }
@@ -77,6 +62,9 @@
     .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
       border-color: rgba(255, 255, 255, 0.18);
     }
+  }
+  .form_password_2 {
+    max-height: 320px;
   }
   .form_auth {
     height: 150px;
@@ -189,4 +177,46 @@
 .terms_of_service::-webkit-scrollbar-thumb {
   background: #e2dfdf;
   border-radius: 6px;
+}
+
+@media (max-width: 375px) {
+  .form_input {
+    max-width: 300px;
+    h1 {
+      font-size: 30px;
+    }
+  }
+  .form_password {
+    max-height: 410px !important;
+  }
+  .form_password_2 {
+    max-height: 290px !important;
+    h1 {
+      margin: 0 !important;
+    }
+    .logo {
+      margin-bottom: 5px !important;
+    }
+  }
+  .form_outtab {
+    padding: 10px !important;
+  }
+  .main_form {
+    .terms_of_service {
+      max-width: 340px;
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      h2 {
+        font-size: 15px;
+      }
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+  .loginBtn {
+    font-size: 8px;
+  }
 }

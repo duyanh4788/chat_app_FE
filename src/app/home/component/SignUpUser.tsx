@@ -47,7 +47,7 @@ export function SignUpUser() {
   };
 
   return (
-    <div className="form_input">
+    <div className="form_input form_sign_up">
       <Form form={form} name="horizontal_login" onFinish={onFinish}>
         <Form.Item name="account" rules={[{ required: true, message: 'please input account.' }]}>
           <Input

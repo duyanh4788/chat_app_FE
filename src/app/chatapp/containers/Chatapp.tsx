@@ -58,7 +58,7 @@ export const Chatapp = () => {
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
   const getListUsers = useSelector(ChatAppSelector.selectListUsers);
   const [listUsers, setListUsers] = useState<Users[]>([]);
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
   const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
   const [listMessages, setListMessages] = useState<Messages[]>([]);
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);

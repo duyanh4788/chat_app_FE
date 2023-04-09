@@ -79,32 +79,12 @@
           justify-content: space-between;
 }
 
-.main_form .form_sign_in .logo {
-  text-align: center;
-}
-
-.main_form .form_sign_in .logo .logo_img {
-  width: 50px;
-  height: 50px;
-  -webkit-animation: spin 2s linear infinite;
-  /* Safari */
-  animation: spin 2s linear infinite;
+.main_form .form_sign_up {
+  max-height: 300px;
 }
 
 .main_form .form_password {
-  height: 450px;
-}
-
-.main_form .form_password .logo {
-  text-align: center;
-}
-
-.main_form .form_password .logo .logo_img {
-  width: 50px;
-  height: 50px;
-  -webkit-animation: spin 2s linear infinite;
-  /* Safari */
-  animation: spin 2s linear infinite;
+  max-height: 430px;
 }
 
 .main_form .form_password .ant-form-inline {
@@ -118,6 +98,10 @@
 
 .main_form .form_password .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
   border-color: rgba(255, 255, 255, 0.18);
+}
+
+.main_form .form_password_2 {
+  max-height: 320px;
 }
 
 .main_form .form_auth {
@@ -261,5 +245,45 @@
 .terms_of_service::-webkit-scrollbar-thumb {
   background: #e2dfdf;
   border-radius: 6px;
+}
+
+@media (max-width: 375px) {
+  .form_input {
+    max-width: 300px;
+  }
+  .form_input h1 {
+    font-size: 30px;
+  }
+  .form_password {
+    max-height: 410px !important;
+  }
+  .form_password_2 {
+    max-height: 290px !important;
+  }
+  .form_password_2 h1 {
+    margin: 0 !important;
+  }
+  .form_password_2 .logo {
+    margin-bottom: 5px !important;
+  }
+  .form_outtab {
+    padding: 10px !important;
+  }
+  .main_form .terms_of_service {
+    max-width: 340px;
+  }
+  .main_form .terms_of_service h1 {
+    font-size: 20px;
+    margin: 0;
+  }
+  .main_form .terms_of_service h2 {
+    font-size: 15px;
+  }
+  .main_form .terms_of_service p {
+    font-size: 13px;
+  }
+  .loginBtn {
+    font-size: 8px;
+  }
 }
 /*# sourceMappingURL=home.css.map */
