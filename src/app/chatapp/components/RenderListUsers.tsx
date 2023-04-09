@@ -16,7 +16,7 @@ interface Props {
   handleSelectUser: (row: any) => void;
 }
 
-export function ListUsers(props: Props) {
+export function RenderListUsers(props: Props) {
   const { collapsed, setCollapsed, userAuthContext, listUsers, handleSelectUser } = props;
   const history = useHistory();
 

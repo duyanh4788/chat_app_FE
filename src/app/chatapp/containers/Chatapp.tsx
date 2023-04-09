@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { io } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
@@ -13,8 +13,8 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Breadcrumb, Avatar, Upload, Image } from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload';
+import { Layout, Breadcrumb, Avatar } from 'antd';
+import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
@@ -23,14 +23,13 @@ import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
-import { format } from 'timeago.js';
 import { ModalUpdateUser } from 'app/chatapp/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
 import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 import { isDeveloperment } from 'index';
 import { ModalQrCode } from 'app/chatapp/components/ModalQrCode';
 import { AuthContext } from 'app/authContext/AuthContextApi';
-import { ListUsers } from '../components/ListUsers';
+import { RenderListUsers } from '../components/RenderListUsers';
 import { Users } from 'store/model/Users.model';
 import { ListMessages, Messages } from 'store/model/ChatApp.model';
 import { RenderListMessages } from '../components/RenderListMessages';
@@ -60,7 +59,6 @@ export const Chatapp = () => {
   const getListUsers = useSelector(ChatAppSelector.selectListUsers);
   const [listUsers, setListUsers] = useState<Users[]>([]);
   const [collapsed, setCollapsed] = useState<boolean>(false);
-  const [errorAcknow, setErrorAcknow] = useState<string | undefined>(undefined);
   const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
   const [listMessages, setListMessages] = useState<Messages[]>([]);
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);
@@ -68,9 +66,9 @@ export const Chatapp = () => {
   const [notiFyTitle, setNotiFyTitle] = useState<string>('Chat App');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [qrCode, setQrCode] = useState<boolean>(false);
-  const socket: any = useRef();
+  const socket: Socket | any = useRef<Socket>(null);
   const notiFyTitleRef: any = useRef();
-  const PORT_SOCKET: any = ApiRouter.SOCKET_URL;
+  const PORT_SOCKET: string = ApiRouter.SOCKET_URL as string;
 
   useEffect(() => {
     if (_.isEmpty(userInfor)) {
@@ -134,7 +132,6 @@ export const Chatapp = () => {
       setListMessages([]);
       setListUsers([]);
       setSendMessage(undefined);
-      setErrorAcknow(undefined);
       setMyFriend(null);
       document.removeEventListener('paste', handlePasteImage);
       window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -192,7 +189,7 @@ export const Chatapp = () => {
     if (!_.isEmpty(getListUsers)) {
       setListUsers(getListUsers);
       socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: Users) => {
-        let newList: any[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
+        let newList: Users[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListUsers(newList);
       });
@@ -221,12 +218,6 @@ export const Chatapp = () => {
     }
     initListMsg(getListMessages);
   }, [getListMessages]);
-
-  useEffect(() => {
-    if (errorAcknow) {
-      openNotifi(400, errorAcknow);
-    }
-  }, [errorAcknow]);
 
   const handleAutoScroll = (type: boolean) => {
     let myRow: HTMLElement | any = document.querySelector('.site_layout');
@@ -259,64 +250,7 @@ export const Chatapp = () => {
     }
   };
 
-  const acknowLedGements = (error: string) => {
-    if (error) {
-      return setErrorAcknow(error);
-    }
-  };
-
-  const getValueFromChat = () => {
-    return {
-      conversationId: _.get(convertStation, '_id'),
-      senderId: _.get(userAuthContext, '_id'),
-      reciverId: _.get(myFriend, '_id'),
-      text: '',
-    };
-  };
-
-  const onSendMessage = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (sendMessage) {
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        { ...getValueFromChat(), text: sendMessage },
-        acknowLedGements,
-      );
-    }
-    if (!_.isEmpty(uploadAWS)) {
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        { ...getValueFromChat(), text: uploadAWS },
-        acknowLedGements,
-      );
-    }
-    handleAutoScroll(true);
-    return resetFromChat();
-  };
-
-  const shareLocation = () => {
-    if (!navigator.geolocation) {
-      return 'Browser Not Support Location';
-    }
-    navigator.geolocation.getCurrentPosition(position => {
-      const linkLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
-      socket.current.emit(
-        SOCKET_COMMIT.SEND_MESSAGE,
-        userAuthContext,
-        {
-          ...getValueFromChat(),
-          text: linkLocation,
-        },
-        acknowLedGements,
-      );
-    });
-    handleAutoScroll(true);
-  };
-
   const resetFromChat = () => {
-    setErrorAcknow(undefined);
     setSendMessage('');
     setFromDataUploadAWS3(undefined);
     dispatch(ChatAppSlice.actions.clearUploadAWS3());
@@ -397,7 +331,7 @@ export const Chatapp = () => {
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}
-        <ListUsers
+        <RenderListUsers
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           userAuthContext={userAuthContext}
@@ -429,8 +363,9 @@ export const Chatapp = () => {
               handleScrollListMessages={handleScrollListMessages}
               setSendMessage={setSendMessage}
               setNotiFyTitle={setNotiFyTitle}
-              shareLocation={shareLocation}
-              onSendMessage={onSendMessage}
+              resetFromChat={resetFromChat}
+              handleAutoScroll={handleAutoScroll}
+              socket={socket}
             />
           ) : (
             <Content className="site_layout_empty">

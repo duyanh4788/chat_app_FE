@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as _ from 'lodash';
@@ -16,6 +16,9 @@ import { ConvertStations, Messages } from 'store/model/ChatApp.model';
 import { format } from 'timeago.js';
 import { RcFile } from 'antd/lib/upload';
 import { useDispatch, useSelector } from 'react-redux';
+import { Socket } from 'socket.io-client';
+import { SOCKET_COMMIT } from 'store/commom/socket_commit';
+import { openNotifi } from 'store/utils/Notification';
 
 const { Content } = Layout;
 const { Dragger } = Upload;
@@ -33,8 +36,9 @@ interface Props {
   handleScrollListMessages: () => void;
   setSendMessage: (msg: string | undefined) => void;
   setNotiFyTitle: (title: string) => void;
-  shareLocation: () => void;
-  onSendMessage: (event: React.FormEvent) => void;
+  resetFromChat: () => void;
+  handleAutoScroll: (type: boolean) => void;
+  socket: Socket | any;
 }
 
 export function RenderListMessages(props: Props) {
@@ -51,12 +55,24 @@ export function RenderListMessages(props: Props) {
     handleScrollListMessages,
     setSendMessage,
     setNotiFyTitle,
-    shareLocation,
-    onSendMessage,
+    resetFromChat,
+    handleAutoScroll,
+    socket,
   } = props;
+  const [errorAcknow, setErrorAcknow] = useState<string | undefined>(undefined);
   const loadingPaging = useSelector(ChatAppSelector.selectLoadingPaging);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (errorAcknow) {
+      openNotifi(400, errorAcknow);
+    }
+    return () => {
+      setErrorAcknow(undefined);
+    };
+  }, [errorAcknow]);
+
   const propsDrag: UploadProps = {
     listType: 'picture',
     openFileDialogOnClick: false,
@@ -64,6 +80,62 @@ export function RenderListMessages(props: Props) {
       handleUploadAWS3(file);
       return false;
     },
+  };
+
+  const onSendMessage = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (sendMessage) {
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        { ...getValueFromChat(), text: sendMessage },
+        acknowLedGements,
+      );
+    }
+    if (!_.isEmpty(uploadAWS)) {
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        { ...getValueFromChat(), text: uploadAWS },
+        acknowLedGements,
+      );
+    }
+    handleAutoScroll(true);
+    return resetFromChat();
+  };
+
+  const shareLocation = () => {
+    if (!navigator.geolocation) {
+      return 'Browser Not Support Location';
+    }
+    navigator.geolocation.getCurrentPosition(position => {
+      const linkLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+      socket.current.emit(
+        SOCKET_COMMIT.SEND_MESSAGE,
+        userAuthContext,
+        {
+          ...getValueFromChat(),
+          text: linkLocation,
+        },
+        acknowLedGements,
+      );
+    });
+    handleAutoScroll(true);
+  };
+
+  const acknowLedGements = (error: string) => {
+    if (error) {
+      return setErrorAcknow(error);
+    }
+  };
+
+  const getValueFromChat = () => {
+    return {
+      conversationId: _.get(convertStation, '_id'),
+      senderId: _.get(userAuthContext, '_id'),
+      reciverId: _.get(myFriend, '_id'),
+      text: '',
+    };
   };
 
   const renderCheckTypeMessages = (text: string) => {
