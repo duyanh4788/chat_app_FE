@@ -69,7 +69,7 @@ export function RenderListUsers(props: Props) {
                 </Menu.Item>
               ))
           ) : (
-            <Menu.Item key="sub3">Không có thành viên</Menu.Item>
+            <Menu.Item key="sub3">Member empty</Menu.Item>
           )}
         </SubMenu>
       </Menu>

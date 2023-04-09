@@ -156,7 +156,7 @@ export function RenderListMessages(props: Props) {
     if (!_.isEmpty(convertStation) && listMessages.length === 0) {
       return (
         <div className="box_chat_empty">
-          <span>Hãy gửi lời chào đến {_.get(myFriend, 'fullName')}</span>
+          <span>Say hello to {_.get(myFriend, 'fullName')}</span>
         </div>
       );
     }
