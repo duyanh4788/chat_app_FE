@@ -11,6 +11,12 @@ import { AuthContextProvider } from 'app/authContext/AuthContextApi';
 
 export const isDeveloperment = process.env.NODE_ENV === 'development' ? true : false;
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 const ConnectedApp = () => (
   <BrowserRouter>
