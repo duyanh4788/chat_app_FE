@@ -7,18 +7,13 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  -ms-touch-action: pan-y;
-      touch-action: pan-y;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  overflow: hidden;
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
   text-size-adjust: none;
-  overflow: hidden;
 }
 
 .main_form {

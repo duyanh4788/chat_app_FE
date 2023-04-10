@@ -7,14 +7,12 @@
   font-family: roboto;
 }
 html {
-  scroll-behavior: smooth;
-  touch-action: pan-y;
-  user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
   text-size-adjust: none;
-  overflow: hidden;
 }
 
 .main_form {
