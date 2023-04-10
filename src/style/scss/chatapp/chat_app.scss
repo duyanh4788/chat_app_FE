@@ -145,6 +145,13 @@
       background-color: #87d068;
     }
   }
+  .new_chat {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 32px;
+    cursor: pointer;
+  }
   .form_chat {
     padding: 20px;
     background: #dae3d77a;

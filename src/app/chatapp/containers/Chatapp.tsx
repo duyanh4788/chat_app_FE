@@ -70,6 +70,7 @@ export const Chatapp = () => {
   const socket: Socket | any = useRef<Socket>(null);
   const notiFyTitleRef: any = useRef();
   const PORT_SOCKET: string = ApiRouter.SOCKET_URL as string;
+  let myRow: HTMLElement | any = document.querySelector('.site_layout');
 
   useEffect(() => {
     if (_.isEmpty(userInfor)) {
@@ -158,9 +159,9 @@ export const Chatapp = () => {
       },
     });
     socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
-    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
-      return openNotifi(200, message);
-    });
+    // socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
+    //   return openNotifi(200, message);
+    // });
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (obJectNotify: any) => {
       notiFyTitleRef.current = obJectNotify;
       if (obJectNotify.reciverId === _.get(userAuthContext, '_id')) {
@@ -170,10 +171,9 @@ export const Chatapp = () => {
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: Messages) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
-    if (isDeveloperment) {
+    if (!isDeveloperment) {
       socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
         local.clearLocalStorage();
-        setNotiFyTitle('AUTHORIZATION_INVALID');
         return history.push('/');
       });
     }
@@ -221,13 +221,12 @@ export const Chatapp = () => {
   }, [getListMessages]);
 
   const handleAutoScroll = (type: boolean) => {
-    let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (!_.isEmpty(myRow) && listMessages?.length <= 9 && !type) {
       setTimeout(() => {
         myRow.scrollTop = myRow?.scrollHeight;
       }, 200);
     }
-    if (type) {
+    if (!_.isEmpty(myRow) && type) {
       setTimeout(() => {
         myRow.scrollTop = myRow?.scrollHeight;
       }, 200);
@@ -311,7 +310,6 @@ export const Chatapp = () => {
   };
 
   const handleScrollListMessages = () => {
-    let myRow: HTMLElement | any = document.querySelector('.site_layout');
     if (myRow.scrollTop < 1 && getListMessages.skip) {
       dispatch(
         ChatAppSlice.actions.getListMessages({
@@ -362,6 +360,7 @@ export const Chatapp = () => {
               myFriend={myFriend}
               listMessages={listMessages}
               notiFyTitleRef={notiFyTitleRef}
+              notiFyTitle={notiFyTitle}
               sendMessage={sendMessage}
               formDataUploadAWS3={formDataUploadAWS3}
               isModalOpen={isModalOpen}
@@ -372,6 +371,7 @@ export const Chatapp = () => {
               resetFromChat={resetFromChat}
               handleAutoScroll={handleAutoScroll}
               socket={socket}
+              myRow={myRow}
             />
           ) : (
             <Content className="site_layout_empty">

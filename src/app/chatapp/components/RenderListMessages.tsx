@@ -9,6 +9,7 @@ import {
   UploadOutlined,
   CloseCircleTwoTone,
   LoadingOutlined,
+  MessageOutlined,
 } from '@ant-design/icons';
 import { AppHelper } from 'store/utils/app.helper';
 import { Users } from 'store/model/Users.model';
@@ -29,6 +30,7 @@ interface Props {
   myFriend: Users | null;
   listMessages: Messages[];
   notiFyTitleRef: any;
+  notiFyTitle: string;
   sendMessage: string | undefined;
   formDataUploadAWS3: string | undefined;
   isModalOpen: boolean;
@@ -39,6 +41,7 @@ interface Props {
   resetFromChat: () => void;
   handleAutoScroll: (type: boolean) => void;
   socket: Socket | any;
+  myRow: HTMLElement | any;
 }
 
 export function RenderListMessages(props: Props) {
@@ -48,6 +51,7 @@ export function RenderListMessages(props: Props) {
     userAuthContext,
     listMessages,
     notiFyTitleRef,
+    notiFyTitle,
     sendMessage,
     formDataUploadAWS3,
     isModalOpen,
@@ -58,6 +62,7 @@ export function RenderListMessages(props: Props) {
     resetFromChat,
     handleAutoScroll,
     socket,
+    myRow,
   } = props;
   const [errorAcknow, setErrorAcknow] = useState<string | undefined>(undefined);
   const loadingPaging = useSelector(ChatAppSelector.selectLoadingPaging);
@@ -209,6 +214,19 @@ export function RenderListMessages(props: Props) {
         )}
         {renderMessage()}
       </Content>
+      {notiFyTitle !== 'Chat App' && myRow?.scrollTop > 0 && (
+        <Tooltip title="new messages">
+          <MessageOutlined
+            className="new_chat"
+            spin
+            style={{ color: 'hotpink' }}
+            onClick={() => {
+              handleAutoScroll(true);
+              setNotiFyTitle('Chat App');
+            }}
+          />
+        </Tooltip>
+      )}
       <div className="form_chat">
         <Dragger {...propsDrag}>
           <Input
