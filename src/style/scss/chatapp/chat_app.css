@@ -293,6 +293,19 @@
   margin-left: 5px;
 }
 
+.modal_avatar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .ant-input-affix-wrapper {
   border-radius: 10px !important;
 }
@@ -393,6 +406,60 @@
   }
   .ant-layout-footer {
     font-size: 12px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .ant-modal {
+    max-width: calc(100vw - 60px) !important;
+  }
+  .ant-modal .ant-modal-header {
+    padding: 6px 4px !important;
+  }
+  .ant-modal .ant-modal-header .ant-modal-title {
+    font-size: 14px !important;
+  }
+  .ant-modal .modal_avatar .ant-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    line-height: 60px !important;
+    margin-bottom: 0 !important;
+  }
+  .ant-modal .modal_avatar .ant-avatar .ant-avatar-string {
+    line-height: unset !important;
+  }
+  .ant-modal .modal_avatar .ant-btn-circle {
+    min-width: 20px !important;
+  }
+  .ant-modal .modal_avatar .ant-btn-icon-only {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .ant-modal .modal_avatar .ant-btn-icon-only span {
+    font-size: 10px !important;
+  }
+  .ant-modal .ant-modal-body {
+    padding: 10px !important;
+  }
+  .ant-modal .ant-modal-footer {
+    padding: 6px 4px !important;
+  }
+  .ant-modal .ant-modal-footer .ant-btn {
+    padding: 0 !important;
+    width: 25px !important;
+    height: 25px !important;
+  }
+  .ant-modal .ant-modal-footer span {
+    font-size: 7px !important;
+  }
+  .site_layout_empty span {
+    font-size: 25px !important;
+  }
+  .ant-drawer-content-wrapper {
+    max-width: 260px !important;
+  }
+  .ant-layout-footer {
+    font-size: 10px !important;
   }
 }
 

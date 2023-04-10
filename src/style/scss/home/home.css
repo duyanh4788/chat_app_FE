@@ -9,7 +9,6 @@
 html {
   -ms-touch-action: manipulation;
       touch-action: manipulation;
-  overflow: hidden;
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
@@ -364,12 +363,33 @@ html {
   }
 }
 
-@media (max-width: 280px) {
+@media (max-width: 320px) {
+  .main_form h1 {
+    font-size: 30px !important;
+  }
+  .main_form .ant-tabs-nav {
+    height: 30px !important;
+  }
+  .main_form .ant-tabs-nav,
+  .main_form h1,
+  .main_form a {
+    margin: 0 !important;
+  }
+  .main_form .form_sign_in {
+    height: 350px !important;
+  }
+  .main_form .ant-form-item {
+    margin-bottom: 10px !important;
+  }
   .form_input {
-    max-width: 250px;
+    max-width: 250px !important;
+    height: 350px !important;
   }
   .form_input h1 {
     font-size: 20px;
+  }
+  .form_sign_up {
+    height: 250px !important;
   }
   .form_password {
     max-height: 400px !important;
@@ -390,17 +410,83 @@ html {
     font-size: 13px;
   }
   .main_form .terms_of_service {
-    max-width: 360px;
+    max-width: 270px !important;
+    max-height: 400px !important;
   }
   .main_form .terms_of_service h1 {
-    font-size: 21px;
+    font-size: 17px !important;
     margin: 0;
   }
   .main_form .terms_of_service h2 {
-    font-size: 16px;
+    font-size: 12px;
   }
   .main_form .terms_of_service p {
-    font-size: 14px;
+    font-size: 11px;
+  }
+  .loginBtn {
+    font-size: 5px;
+  }
+}
+
+@media (max-width: 280px) {
+  .main_form h1 {
+    font-size: 28px !important;
+  }
+  .main_form .ant-tabs-nav {
+    height: 30px !important;
+  }
+  .main_form .ant-tabs-nav,
+  .main_form h1,
+  .main_form a {
+    margin: 0 !important;
+  }
+  .main_form .form_sign_in {
+    height: 330px !important;
+  }
+  .main_form .ant-form-item {
+    margin-bottom: 10px !important;
+  }
+  .form_input {
+    max-width: 230px !important;
+    height: 330px !important;
+  }
+  .form_input h1 {
+    font-size: 18px;
+  }
+  .form_sign_up {
+    height: 230px !important;
+  }
+  .form_password {
+    max-height: 380px !important;
+  }
+  .form_password_2 {
+    max-height: 250px !important;
+  }
+  .form_password_2 h1 {
+    margin: 0;
+  }
+  .form_password_2 .logo {
+    margin-bottom: 5px;
+  }
+  .form_outtab p {
+    font-size: 10px;
+  }
+  .form_outtab span {
+    font-size: 12px;
+  }
+  .main_form .terms_of_service {
+    max-width: 270px !important;
+    max-height: 400px !important;
+  }
+  .main_form .terms_of_service h1 {
+    font-size: 17px !important;
+    margin: 0;
+  }
+  .main_form .terms_of_service h2 {
+    font-size: 12px;
+  }
+  .main_form .terms_of_service p {
+    font-size: 11px;
   }
   .loginBtn {
     font-size: 5px;

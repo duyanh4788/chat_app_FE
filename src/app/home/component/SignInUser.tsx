@@ -101,12 +101,14 @@ export function SignInUser({ setFromAuth }: Props) {
           </Tooltip>
         </Form.Item>
       </Form>
-      <Typography.Link href="termsOfService" style={{ marginBottom: '10px' }}>
-        Terms of Service ChatApp
-      </Typography.Link>
-      <Typography.Link href="privacyPolicy" style={{ marginBottom: '10px' }}>
-        Privacy Policy ChatApp
-      </Typography.Link>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography.Link href="termsOfService" style={{ marginBottom: '10px' }}>
+          Terms of Service ChatApp
+        </Typography.Link>
+        <Typography.Link href="privacyPolicy" style={{ marginBottom: '10px' }}>
+          Privacy Policy ChatApp
+        </Typography.Link>
+      </div>
       <div style={{ display: 'flex' }}>
         <button className="loginBtn loginBtn--facebook" onClick={() => checkLocalStorage('FB')}>
           Login with Facebook

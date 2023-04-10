@@ -88,14 +88,9 @@ export function ModalUpdateUser(props: Props) {
       onOk={() => handleUpDateInfo(avatar, fullName, userInfor._id as string, twoFA, type2FA)}
       onCancel={handleCancel}>
       {loading && <AppLoading loading />}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
+      <div className="modal_avatar">
         {loadingImage ? (
-          <Skeleton active style={{ width: '140px' }} />
+          <Skeleton active style={{ maxWidth: '140px' }} />
         ) : (
           <Avatar
             shape="square"
@@ -113,7 +108,7 @@ export function ModalUpdateUser(props: Props) {
             handleUploadAWS3Modal(file);
             return false;
           }}>
-          <Button shape="circle" icon={<UploadOutlined />} />
+          <Button shape="circle" icon={<UploadOutlined />} className="modal_upload" />
         </Upload>
       </div>
       <Input

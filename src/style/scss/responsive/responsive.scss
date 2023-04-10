@@ -21,6 +21,25 @@
     }
 }
 
+@mixin mainform_320 {
+    .main_form {
+        .terms_of_service {
+            max-width: 270px !important;
+            max-height: 400px !important;
+            h1 {
+                font-size: 17px !important;
+                margin: 0;
+            }
+            h2 {
+                font-size: 12px;
+            }
+            p {
+                font-size: 11px;
+            }
+        }
+    }
+}
+
 @mixin pw2_h1_logo {
     h1 {
         margin: 0;
