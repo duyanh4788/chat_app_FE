@@ -9,7 +9,6 @@ import {
   UploadOutlined,
   CloseCircleTwoTone,
   LoadingOutlined,
-  MessageOutlined,
 } from '@ant-design/icons';
 import { AppHelper } from 'store/utils/app.helper';
 import { Users } from 'store/model/Users.model';
@@ -20,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { openNotifi } from 'store/utils/Notification';
+import newmsg from '../../../images/newmsg.png';
 
 const { Content } = Layout;
 const { Dragger } = Upload;
@@ -215,17 +215,15 @@ export function RenderListMessages(props: Props) {
         {renderMessage()}
       </Content>
       {notiFyTitle !== 'Chat App' && myRow?.scrollTop > 0 && (
-        <Tooltip title="new messages">
-          <MessageOutlined
-            className="new_chat"
-            spin
-            style={{ color: 'hotpink' }}
-            onClick={() => {
-              handleAutoScroll(true);
-              setNotiFyTitle('Chat App');
-            }}
-          />
-        </Tooltip>
+        <img
+          src={newmsg}
+          alt="new messages"
+          className="new_chat new_chat_animation"
+          onClick={() => {
+            handleAutoScroll(true);
+            setNotiFyTitle('Chat App');
+          }}
+        />
       )}
       <div className="form_chat">
         <Dragger {...propsDrag}>

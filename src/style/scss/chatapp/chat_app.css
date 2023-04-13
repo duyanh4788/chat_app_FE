@@ -208,8 +208,23 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 32px;
+  font-size: 13px;
   cursor: pointer;
+  -webkit-animation-duration: 2s;
+          animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-transform-origin: bottom;
+          transform-origin: bottom;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.ant-layout .new_chat_animation {
+  -webkit-animation-name: new_chat_animation;
+          animation-name: new_chat_animation;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
 }
 
 .ant-layout .form_chat {
@@ -235,6 +250,36 @@
 
 .ant-layout .footer_chatapp {
   padding: 15px 24px 15px 24px;
+}
+
+@-webkit-keyframes new_chat_animation {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@keyframes new_chat_animation {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
 }
 
 .ant-layout .site_layout_empty {
