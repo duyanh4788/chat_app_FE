@@ -103,12 +103,22 @@ export const Chatapp = () => {
           resetFromChat();
           break;
         case AuthSlice.actions.getUserByIdFail.type:
+          openNotifi(400, payload);
+          local.clearLocalStorage();
+          history.push('/');
+          break;
+        case AuthSlice.actions.pairAuthSuccess.type:
+          setQrCode(false);
+          break;
         case ChatAppSlice.actions.getListUsersFail.type:
         case ChatAppSlice.actions.getListMessagesFail.type:
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
-        case ChatAppSlice.actions.removeUploadAWS3Fail.type:
         case AuthSlice.actions.updateInfoFail.type:
-          openNotifi(400, message);
+        case AuthSlice.actions.pairAuthFail.type:
+          openNotifi(400, payload);
+          break;
+        case ChatAppSlice.actions.removeUploadAWS3Fail.type:
+          setFromDataUploadAWS3(undefined);
           break;
         default:
           break;
