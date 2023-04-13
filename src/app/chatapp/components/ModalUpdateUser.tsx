@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Upload, Button, Avatar, Switch, Radio, Space, Skeleton } from 'antd';
 import { UploadOutlined, UserOutlined, MailOutlined, AccountBookOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as AuthSlice from 'store/auth/shared/slice';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as _ from 'lodash';
@@ -34,6 +35,7 @@ export function ModalUpdateUser(props: Props) {
     handleUpDateInfo,
     handleQrCode,
   } = props;
+  const dispatch = useDispatch();
   const loading = useSelector(AuthSelector.selectLoading);
   const userInfor = useSelector(AuthSelector.selectUserById);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
@@ -78,7 +80,10 @@ export function ModalUpdateUser(props: Props) {
 
   const handleType2FaApp = e => {
     setType2FA(e.target.value);
-    handleQrCode(true);
+    if (e.target.value === 2) {
+      handleQrCode(true);
+      dispatch(AuthSlice.actions.getAuthPair());
+    }
   };
 
   return (

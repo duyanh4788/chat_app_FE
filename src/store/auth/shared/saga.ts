@@ -126,6 +126,26 @@ export function* updateInfo(api, action) {
   }
 }
 
+export function* getAuthPair(api, action) {
+  const resPonse = yield call(api.getAuthPair, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.getAuthPairSuccess(data));
+  } catch (error) {
+    yield put(actions.getAuthPairFail(_.get(error, 'message')));
+  }
+}
+
+export function* pairAuth(api, action) {
+  const resPonse = yield call(api.pairAuth, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.pairAuthSuccess(data));
+  } catch (error) {
+    yield put(actions.pairAuthFail(_.get(error, 'message')));
+  }
+}
+
 export function* AuthSaga() {
   yield all([
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
@@ -144,5 +164,7 @@ export function* AuthSaga() {
     yield takeLatest(actions.getUserById.type, getUserById, authRequest),
     yield takeLatest(actions.updateInfo.type, updateInfo, authRequest),
     yield takeLatest(actions.changeStatusOnline.type, changeStatusOnline, authRequest),
+    yield takeLatest(actions.getAuthPair.type, getAuthPair, authRequest),
+    yield takeLatest(actions.pairAuth.type, pairAuth, authRequest),
   ]);
 }

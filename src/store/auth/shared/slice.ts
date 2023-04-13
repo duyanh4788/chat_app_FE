@@ -6,6 +6,7 @@ export interface AuthState {
   success: any;
   error: any;
   userById: Users;
+  authPair: string | null;
 }
 
 export const initialState: AuthState = {
@@ -13,6 +14,7 @@ export const initialState: AuthState = {
   success: {},
   error: {},
   userById: {},
+  authPair: null,
 };
 
 const AuthSlice = createSlice({
@@ -147,9 +149,35 @@ const AuthSlice = createSlice({
       state.loading = false;
     },
 
+    getAuthPair(state) {
+      state.loading = true;
+    },
+    getAuthPairSuccess(state, action) {
+      state.loading = false;
+      state.authPair = action.payload.data;
+    },
+    getAuthPairFail(state, action) {
+      state.loading = false;
+    },
+
+    pairAuth(state, action) {
+      state.loading = true;
+    },
+    pairAuthSuccess(state, action) {
+      state.loading = false;
+    },
+    pairAuthFail(state, action) {
+      state.loading = false;
+    },
+
+    clearCode(state) {
+      state.authPair = null;
+    },
+
     clearData(state) {
       state.success = {};
       state.error = {};
+      state.authPair = null;
     },
   },
 });

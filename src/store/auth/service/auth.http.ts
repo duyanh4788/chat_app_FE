@@ -101,4 +101,12 @@ export class AuthHttp {
   public resetPassword = (body: any): Promise<any> => {
     return this.request.post(AuthApi.RESET_PASSWORD, this.configResetPassWord(body));
   };
+
+  public getAuthPair = (): Promise<any> => {
+    return this.request.get(AuthApi.GET_AUTH_PAIR);
+  };
+
+  public pairAuth = (token: string): Promise<any> => {
+    return this.request.post(AuthApi.PAIR_AUTH, token);
+  };
 }

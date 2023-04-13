@@ -11,6 +11,8 @@ export const AuthApi = {
   FORGOT_PW: '/users/order-reset-password',
   RESEND_ORDER_RESET_PASSWORD: '/users/resend-order-reset-password',
   RESET_PASSWORD: '/users/reset-password',
+  GET_AUTH_PAIR: '/users/get-auth-pair',
+  PAIR_AUTH: '/users/pair-auth',
 };
 
 export const REPONSE_CONSTANT = {
@@ -36,6 +38,10 @@ export const REPONSE_CONSTANT = {
   RESEND_ORDER_RESET_PASSWORD_FAIL: 'RESEND_ORDER_RESET_PASSWORD_FAIL',
   RESET_PASSWORD_SUCCESS: 'RESET_PASSWORD_SUCCESS',
   RESET_PASSWORD_FAIL: 'RESET_PASSWORD_FAIL',
+  GET_AUTH_PAIR_SUCCESS: 'GET_AUTH_PAIR_SUCCESS',
+  GET_AUTH_PAIR_FAIL: 'GET_AUTH_PAIR_FAIL',
+  PAIR_AUTH_SUCCESS: 'PAIR_AUTH_SUCCESS',
+  PAIR_AUTH_FAIL: 'PAIR_AUTH_FAIL',
 };
 
 export const REPONSE_MESSAGE = {

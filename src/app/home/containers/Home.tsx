@@ -110,6 +110,7 @@ export const Home = () => {
         break;
       case 201:
       case 202:
+      case 203:
         openNotifi(code, message);
         setFromAuth(true);
         break;
