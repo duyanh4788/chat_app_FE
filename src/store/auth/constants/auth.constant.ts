@@ -1,6 +1,7 @@
 export const AuthApi = {
   SIGN_IN: '/users/signIn',
   SIGN_IN_WITH_CODE: '/users/signin-withcode',
+  SIGN_IN_WITH_APP: '/users/signin-withapp',
   SIGN_UP: '/users/signUp',
   ACTIVE_AUTH_CODE: '/users/active',
   GET_USER_BY_ID: '/users/getUserById/',

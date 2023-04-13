@@ -54,6 +54,10 @@ export class AuthHttp {
     return this.request.post(AuthApi.SIGN_IN_WITH_CODE, authCode);
   };
 
+  public sigInUserWithApp = (otp: number): Promise<any> => {
+    return this.request.post(AuthApi.SIGN_IN_WITH_APP, otp);
+  };
+
   public signUpUser = (data: Users): Promise<any> => {
     return this.request.post(AuthApi.SIGN_UP, {
       ...this.configSignUp(data),

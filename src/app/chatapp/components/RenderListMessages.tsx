@@ -220,6 +220,7 @@ export function RenderListMessages(props: Props) {
           alt="new messages"
           className="new_chat new_chat_animation"
           onClick={() => {
+            console.log(123);
             handleAutoScroll(true);
             setNotiFyTitle('Chat App');
           }}

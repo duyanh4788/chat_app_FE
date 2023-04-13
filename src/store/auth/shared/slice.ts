@@ -43,6 +43,17 @@ const AuthSlice = createSlice({
       state.loading = false;
     },
 
+    sigInUserWithApp(state, action) {
+      state.loading = true;
+    },
+    sigInUserWithAppSuccess(state, action) {
+      state.loading = false;
+      state.userById = action.payload.data;
+    },
+    sigInUserWithAppFail(state, action) {
+      state.loading = false;
+    },
+
     signUpUser(state, action) {
       state.loading = true;
     },

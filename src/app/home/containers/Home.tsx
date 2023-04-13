@@ -27,6 +27,7 @@ export const Home = () => {
   const loading = useSelector(AuthSelector.selectLoading);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
   const [fromAuth, setFromAuth] = useState<boolean>(false);
+  const [typeAuth, setTypeAuth] = useState<number>(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -113,6 +114,12 @@ export const Home = () => {
       case 203:
         openNotifi(code, message);
         setFromAuth(true);
+        if (201) {
+          setTypeAuth(201);
+        }
+        if (202) {
+          setTypeAuth(202);
+        }
         break;
       default:
         break;
@@ -120,8 +127,13 @@ export const Home = () => {
   };
 
   const handleLoginWithCode = e => {
-    if (e.target.value.length === 6) {
+    if (e.target.value.length === 6 && typeAuth === 201) {
       dispatch(AuthSlice.actions.sigInUserWithCode({ authCode: e.target.value }));
+      return;
+    }
+    if (e.target.value.length === 6 && typeAuth === 202) {
+      dispatch(AuthSlice.actions.sigInUserWithApp({ otp: e.target.value }));
+      return;
     }
   };
 
