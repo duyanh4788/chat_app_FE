@@ -50,7 +50,11 @@ export const PassWord = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
-      const { message } = payload;
+      const { code, message } = payload;
+      if (code === 401) {
+        openNotifi(400, message);
+        return history.push('/');
+      }
       switch (type) {
         case AuthSlice.actions.forgotPasswordSuccess.type:
           openNotifi(200, message);
@@ -67,13 +71,9 @@ export const PassWord = () => {
           history.push('/');
           break;
         case AuthSlice.actions.forgotPasswordFail.type:
-          openNotifi(400, payload);
-          break;
         case AuthSlice.actions.resendOrderForgotPasswordFail.type:
-          openNotifi(400, payload);
-          break;
         case AuthSlice.actions.resetPasswordFail.type:
-          openNotifi(400, payload);
+          openNotifi(400, message);
           break;
         default:
           break;

@@ -26,7 +26,6 @@ import { AppLoading } from 'store/utils/Apploading';
 import { openNotifi } from 'store/utils/Notification';
 import { ModalUpdateUser } from 'app/chatapp/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
-import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 import { isDeveloperment } from 'index';
 import { ModalQrCode } from 'app/chatapp/components/ModalQrCode';
 import { AuthContext } from 'app/authContext/AuthContextApi';
@@ -88,8 +87,8 @@ export const Chatapp = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       if (!payload) return;
-      const { data, message } = payload;
-      if (message === TOKEN_EXPRIED) {
+      const { data, message, code } = payload;
+      if (code === 401) {
         openNotifi(400, message);
         local.clearLocalStorage();
         return history.push('/');
@@ -104,22 +103,12 @@ export const Chatapp = () => {
           resetFromChat();
           break;
         case AuthSlice.actions.getUserByIdFail.type:
-          openNotifi(400, payload);
-          local.clearLocalStorage();
-          history.push('/');
-          break;
-        case AuthSlice.actions.pairAuthSuccess.type:
-          setQrCode(false);
-          break;
         case ChatAppSlice.actions.getListUsersFail.type:
         case ChatAppSlice.actions.getListMessagesFail.type:
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
-        case AuthSlice.actions.updateInfoFail.type:
-        case AuthSlice.actions.pairAuthFail.type:
-          openNotifi(400, payload);
-          break;
         case ChatAppSlice.actions.removeUploadAWS3Fail.type:
-          setFromDataUploadAWS3(undefined);
+        case AuthSlice.actions.updateInfoFail.type:
+          openNotifi(400, message);
           break;
         default:
           break;

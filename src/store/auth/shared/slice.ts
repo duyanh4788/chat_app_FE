@@ -59,7 +59,7 @@ const AuthSlice = createSlice({
     },
     signUpUserSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.message;
+      state.success = action.payload;
     },
     signUpUserFail(state, action) {
       state.loading = false;
@@ -70,7 +70,7 @@ const AuthSlice = createSlice({
     },
     activeAuthCodeSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.message;
+      state.success = action.payload;
     },
     activeAuthCodeFail(state, action) {
       state.loading = false;
@@ -81,7 +81,7 @@ const AuthSlice = createSlice({
     },
     forgotPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.message;
+      state.success = action.payload;
     },
     forgotPasswordFail(state, action) {
       state.loading = false;
@@ -92,7 +92,7 @@ const AuthSlice = createSlice({
     },
     resetPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.message;
+      state.success = action.payload;
     },
     resetPasswordFail(state, action) {
       state.loading = false;
@@ -103,7 +103,7 @@ const AuthSlice = createSlice({
     },
     resendOrderForgotPasswordSuccess(state, action) {
       state.loading = false;
-      state.success = action.payload.message;
+      state.success = action.payload;
     },
     resendOrderForgotPasswordFail(state, action) {
       state.loading = false;
