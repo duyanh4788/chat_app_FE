@@ -31,7 +31,7 @@ export function* sigInUserWithApp(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.sigInUserWithAppSuccess(data));
   } catch (error) {
-    yield put(actions.sigInUserWithAppFail(_.get(error, 'message')));
+    yield put(actions.sigInUserWithAppFail(configResponseError(error)));
   }
 }
 
@@ -141,7 +141,7 @@ export function* getAuthPair(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.getAuthPairSuccess(data));
   } catch (error) {
-    yield put(actions.getAuthPairFail(_.get(error, 'message')));
+    yield put(actions.getAuthPairFail(configResponseError(error)));
   }
 }
 
@@ -151,7 +151,7 @@ export function* pairAuth(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.pairAuthSuccess(data));
   } catch (error) {
-    yield put(actions.pairAuthFail(_.get(error, 'message')));
+    yield put(actions.pairAuthFail(configResponseError(error)));
   }
 }
 
