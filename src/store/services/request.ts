@@ -1,5 +1,5 @@
 import apisauce, { ApiResponse, ApisauceInstance } from 'apisauce';
-import { isEmpty, get, snakeCase } from 'lodash';
+import { get, snakeCase } from 'lodash';
 import { LocalStorageService, LocalStorageKey } from './localStorage';
 
 export class HttpRequest {
@@ -39,18 +39,14 @@ export function configRequest(request: any): any {
 }
 
 export function configResponse(response: ApiResponse<any>): any {
-  if (!response.ok) {
-    if (response.status === 404 || response.status === 400) {
-      throw !isEmpty(response.data) ? response.data : '404 Not Found';
-    }
-    const message = get(response.data, 'message');
-    if (isEmpty(response.data) || !message) {
-      throw new Error(response.problem);
-    }
+  if (!response.data) {
+    return { message: '404 Not Found', code: 401 };
   }
   const { data, code, message, status } = response.data;
-  if (code === 400 || code === 500 || response.status === 401) {
-    throw new Error(message);
+  if (!response.ok) {
+    if (code === 400 || code === 401 || code === 403 || code === 404 || code === 500) {
+      return { message, code };
+    }
   }
   if (status === 'success') {
     return { data, message, code };

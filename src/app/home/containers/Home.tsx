@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
-import * as AuthConst from 'store/auth/constants/auth.constant';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Tabs, Tooltip } from 'antd';
@@ -16,7 +15,6 @@ import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { openNotifi } from 'store/utils/Notification';
 import { LocalStorageService } from 'store/services/localStorage';
-import { TOKEN_EXPRIED } from 'store/commom/common.contants';
 
 const { TabPane } = Tabs;
 
@@ -60,14 +58,15 @@ export const Home = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       const { data, message, code } = payload;
-      if (message === TOKEN_EXPRIED) {
+      if (code === 401) {
         openNotifi(400, payload);
+        history.push('/');
         return;
       }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
-          openNotifi(200, message || AuthConst.REPONSE_MESSAGE.SIGN_UP_SUCCESS);
+          openNotifi(200, message);
           break;
         case AuthSlice.actions.activeAuthCodeSuccess.type:
           setTabsPanel('1');
@@ -83,12 +82,10 @@ export const Home = () => {
           break;
         case AuthSlice.actions.signUpUserFail.type:
         case AuthSlice.actions.signUpWithFBFail.type:
-          openNotifi(400, payload);
-          break;
         case AuthSlice.actions.sigInUserFail.type:
         case AuthSlice.actions.sigInUserWithCodeFail.type:
         case AuthSlice.actions.activeAuthCodeFail.type:
-          openNotifi(400, payload);
+          openNotifi(400, message);
           break;
         default:
           break;
