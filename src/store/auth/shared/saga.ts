@@ -1,8 +1,7 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
 import { actions } from './slice';
-import * as _ from 'lodash';
 import { AuthHttp } from '../service/auth.http';
-import { configResponse } from 'store/services/request';
+import { configResponse, configResponseError } from 'store/services/request';
 
 const authRequest = new AuthHttp();
 
@@ -12,7 +11,7 @@ export function* sigInUser(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.sigInUserSuccess(data));
   } catch (error) {
-    yield put(actions.sigInUserFail(_.get(error, 'message')));
+    yield put(actions.sigInUserFail(configResponseError(error)));
   }
 }
 
@@ -22,7 +21,7 @@ export function* sigInUserWithCode(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.sigInUserWithCodeSuccess(data));
   } catch (error) {
-    yield put(actions.sigInUserWithCodeFail(_.get(error, 'message')));
+    yield put(actions.sigInUserWithCodeFail(configResponseError(error)));
   }
 }
 
@@ -42,7 +41,7 @@ export function* signUpUser(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.signUpUserSuccess(data));
   } catch (error) {
-    yield put(actions.signUpUserFail(_.get(error, 'message')));
+    yield put(actions.signUpUserFail(configResponseError(error)));
   }
 }
 
@@ -52,7 +51,7 @@ export function* activeAuthCode(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.activeAuthCodeSuccess(data));
   } catch (error) {
-    yield put(actions.activeAuthCodeFail(_.get(error, 'message')));
+    yield put(actions.activeAuthCodeFail(configResponseError(error)));
   }
 }
 
@@ -62,7 +61,7 @@ export function* forgotPassword(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.forgotPasswordSuccess(data));
   } catch (error) {
-    yield put(actions.forgotPasswordFail(_.get(error, 'message')));
+    yield put(actions.forgotPasswordFail(configResponseError(error)));
   }
 }
 
@@ -72,7 +71,7 @@ export function* resendOrderForgotPassword(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.resendOrderForgotPasswordSuccess(data));
   } catch (error) {
-    yield put(actions.resendOrderForgotPasswordFail(_.get(error, 'message')));
+    yield put(actions.resendOrderForgotPasswordFail(configResponseError(error)));
   }
 }
 
@@ -82,7 +81,7 @@ export function* resetPassword(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.resetPasswordSuccess(data));
   } catch (error) {
-    yield put(actions.resetPasswordFail(_.get(error, 'message')));
+    yield put(actions.resetPasswordFail(configResponseError(error)));
   }
 }
 
@@ -92,7 +91,7 @@ export function* signUpWithFB(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.signUpWithFBSuccess(data));
   } catch (error) {
-    yield put(actions.signUpWithFBFail(_.get(error, 'message')));
+    yield put(actions.signUpWithFBFail(configResponseError(error)));
   }
 }
 
@@ -102,7 +101,7 @@ export function* signUpWithGG(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.signUpWithGGSuccess(data));
   } catch (error) {
-    yield put(actions.signUpWithGGFail(_.get(error, 'message')));
+    yield put(actions.signUpWithGGFail(configResponseError(error)));
   }
 }
 
@@ -112,7 +111,7 @@ export function* getUserById(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.getUserByIdSuccess(data));
   } catch (error) {
-    yield put(actions.getUserByIdFail(_.get(error, 'message')));
+    yield put(actions.getUserByIdFail(configResponseError(error)));
   }
 }
 
@@ -122,7 +121,7 @@ export function* changeStatusOnline(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.changeStatusOnlineSuccess(data));
   } catch (error) {
-    yield put(actions.changeStatusOnlineFail(_.get(error, 'message')));
+    yield put(actions.changeStatusOnlineFail(configResponseError(error)));
   }
 }
 
@@ -132,7 +131,7 @@ export function* updateInfo(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.updateInfoSuccess(data));
   } catch (error) {
-    yield put(actions.updateInfoFail(_.get(error, 'message')));
+    yield put(actions.updateInfoFail(configResponseError(error)));
   }
 }
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import apisauce, { ApiResponse, ApisauceInstance } from 'apisauce';
 import { get, snakeCase } from 'lodash';
 import { LocalStorageService, LocalStorageKey } from './localStorage';
@@ -40,15 +41,29 @@ export function configRequest(request: any): any {
 
 export function configResponse(response: ApiResponse<any>): any {
   if (!response.data) {
-    return { message: '404 Not Found', code: 401 };
+    return { message: 'server not found', code: 401 };
   }
   const { data, code, message, status } = response.data;
   if (!response.ok) {
-    if (code === 400 || code === 401 || code === 403 || code === 404 || code === 500) {
-      return { message, code };
+    if (code >= 400 && code <= 500) {
+      throw Object.assign(new Error(message), { code });
     }
   }
   if (status === 'success') {
     return { data, message, code };
   }
+}
+
+export function configResponseError(errors: any): any {
+  if (!errors) {
+    return { message: 'request server not found', code: 404 };
+  }
+  const { code, message } = errors;
+  if (!message && code) {
+    return { code, message: 'request server not found' };
+  }
+  if (message && !code) {
+    return { code: 404, message };
+  }
+  return { message, code };
 }

@@ -1,8 +1,7 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
 import { actions } from './slice';
-import * as _ from 'lodash';
 import { ChatAppHttp } from '../service/chatapp.http';
-import { configResponse } from 'store/services/request';
+import { configResponse, configResponseError } from 'store/services/request';
 
 export function* getListUsers(api, action) {
   const resPonse = yield call(api.getListUsers, action.payload);
@@ -10,7 +9,7 @@ export function* getListUsers(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.getListUsersSuccess(data));
   } catch (error) {
-    yield put(actions.getListUsersFail(_.get(error, 'message')));
+    yield put(actions.getListUsersFail(configResponseError(error)));
   }
 }
 
@@ -20,7 +19,7 @@ export function* getListMessages(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.getListMessagesSuccess(data));
   } catch (error) {
-    yield put(actions.getListMessagesFail(_.get(error, 'message')));
+    yield put(actions.getListMessagesFail(configResponseError(error)));
   }
 }
 
@@ -30,7 +29,7 @@ export function* postNewMessage(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.postNewMessageSuccess(data));
   } catch (error) {
-    yield put(actions.postNewMessageFail(_.get(error, 'message')));
+    yield put(actions.postNewMessageFail(configResponseError(error)));
   }
 }
 
@@ -40,7 +39,7 @@ export function* saveConvertStation(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.saveConvertStationSuccess(data));
   } catch (error) {
-    yield put(actions.saveConvertStationFail(_.get(error, 'message')));
+    yield put(actions.saveConvertStationFail(configResponseError(error)));
   }
 }
 
@@ -50,7 +49,7 @@ export function* changeStatusoffline(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.changeStatusofflineSuccess(data));
   } catch (error) {
-    yield put(actions.changeStatusofflineFail(_.get(error, 'message')));
+    yield put(actions.changeStatusofflineFail(configResponseError(error)));
   }
 }
 
@@ -60,7 +59,7 @@ export function* postUploadAWS3(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.postUploadAWS3Success(data));
   } catch (error) {
-    yield put(actions.postUploadAWS3Fail(_.get(error, 'message')));
+    yield put(actions.postUploadAWS3Fail(configResponseError(error)));
   }
 }
 
@@ -70,7 +69,7 @@ export function* removeUploadAWS3(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.removeUploadAWS3Success(data));
   } catch (error) {
-    yield put(actions.removeUploadAWS3Fail(_.get(error, 'message')));
+    yield put(actions.removeUploadAWS3Fail(configResponseError(error)));
   }
 }
 
