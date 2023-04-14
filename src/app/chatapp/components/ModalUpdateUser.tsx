@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable no-useless-concat */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Upload, Button, Avatar, Switch, Radio, Space, Skeleton } from 'antd';
 import { UploadOutlined, UserOutlined, MailOutlined, AccountBookOutlined } from '@ant-design/icons';
@@ -13,6 +17,7 @@ import { AppHelper } from 'store/utils/app.helper';
 
 interface Props {
   isModalOpen: boolean;
+  qrCode: boolean;
   handleOk: () => void;
   handleCancel: () => void;
   handleUploadAWS3Modal: (files: RcFile) => void;
@@ -21,7 +26,7 @@ interface Props {
     avatar: string,
     account: string,
     _id: string,
-    twoFA: boolean,
+    twofa: boolean,
     type2FA: number,
   ) => void;
 }
@@ -29,6 +34,7 @@ interface Props {
 export function ModalUpdateUser(props: Props) {
   const {
     isModalOpen,
+    qrCode,
     handleOk,
     handleCancel,
     handleUploadAWS3Modal,
@@ -38,6 +44,7 @@ export function ModalUpdateUser(props: Props) {
   const dispatch = useDispatch();
   const loading = useSelector(AuthSelector.selectLoading);
   const userInfor = useSelector(AuthSelector.selectUserById);
+  const authPairSuccess = useSelector(AuthSelector.selectAuthPairSuccess);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const loadingImage = useSelector(ChatAppSelector.selectLoadingImage);
 
@@ -50,34 +57,43 @@ export function ModalUpdateUser(props: Props) {
 
   useEffect(() => {
     function initInfoUser(data: any) {
-      if (!data) return;
+      if (!data || !isModalOpen) return;
       setAccount(data.account);
       setEmail(data.email);
       setFullName(data.fullName);
       setAvatar(data.avatar);
-      setTwoFA(data.twoFA);
-      if (data.type2FA === 'PASSPORT') {
+      setTwoFA(data.twofa);
+      if (
+        data.type2FA === 'PASSPORT' ||
+        authPairSuccess ||
+        (data.type2FA === 'AUTH_CODE' && authPairSuccess) ||
+        (data.type2FA === '' && authPairSuccess)
+      ) {
         setType2FA(2);
+        setTwoFA(true);
       }
-      if (data.type2FA === 'AUTH_CODE' || data.type2FA === '') {
+      if (
+        (data.type2FA === 'AUTH_CODE' && !authPairSuccess) ||
+        (data.type2FA === '' && !authPairSuccess)
+      ) {
         setType2FA(1);
       }
       if (!_.isEmpty(uploadAWS)) {
         setAvatar(uploadAWS);
       }
     }
-    setTimeout(() => initInfoUser(userInfor));
+    initInfoUser(userInfor);
 
     return () => {
       setAccount('');
       setEmail('');
       setFullName('');
       setAvatar('');
-      setTwoFA(false);
+      setTwoFA(userInfor.twofa as boolean);
       setType2FA(1);
     };
-  }, [userInfor, uploadAWS]);
-
+  }, [isModalOpen, qrCode, userInfor, uploadAWS, authPairSuccess]);
+  console.log(twoFA);
   const handleType2FaApp = e => {
     setType2FA(e.target.value);
     if (e.target.value === 2) {
@@ -134,9 +150,9 @@ export function ModalUpdateUser(props: Props) {
       <Radio.Group style={{ marginTop: '20px' }} onChange={handleType2FaApp} value={type2FA}>
         <Space direction="vertical">
           <Switch
-            checkedChildren="TWO 2FA"
-            unCheckedChildren="twoFA"
-            defaultChecked={twoFA}
+            checkedChildren="On twoFA"
+            unCheckedChildren="Off twoFA"
+            checked={twoFA}
             onChange={isChecked => setTwoFA(isChecked)}
           />
           {twoFA && (

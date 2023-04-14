@@ -3,8 +3,6 @@ import { actions } from './slice';
 import { AuthHttp } from '../service/auth.http';
 import { configResponse, configResponseError } from 'store/services/request';
 
-const authRequest = new AuthHttp();
-
 export function* sigInUser(api, action) {
   const resPonse = yield call(api.signInUser, action.payload);
   try {
@@ -31,7 +29,7 @@ export function* sigInUserWithApp(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.sigInUserWithAppSuccess(data));
   } catch (error) {
-    yield put(actions.sigInUserWithAppFail(_.get(error, 'message')));
+    yield put(actions.sigInUserWithAppFail(configResponseError(error)));
   }
 }
 
@@ -141,7 +139,7 @@ export function* getAuthPair(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.getAuthPairSuccess(data));
   } catch (error) {
-    yield put(actions.getAuthPairFail(_.get(error, 'message')));
+    yield put(actions.getAuthPairFail(configResponseError(error)));
   }
 }
 
@@ -151,11 +149,12 @@ export function* pairAuth(api, action) {
     const data = yield configResponse(resPonse);
     yield put(actions.pairAuthSuccess(data));
   } catch (error) {
-    yield put(actions.pairAuthFail(_.get(error, 'message')));
+    yield put(actions.pairAuthFail(configResponseError(error)));
   }
 }
 
 export function* AuthSaga() {
+  const authRequest = new AuthHttp();
   yield all([
     yield takeLatest(actions.sigInUser.type, sigInUser, authRequest),
     yield takeLatest(actions.sigInUserWithCode.type, sigInUserWithCode, authRequest),

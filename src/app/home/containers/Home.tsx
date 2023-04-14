@@ -23,6 +23,7 @@ export const Home = () => {
   const dispatch = useDispatch();
   const local = new LocalStorageService();
   const loading = useSelector(AuthSelector.selectLoading);
+  const userById = useSelector(AuthSelector.selectUserById);
   const [tabsPanel, setTabsPanel] = useState<string>('1');
   const [fromAuth, setFromAuth] = useState<boolean>(false);
   const [typeAuth, setTypeAuth] = useState<number>(0);
@@ -59,11 +60,6 @@ export const Home = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       const { data, message, code } = payload;
-      if (code === 401) {
-        openNotifi(400, payload);
-        history.push('/');
-        return;
-      }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
@@ -75,6 +71,7 @@ export const Home = () => {
           break;
         case AuthSlice.actions.sigInUserSuccess.type:
         case AuthSlice.actions.sigInUserWithCodeSuccess.type:
+        case AuthSlice.actions.sigInUserWithAppSuccess.type:
           handleLogin(data, message, code);
           break;
         case AuthSlice.actions.signUpWithFBSuccess.type:
@@ -85,6 +82,7 @@ export const Home = () => {
         case AuthSlice.actions.signUpWithFBFail.type:
         case AuthSlice.actions.sigInUserFail.type:
         case AuthSlice.actions.sigInUserWithCodeFail.type:
+        case AuthSlice.actions.sigInUserWithAppFail.type:
         case AuthSlice.actions.activeAuthCodeFail.type:
           openNotifi(400, message);
           break;
@@ -108,15 +106,13 @@ export const Home = () => {
         break;
       case 201:
       case 202:
+        openNotifi(code, message);
+        setFromAuth(true);
+        break;
       case 203:
         openNotifi(code, message);
         setFromAuth(true);
-        if (201) {
-          setTypeAuth(201);
-        }
-        if (202) {
-          setTypeAuth(202);
-        }
+        setTypeAuth(203);
         break;
       default:
         break;
@@ -124,12 +120,13 @@ export const Home = () => {
   };
 
   const handleLoginWithCode = e => {
-    if (e.target.value.length === 6 && typeAuth === 201) {
+    if (e.target.value.length === 6 && typeAuth === 0) {
       dispatch(AuthSlice.actions.sigInUserWithCode({ authCode: e.target.value }));
       return;
     }
-    if (e.target.value.length === 6 && typeAuth === 202) {
-      dispatch(AuthSlice.actions.sigInUserWithApp({ otp: e.target.value }));
+    if (_.isEmpty(userById)) return;
+    if (e.target.value.length === 6 && typeAuth === 203) {
+      dispatch(AuthSlice.actions.sigInUserWithApp({ userId: userById?._id, otp: e.target.value }));
       return;
     }
   };

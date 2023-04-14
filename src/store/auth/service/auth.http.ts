@@ -32,7 +32,7 @@ export class AuthHttp {
       avatar: user.avatar,
       _id: user._id,
       type2FA: user.type2FA,
-      twoFA: user.twoFA,
+      twofa: user.twofa,
     };
   };
 
@@ -86,7 +86,13 @@ export class AuthHttp {
   };
 
   public updateInfo = (body: any): Promise<any> => {
-    const config = this.configUpdateInfor(body);
+    const { payload, toKen } = body;
+    if (toKen) {
+      this.request.setHeaders({
+        Authorization: toKen,
+      });
+    }
+    const config = this.configUpdateInfor(payload);
     return this.request.put(AuthApi.UPDATE_INFOR, config);
   };
 

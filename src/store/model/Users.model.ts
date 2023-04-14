@@ -4,7 +4,7 @@ export interface Users {
   fullName?: string;
   avatar?: string;
   type2FA?: string;
-  twoFA?: boolean;
+  twofa?: boolean;
   account?: string;
   passWord?: string;
   email?: string;

@@ -13,7 +13,7 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Breadcrumb, Avatar } from 'antd';
+import { Layout, Avatar } from 'antd';
 import { AlignLeftOutlined } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -103,7 +103,7 @@ export const Chatapp = () => {
           resetFromChat();
           break;
         case AuthSlice.actions.getUserByIdFail.type:
-          openNotifi(400, payload);
+          openNotifi(400, message);
           local.clearLocalStorage();
           history.push('/');
           break;
@@ -115,7 +115,7 @@ export const Chatapp = () => {
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
         case AuthSlice.actions.updateInfoFail.type:
         case AuthSlice.actions.pairAuthFail.type:
-          openNotifi(400, payload);
+          openNotifi(400, message);
           break;
         case ChatAppSlice.actions.removeUploadAWS3Fail.type:
           setFromDataUploadAWS3(undefined);
@@ -292,7 +292,7 @@ export const Chatapp = () => {
     avatar: string,
     fullName: string,
     _id: string,
-    twoFA: boolean,
+    twofa: boolean,
     type2FAValue: number,
   ) => {
     const type2FA = type2FAValue === 1 ? 'AUTH_CODE' : 'PASSPORT';
@@ -300,10 +300,10 @@ export const Chatapp = () => {
       avatar: !_.isEmpty(avatar) ? avatar : '',
       fullName,
       _id,
-      twoFA: !!twoFA,
-      type2FA: twoFA ? type2FA : '',
+      twofa: !!twofa,
+      type2FA: twofa ? type2FA : '',
     };
-    dispatch(AuthSlice.actions.updateInfo(payload));
+    dispatch(AuthSlice.actions.updateInfo({ payload, toKen: _.get(userInfor, 'toKen') }));
   };
 
   const handleScrollListMessages = () => {
@@ -382,6 +382,7 @@ export const Chatapp = () => {
       </Layout>
       <ModalUpdateUser
         isModalOpen={isModalOpen}
+        qrCode={qrCode}
         handleOk={() => {
           setIsModalOpen(false);
           setQrCode(false);
@@ -390,6 +391,7 @@ export const Chatapp = () => {
         handleCancel={() => {
           setIsModalOpen(false);
           setQrCode(false);
+          dispatch(AuthSlice.actions.clearAuthPairSuccess());
           if (!_.isEmpty(uploadAWS)) {
             dispatch(
               ChatAppSlice.actions.removeUploadAWS3({
