@@ -17,10 +17,11 @@ export function ModalQrCode(props: Props) {
   const dispatch = useDispatch();
   const loading = useSelector(AuthSelector.selectLoading);
   const authPair = useSelector(AuthSelector.selectAuthPair);
+  const userInfor = useSelector(AuthSelector.selectUserById);
 
   const handlePairAuth = e => {
     if (e.target.value.length === 6) {
-      dispatch(AuthSlice.actions.pairAuth({ token: e.target.value }));
+      dispatch(AuthSlice.actions.pairAuth({ token: e.target.value, toKenUser: userInfor.toKen }));
     }
   };
 

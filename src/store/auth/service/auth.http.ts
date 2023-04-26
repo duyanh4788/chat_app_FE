@@ -106,11 +106,22 @@ export class AuthHttp {
     return this.request.post(AuthApi.RESET_PASSWORD, this.configResetPassWord(body));
   };
 
-  public getAuthPair = (): Promise<any> => {
+  public getAuthPair = (toKen: string): Promise<any> => {
+    if (toKen) {
+      this.request.setHeaders({
+        Authorization: toKen,
+      });
+    }
     return this.request.get(AuthApi.GET_AUTH_PAIR);
   };
 
-  public pairAuth = (token: string): Promise<any> => {
+  public pairAuth = (payload): Promise<any> => {
+    const { token, tokenUser } = payload;
+    if (tokenUser) {
+      this.request.setHeaders({
+        Authorization: tokenUser,
+      });
+    }
     return this.request.post(AuthApi.PAIR_AUTH, token);
   };
 }

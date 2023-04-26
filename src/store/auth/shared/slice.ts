@@ -160,7 +160,7 @@ const AuthSlice = createSlice({
       state.loading = false;
     },
 
-    getAuthPair(state) {
+    getAuthPair(state, action) {
       state.loading = true;
     },
     getAuthPairSuccess(state, action) {
