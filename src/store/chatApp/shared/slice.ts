@@ -37,6 +37,12 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
+    searchUsers(state, action) {},
+    searchUsersSuccess(state, action) {
+      state.listUsers = action.payload.data;
+    },
+    searchUsersFail(state, action) {},
+
     getListMessages(state, action) {
       state.loadingPaging = true;
     },

@@ -9,7 +9,7 @@ import { AuthSaga } from 'store/auth/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 import { LocalStorageService } from 'store/services/localStorage';
 
 export function SignUpUser() {

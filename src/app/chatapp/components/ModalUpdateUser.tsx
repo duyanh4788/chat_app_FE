@@ -8,8 +8,8 @@ import * as AuthSelector from 'store/auth/shared/selectors';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as _ from 'lodash';
 import { RcFile } from 'antd/lib/upload';
-import { AppLoading } from 'store/utils/Apploading';
-import { AppHelper } from 'store/utils/app.helper';
+import { AppLoading } from 'utils/Apploading';
+import { AppHelper } from 'utils/app.helper';
 
 interface Props {
   isModalOpen: boolean;

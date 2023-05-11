@@ -1,5 +1,5 @@
 import { lazyLoad } from './loadable';
-import { LoaderFallBack } from 'store/utils/Apploading';
+import { LoaderFallBack } from 'utils/Apploading';
 
 export const Home = lazyLoad(
   () => import('app'),
@@ -34,5 +34,11 @@ export const PrivacyPolicy = lazyLoad(
 export const OutTab = lazyLoad(
   () => import('app'),
   module => module.OutTab,
+  LoaderFallBack(),
+);
+
+export const Admin = lazyLoad(
+  () => import('app'),
+  module => module.Admin,
   LoaderFallBack(),
 );

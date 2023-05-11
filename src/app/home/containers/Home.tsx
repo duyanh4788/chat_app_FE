@@ -8,12 +8,12 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Tabs, Tooltip } from 'antd';
 import { CodeOutlined, RollbackOutlined } from '@ant-design/icons';
-import { AppLoading } from 'store/utils/Apploading';
+import { AppLoading } from 'utils/Apploading';
 import { SignUpUser } from '../component/SignUpUser';
 import { SignInUser } from '../component/SignInUser';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 import { LocalStorageService } from 'store/services/localStorage';
 
 const { TabPane } = Tabs;

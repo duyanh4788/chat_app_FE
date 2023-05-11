@@ -10,7 +10,7 @@ import { Form, Input, Button, Tooltip, Typography } from 'antd';
 import { UserOutlined, LockOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 import logo from '../../../images/logo.png';
 import { LocalStorageService } from 'store/services/localStorage';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 
 interface Props {
   setFromAuth: (isBol: boolean) => void;

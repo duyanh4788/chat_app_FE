@@ -13,6 +13,16 @@ export function* getListUsers(api, action) {
   }
 }
 
+export function* searchUsers(api, action) {
+  const resPonse = yield call(api.searchUsers, action.payload);
+  try {
+    const data = yield configResponse(resPonse);
+    yield put(actions.searchUsersSuccess(data));
+  } catch (error) {
+    yield put(actions.searchUsersFail(configResponseError(error)));
+  }
+}
+
 export function* getListMessages(api, action) {
   const resPonse = yield call(api.getListMessages, action.payload);
   try {
@@ -78,6 +88,7 @@ export function* ChatAppSaga() {
   yield all([
     yield takeLatest(actions.changeStatusoffline.type, changeStatusoffline, chatApptRequest),
     yield takeLatest(actions.getListUsers.type, getListUsers, chatApptRequest),
+    yield takeLatest(actions.searchUsers.type, searchUsers, chatApptRequest),
     yield takeLatest(actions.postNewMessage.type, postNewMessage, chatApptRequest),
     yield takeLatest(actions.saveConvertStation.type, saveConvertStation, chatApptRequest),
     yield takeLatest(actions.getListMessages.type, getListMessages, chatApptRequest),

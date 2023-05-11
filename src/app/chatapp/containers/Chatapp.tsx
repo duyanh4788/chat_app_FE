@@ -13,7 +13,7 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Breadcrumb, Avatar } from 'antd';
+import { Layout, Avatar } from 'antd';
 import { AlignLeftOutlined } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,9 +21,9 @@ import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
 import { ApiRouter } from 'store/services/request.constants';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
-import { AppHelper } from 'store/utils/app.helper';
-import { AppLoading } from 'store/utils/Apploading';
-import { openNotifi } from 'store/utils/Notification';
+import { AppHelper } from 'utils/app.helper';
+import { AppLoading } from 'utils/Apploading';
+import { openNotifi } from 'utils/Notification';
 import { ModalUpdateUser } from 'app/chatapp/components/ModalUpdateUser';
 import { LocalStorageService } from 'store/services/localStorage';
 import { isDeveloperment } from 'index';
@@ -33,6 +33,7 @@ import { RenderListUsers } from '../components/RenderListUsers';
 import { Users } from 'store/model/Users.model';
 import { ListMessages, Messages } from 'store/model/ChatApp.model';
 import { RenderListMessages } from '../components/RenderListMessages';
+import { HeartIcon } from 'hook/icon';
 
 const { Header, Content, Footer } = Layout;
 
@@ -81,7 +82,6 @@ export const Chatapp = () => {
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    dispatch(ChatAppSlice.actions.getListUsers());
     document.addEventListener('paste', handlePasteImage);
 
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
@@ -110,7 +110,6 @@ export const Chatapp = () => {
         case AuthSlice.actions.pairAuthSuccess.type:
           setQrCode(false);
           break;
-        case ChatAppSlice.actions.getListUsersFail.type:
         case ChatAppSlice.actions.getListMessagesFail.type:
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
         case AuthSlice.actions.updateInfoFail.type:
@@ -348,6 +347,12 @@ export const Chatapp = () => {
                 {AppHelper.convertFullName(_.get(userAuthContext, 'fullName'))}
               </Avatar>
               <span className="account">{_.get(userAuthContext, 'fullName')}</span>
+              {_.get(userAuthContext, 'userTypeCode') === 'ADMIN' && (
+                <HeartIcon
+                  style={{ color: 'hotpink', cursor: 'pointer' }}
+                  onClick={() => history.push('/admin')}
+                />
+              )}
             </div>
           </Header>
           {convertStation && convertStation._id && convertStation.members?.length ? (

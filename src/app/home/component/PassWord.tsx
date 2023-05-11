@@ -10,7 +10,7 @@ import { MailOutlined, RollbackOutlined, CodeOutlined, LockOutlined } from '@ant
 import logo from '../../../images/logo.png';
 import { RootStore } from 'store/configStore';
 import { Unsubscribe } from 'redux';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 
 enum TypeFromPassWord {
   AUTHCODE = 'AUTHCODE',

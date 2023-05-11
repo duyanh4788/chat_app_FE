@@ -4,5 +4,6 @@ import { PassWord } from './home/component/PassWord';
 import { Home } from './home/containers/Home';
 import { PrivacyPolicy } from './home/containers/PrivacyPolicy';
 import { TermsOfService } from './home/containers/TermsOfService';
+import { Admin } from './admin/containers/Admin';
 
-export { Home, Chatapp, PassWord, TermsOfService, PrivacyPolicy, OutTab };
+export { Home, Chatapp, PassWord, TermsOfService, PrivacyPolicy, OutTab, Admin };

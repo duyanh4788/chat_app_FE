@@ -10,7 +10,7 @@ import {
   CloseCircleTwoTone,
   LoadingOutlined,
 } from '@ant-design/icons';
-import { AppHelper } from 'store/utils/app.helper';
+import { AppHelper } from 'utils/app.helper';
 import { Users } from 'store/model/Users.model';
 import { ConvertStations, Messages } from 'store/model/ChatApp.model';
 import { format } from 'timeago.js';
@@ -18,7 +18,7 @@ import { RcFile } from 'antd/lib/upload';
 import { useDispatch, useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 import newmsg from '../../../images/newmsg.png';
 
 const { Content } = Layout;

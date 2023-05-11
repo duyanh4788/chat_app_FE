@@ -6,7 +6,15 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './style/scss/home/home.css';
 import './style/scss/chatapp/chat_app.css';
 import 'antd/dist/antd.css';
-import { Chatapp, Home, Password, PrivacyPolicy, TermsOfService, OutTab } from 'router/lazyRouting';
+import {
+  Chatapp,
+  Home,
+  Password,
+  PrivacyPolicy,
+  TermsOfService,
+  OutTab,
+  Admin,
+} from 'router/lazyRouting';
 import { AuthContextProvider } from 'app/authContext/AuthContextApi';
 
 export const isDeveloperment = process.env.NODE_ENV === 'development' ? true : false;
@@ -23,6 +31,7 @@ const ConnectedApp = () => (
           <Route path="/termsOfService" exact component={TermsOfService} />
           <Route path="/privacyPolicy" exact component={PrivacyPolicy} />
           <Route path="/outTab" exact component={OutTab} />
+          <Route path="/admin" exact component={Admin} />
         </AuthContextProvider>
       </Switch>
     </Provider>
