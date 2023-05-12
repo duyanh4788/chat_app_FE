@@ -9,7 +9,7 @@ import * as AuthSelector from 'store/auth/shared/selectors';
 import { AuthSaga } from 'store/auth/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { LocalStorageService } from 'store/services/localStorage';
-import { openNotifi } from 'store/utils/Notification';
+import { openNotifi } from 'utils/Notification';
 
 export const AuthContext = React.createContext({});
 export const AuthContextProvider = ({ children }) => {

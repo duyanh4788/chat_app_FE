@@ -1,5 +1,5 @@
 import { lazyLoad } from './loadable';
-import { LoaderFallBack } from 'store/utils/Apploading';
+import { LoaderFallBack } from 'utils/Apploading';
 
 export const Home = lazyLoad(
   () => import('app'),

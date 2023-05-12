@@ -4,7 +4,7 @@ import QRCode from 'qrcode.react';
 import * as AuthSelector from 'store/auth/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppLoading } from 'store/utils/Apploading';
+import { AppLoading } from 'utils/Apploading';
 
 interface Props {
   qrCode: boolean;

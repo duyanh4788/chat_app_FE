@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
 import { Menu, Avatar, Tooltip, Badge, Drawer } from 'antd';
 import { LogoutOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
-import { AppHelper } from 'store/utils/app.helper';
+import { AppHelper } from 'utils/app.helper';
 
 const { SubMenu } = Menu;
 
