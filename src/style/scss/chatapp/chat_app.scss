@@ -312,6 +312,49 @@
   font-size: 18px !important;
 }
 
+.ant-select-dropdown {
+  background-color: #001428 !important;
+  border: 1px solid #ffffff1f !important;
+  .ant-menu-title-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .bg_green {
+    background-color: #87d068;
+  }
+  .account {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: bolder;
+  }
+  .ant-menu-item:active,
+  .ant-menu-submenu-title:active {
+    background: none !important;
+  }
+  .icon_add_friend {
+    color: #ffffff;
+    font-size: 20px;
+  }
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #000c16 !important;
+}
+
+.ant-select-item-option-content {
+  padding: 5px !important;
+}
+
+.dpl_al_center {
+  display: flex;
+  align-items: center;
+}
+
+.icon_add_friend:hover {
+  color: #87d068;
+}
+
 @media (max-width: 540px) {
   .site_layout_empty {
     span {

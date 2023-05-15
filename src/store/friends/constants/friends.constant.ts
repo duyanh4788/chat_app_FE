@@ -1,0 +1,11 @@
+export const FriendsApi = {
+  ADD_FRIEND: '/friends/add-friends',
+  GET_LIST_FRIEND: '/friends/get-list-friends',
+};
+
+export const REPONSE_CONSTANT = {
+  ADD_FRIEND_SUCCESS: 'ADD_FRIEND_SUCCESS',
+  ADD_FRIEND_FAIL: 'ADD_FRIEND_FAIL',
+  GET_LIST_FRIEND_SUCCESS: 'GET_LIST_FRIEND_SUCCESS',
+  GET_LIST_FRIEND_FAIL: 'GET_LIST_FRIEND_FAIL',
+};

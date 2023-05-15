@@ -418,6 +418,64 @@
   font-size: 18px !important;
 }
 
+.ant-select-dropdown {
+  background-color: #001428 !important;
+  border: 1px solid #ffffff1f !important;
+}
+
+.ant-select-dropdown .ant-menu-title-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.ant-select-dropdown .bg_green {
+  background-color: #87d068;
+}
+
+.ant-select-dropdown .account {
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: bolder;
+}
+
+.ant-select-dropdown .ant-menu-item:active,
+.ant-select-dropdown .ant-menu-submenu-title:active {
+  background: none !important;
+}
+
+.ant-select-dropdown .icon_add_friend {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #000c16 !important;
+}
+
+.ant-select-item-option-content {
+  padding: 5px !important;
+}
+
+.dpl_al_center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.icon_add_friend:hover {
+  color: #87d068;
+}
+
 @media (max-width: 540px) {
   .site_layout_empty span {
     font-size: 34px !important;

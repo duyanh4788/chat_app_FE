@@ -28,6 +28,9 @@ export class ChatAppHttp {
 
   public getListUsers = (): Promise<any> => this.request.get(ChatAppApi.LIST_USER);
 
+  public searchUsers = (query: string): Promise<any> =>
+    this.request.get(ChatAppApi.SEARCH_USER + '/' + query);
+
   public saveConvertStation = (data: PostConvertStation): Promise<any> =>
     this.request.post(ChatAppApi.SAVE_CONVERT_STATION, {
       ...this.configConverStation(data),

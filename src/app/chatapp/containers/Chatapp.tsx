@@ -10,10 +10,13 @@ import * as _ from 'lodash';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as AuthSlice from 'store/auth/shared/slice';
+import * as FriendsSelector from 'store/friends/shared/selectors';
+import * as FriendsSlice from 'store/friends/shared/slice';
+import { FriendsSaga } from 'store/friends/shared/saga';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Breadcrumb, Avatar } from 'antd';
+import { Layout, Avatar } from 'antd';
 import { AlignLeftOutlined } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +36,7 @@ import { RenderListUsers } from '../components/RenderListUsers';
 import { Users } from 'store/model/Users.model';
 import { ListMessages, Messages } from 'store/model/ChatApp.model';
 import { RenderListMessages } from '../components/RenderListMessages';
+import { Friends } from 'store/model/Friends.model';
 
 const { Header, Content, Footer } = Layout;
 
@@ -52,17 +56,27 @@ export const Chatapp = () => {
     key: ChatAppSlice.sliceKey,
     saga: ChatAppSaga,
   });
+
+  useInjectReducer({
+    key: FriendsSlice.sliceKey,
+    reducer: FriendsSlice.reducer,
+  });
+  useInjectSaga({
+    key: FriendsSlice.sliceKey,
+    saga: FriendsSaga,
+  });
+
   const loading = useSelector(ChatAppSelector.selectLoading);
   const convertStation = useSelector(ChatAppSelector.selectConvertStation);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const getListMessages = useSelector(ChatAppSelector.selectGetListMessages);
-  const getListUsers = useSelector(ChatAppSelector.selectListUsers);
-  const [listUsers, setListUsers] = useState<Users[]>([]);
+  const getListFriends = useSelector(FriendsSelector.selectListFriends);
+  const [listFriends, setListFriends] = useState<Friends[]>([]);
   const [drawer, setDrawer] = useState<boolean>(false);
   const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
   const [listMessages, setListMessages] = useState<Messages[]>([]);
   const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);
-  const [myFriend, setMyFriend] = useState<Users | null>(null);
+  const [myFriend, setMyFriend] = useState<Friends | null>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<string>('Chat App');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [qrCode, setQrCode] = useState<boolean>(false);
@@ -81,8 +95,9 @@ export const Chatapp = () => {
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    dispatch(ChatAppSlice.actions.getListUsers());
     document.addEventListener('paste', handlePasteImage);
+
+    dispatch(FriendsSlice.actions.getListFriends());
 
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
@@ -110,11 +125,11 @@ export const Chatapp = () => {
         case AuthSlice.actions.pairAuthSuccess.type:
           setQrCode(false);
           break;
-        case ChatAppSlice.actions.getListUsersFail.type:
         case ChatAppSlice.actions.getListMessagesFail.type:
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
         case AuthSlice.actions.updateInfoFail.type:
         case AuthSlice.actions.pairAuthFail.type:
+        case FriendsSlice.actions.addFriendFail.type:
           openNotifi(400, payload);
           break;
         case ChatAppSlice.actions.removeUploadAWS3Fail.type:
@@ -129,7 +144,7 @@ export const Chatapp = () => {
       dispatch(ChatAppSlice.actions.clearData());
       dispatch(AuthSlice.actions.clearData());
       setListMessages([]);
-      setListUsers([]);
+      setListFriends([]);
       setSendMessage(undefined);
       setMyFriend(null);
       document.removeEventListener('paste', handlePasteImage);
@@ -184,20 +199,20 @@ export const Chatapp = () => {
   }, [PORT_SOCKET, userAuthContext]);
 
   useEffect(() => {
-    if (!_.isEmpty(getListUsers)) {
-      setListUsers(getListUsers);
+    if (getListFriends.length) {
+      setListFriends(getListFriends);
       socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: Users) => {
-        let newList: Users[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
+        let newList: any = getListFriends.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
-        setListUsers(newList);
+        setListFriends(newList);
       });
       socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: Users) => {
-        let newList: Users[] = getListUsers.filter(({ _id }) => _id !== dataUser._id);
+        let newList: any = getListFriends.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
-        setListUsers(newList);
+        setListFriends(newList);
       });
     }
-  }, [getListUsers]);
+  }, [getListFriends]);
 
   useEffect(() => {
     handleAutoScroll(false);
@@ -332,7 +347,7 @@ export const Chatapp = () => {
           drawer={drawer}
           setDrawer={setDrawer}
           userAuthContext={userAuthContext}
-          listUsers={listUsers}
+          listFriends={listFriends}
           handleSelectUser={handleSelectUser}
         />
         <Layout>

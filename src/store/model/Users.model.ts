@@ -12,4 +12,5 @@ export interface Users {
   statusCreate?: string;
   userTypeCode?: string;
   toKen?: string;
+  isFriend?: boolean;
 }
