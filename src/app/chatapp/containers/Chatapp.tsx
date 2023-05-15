@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext, useMemo } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
@@ -117,6 +117,11 @@ export const Chatapp = () => {
           setIsModalOpen(false);
           resetFromChat();
           break;
+        case FriendsSlice.actions.addFriendSuccess.type:
+        case FriendsSlice.actions.acceptFriendsSuccess.type:
+        case FriendsSlice.actions.declineFriendsSuccess.type:
+          dispatch(FriendsSlice.actions.getListFriends());
+          break;
         case AuthSlice.actions.getUserByIdFail.type:
           openNotifi(400, payload);
           local.clearLocalStorage();
@@ -130,7 +135,10 @@ export const Chatapp = () => {
         case AuthSlice.actions.updateInfoFail.type:
         case AuthSlice.actions.pairAuthFail.type:
         case FriendsSlice.actions.addFriendFail.type:
-          openNotifi(400, payload);
+        case FriendsSlice.actions.acceptFriendsFail.type:
+        case FriendsSlice.actions.declineFriendsFail.type:
+        case ChatAppSlice.actions.saveConvertStationFail.type:
+          openNotifi(400, message);
           break;
         case ChatAppSlice.actions.removeUploadAWS3Fail.type:
           setFromDataUploadAWS3(undefined);
@@ -201,12 +209,12 @@ export const Chatapp = () => {
   useEffect(() => {
     if (getListFriends.length) {
       setListFriends(getListFriends);
-      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: Users) => {
+      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_ONLINE, (dataUser: Friends) => {
         let newList: any = getListFriends.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListFriends(newList);
       });
-      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: Users) => {
+      socket.current.on(SOCKET_COMMIT.CHANGE_STATUS_OFFLINE, (dataUser: Friends) => {
         let newList: any = getListFriends.filter(({ _id }) => _id !== dataUser._id);
         newList.push(dataUser);
         setListFriends(newList);
@@ -245,17 +253,17 @@ export const Chatapp = () => {
     }
   };
 
-  const handleSelectUser = (friend: Users) => {
+  const handleSelectUser = (friend: Friends) => {
     setListMessages([]);
     setDrawer(false);
     setMyFriend(friend);
     if (
       !convertStation ||
-      (convertStation && convertStation?.members?.includes(friend._id as string) === false)
+      (convertStation && convertStation?.members?.includes(friend.userId as string) === false)
     ) {
       dispatch(
         ChatAppSlice.actions.saveConvertStation({
-          reciverId: _.get(friend, '_id'),
+          reciverId: _.get(friend, 'userId'),
           senderId: _.get(userAuthContext, '_id'),
         }),
       );
@@ -336,6 +344,18 @@ export const Chatapp = () => {
     }
   };
 
+  const renderListUsersMemo = useMemo(() => {
+    return (
+      <RenderListUsers
+        drawer={drawer}
+        setDrawer={setDrawer}
+        userAuthContext={userAuthContext}
+        listFriends={listFriends}
+        handleSelectUser={handleSelectUser}
+      />
+    );
+  }, [drawer, setDrawer, userAuthContext, listFriends, handleSelectUser]);
+
   return (
     <React.Fragment>
       <Helmet>
@@ -343,13 +363,7 @@ export const Chatapp = () => {
       </Helmet>
       <Layout>
         {loading && <AppLoading loading />}
-        <RenderListUsers
-          drawer={drawer}
-          setDrawer={setDrawer}
-          userAuthContext={userAuthContext}
-          listFriends={listFriends}
-          handleSelectUser={handleSelectUser}
-        />
+        {renderListUsersMemo}
         <Layout>
           <Header className="site_info">
             <div className="icon_drawer">

@@ -20,6 +20,7 @@ import { Socket } from 'socket.io-client';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { openNotifi } from 'utils/Notification';
 import newmsg from '../../../images/newmsg.png';
+import { Friends } from 'store/model/Friends.model';
 
 const { Content } = Layout;
 const { Dragger } = Upload;
@@ -27,7 +28,7 @@ const { Dragger } = Upload;
 interface Props {
   convertStation: ConvertStations;
   userAuthContext: Users;
-  myFriend: Users | null;
+  myFriend: Friends | null;
   listMessages: Messages[];
   notiFyTitleRef: any;
   notiFyTitle: string;
@@ -138,7 +139,7 @@ export function RenderListMessages(props: Props) {
     return {
       conversationId: _.get(convertStation, '_id'),
       senderId: _.get(userAuthContext, '_id'),
-      reciverId: _.get(myFriend, '_id'),
+      reciverId: _.get(myFriend, 'userId'),
       text: '',
     };
   };

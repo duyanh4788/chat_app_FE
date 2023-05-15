@@ -64,6 +64,12 @@
   font-weight: bolder;
 }
 
+.ant-layout .subMenu .span_accept {
+  border: 1px solid #ffffff45;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 .ant-layout .site_layout {
   padding: 20px;
   overflow: auto;

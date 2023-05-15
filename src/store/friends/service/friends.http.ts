@@ -16,4 +16,12 @@ export class FriendsHttp {
   public addFriend = (payload: any): Promise<any> => {
     return this.request.post(FriendsApi.ADD_FRIEND, payload);
   };
+
+  public acceptFriends = (payload: any): Promise<any> => {
+    return this.request.post(FriendsApi.ACCEPT_FRIENDS, payload);
+  };
+
+  public declineFriends = (payload: any): Promise<any> => {
+    return this.request.post(FriendsApi.DECLINE_FRIENDS, payload);
+  };
 }

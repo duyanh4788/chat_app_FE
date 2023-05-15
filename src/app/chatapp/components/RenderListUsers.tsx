@@ -6,13 +6,17 @@ import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as FriendsSlice from 'store/friends/shared/slice';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
 import * as FriendsSelector from 'store/friends/shared/selectors';
-import { Menu, Avatar, Tooltip, Badge, Drawer, AutoComplete, Input } from 'antd';
+import { Menu, Avatar, Tooltip, Drawer, AutoComplete, Input } from 'antd';
 import {
   LogoutOutlined,
   UserOutlined,
   SmileOutlined,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
   SearchOutlined,
   UserAddOutlined,
+  ContactsOutlined,
+  LoadingOutlined,
 } from '@ant-design/icons';
 import { AppHelper } from 'utils/app.helper';
 import { Friends } from 'store/model/Friends.model';
@@ -34,7 +38,7 @@ export function RenderListUsers(props: Props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const getListUsers = useSelector(ChatAppSelector.selectListUsers);
   const success = useSelector(FriendsSelector.selectSuccess);
-
+  console.log(success);
   useEffect(() => {
     if (!drawer && showDropdown) {
       setShowDropdown(false);
@@ -42,7 +46,7 @@ export function RenderListUsers(props: Props) {
     if (getListUsers.length && drawer) {
       setShowDropdown(true);
     }
-  }, [drawer, getListUsers]);
+  }, [drawer, getListUsers, showDropdown]);
 
   const debouncedSearch = _.debounce((value: string) => {
     dispatch(ChatAppSlice.actions.searchUsers(value));
@@ -65,14 +69,24 @@ export function RenderListUsers(props: Props) {
     return getListUsers.map((row, idx) => ({
       value: row.id,
       label: (
-        <Menu.Item key={idx} className="subMenu" onClick={() => handleAddFriend(row)}>
+        <Menu.Item key={idx} className="subMenu">
           <span className="dpl_al_center">
             <Avatar size={20} className="bg_green" src={row.avatar !== '' ? row.avatar : null}>
               {AppHelper.convertFullName(row.fullName)}
             </Avatar>
             <span className="account">{row.fullName}</span>
           </span>
-          {!row.isFriend && <UserAddOutlined className="icon_add_friend" />}
+          {typeof row.isFriend !== 'boolean' && !row.isFriend && (
+            <UserAddOutlined className="icon_add_friend" onClick={() => handleAddFriend(row)} />
+          )}
+          {typeof row.isFriend === 'boolean' && !row.isFriend ? (
+            <Tooltip title="waiting accept">
+              <LoadingOutlined className="icon_add_friend" />
+            </Tooltip>
+          ) : null}
+          {typeof row.isFriend === 'boolean' && row.isFriend && (
+            <ContactsOutlined className="icon_add_friend" />
+          )}
         </Menu.Item>
       ),
     }));
@@ -82,7 +96,11 @@ export function RenderListUsers(props: Props) {
     <Drawer
       placement="left"
       closable={false}
-      onClose={() => setDrawer(false)}
+      onClose={() => {
+        setDrawer(false);
+        dispatch(ChatAppSlice.actions.clearListUsers());
+        dispatch(FriendsSlice.actions.clearSuccess());
+      }}
       open={drawer}
       getContainer={false}>
       <div className="sider_btn">
@@ -110,27 +128,49 @@ export function RenderListUsers(props: Props) {
             />
           </AutoComplete>
           {listFriends.length ? (
-            listFriends
-              .filter(item => item._id !== _.get(userAuthContext, '_id'))
-              .map((row, idx) => (
-                <Menu.Item key={idx} className="subMenu" onClick={() => handleSelectUser(row)}>
-                  <span>
-                    <Avatar
-                      size={20}
-                      className="bg_green"
-                      src={row.avatar !== '' ? row.avatar : null}>
-                      {AppHelper.convertFullName(row.fullName)}
-                    </Avatar>
-                    <span className="account">{row.fullName}</span>
-                  </span>
+            listFriends.map((row, idx) => (
+              <Menu.Item key={idx} className="subMenu">
+                <span onClick={() => handleSelectUser(row)}>
+                  <Avatar
+                    size={20}
+                    className="bg_green"
+                    src={row.avatar !== '' ? row.avatar : null}>
+                    {AppHelper.convertFullName(row.fullName)}
+                  </Avatar>
+                  <span className="account">{row.fullName}</span>
+                </span>
+                <span>
+                  {row.isFriend ? (
+                    <span className="span_accept">friend</span>
+                  ) : (
+                    <span className="span_accept">
+                      <Tooltip
+                        placement="top"
+                        title="please accept or decline for request add friend">
+                        <CheckCircleTwoTone
+                          twoToneColor="#52c41a"
+                          onClick={() =>
+                            dispatch(FriendsSlice.actions.acceptFriends({ id: row._id }))
+                          }
+                        />
+                        <CloseCircleTwoTone
+                          twoToneColor="#eb2f96"
+                          onClick={() =>
+                            dispatch(FriendsSlice.actions.declineFriends({ id: row._id }))
+                          }
+                        />
+                      </Tooltip>
+                    </span>
+                  )}
                   <SmileOutlined
                     className="smile_icon"
                     style={{
                       color: row.isOnline ? '#108ee9' : '#e91010',
                     }}
                   />
-                </Menu.Item>
-              ))
+                </span>
+              </Menu.Item>
+            ))
           ) : (
             <Menu.Item key="sub3">Member empty</Menu.Item>
           )}

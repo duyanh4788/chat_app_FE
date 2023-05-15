@@ -3,7 +3,7 @@ import { Friends } from 'store/model/Friends.model';
 
 export interface FriendsState {
   loading: boolean;
-  success: any;
+  success: boolean;
   error: any;
   friendById: Friends | null;
   listFriends: Friends[];
@@ -11,7 +11,7 @@ export interface FriendsState {
 
 export const initialState: FriendsState = {
   loading: false,
-  success: {},
+  success: false,
   error: {},
   friendById: null,
   listFriends: [],
@@ -37,8 +37,31 @@ const FriendsSlice = createSlice({
     },
     addFriendSuccess(state, action) {
       state.loading = false;
+      state.success = true;
     },
     addFriendFail(state, action) {
+      state.loading = false;
+    },
+
+    acceptFriends(state, action) {
+      state.loading = true;
+    },
+    acceptFriendsSuccess(state, action) {
+      state.loading = false;
+      state.success = true;
+    },
+    acceptFriendsFail(state, action) {
+      state.loading = false;
+    },
+
+    declineFriends(state, action) {
+      state.loading = true;
+    },
+    declineFriendsSuccess(state, action) {
+      state.loading = false;
+      state.success = true;
+    },
+    declineFriendsFail(state, action) {
       state.loading = false;
     },
 
@@ -46,8 +69,12 @@ const FriendsSlice = createSlice({
       state.listFriends = [];
     },
 
+    clearSuccess(state) {
+      state.success = false;
+    },
+
     clearData(state) {
-      state.success = {};
+      state.success = false;
       state.error = {};
       state.friendById = null;
       state.listFriends = [];
