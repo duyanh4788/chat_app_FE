@@ -43,6 +43,10 @@
 
 ## Features
 
+Account Test :
+test01/1
+test02/1
+
 <dl>
   <dt>Quick scaffolding</dt>
   <dd>Create components, containers, routes, selectors and sagas - and their tests - right from the CLI!</dd>
