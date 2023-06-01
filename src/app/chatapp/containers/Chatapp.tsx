@@ -264,6 +264,8 @@ export const Chatapp = () => {
   };
 
   const handlePasteImage = (evt: ClipboardEvent) => {
+    evt.preventDefault(); // Ngăn việc dán dữ liệu vào trình soạn thảo
+
     const clipboardItems = evt.clipboardData?.items;
     if (!clipboardItems) {
       return;
