@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext, useMemo } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import * as AuthSlice from 'store/auth/shared/slice';
 import { ChatAppSaga } from 'store/chatApp/shared/saga';
 import { useInjectReducer, useInjectSaga } from 'store/core/@reduxjs/redux-injectors';
 import { Helmet } from 'react-helmet';
-import { Layout, Breadcrumb, Avatar } from 'antd';
+import { Layout, Avatar } from 'antd';
 import { AlignLeftOutlined } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -61,7 +61,6 @@ export const Chatapp = () => {
   const [drawer, setDrawer] = useState<boolean>(false);
   const [sendMessage, setSendMessage] = useState<string | undefined>(undefined);
   const [listMessages, setListMessages] = useState<Messages[]>([]);
-  const [formDataUploadAWS3, setFromDataUploadAWS3] = useState<string | undefined>(undefined);
   const [myFriend, setMyFriend] = useState<Users | null>(null);
   const [notiFyTitle, setNotiFyTitle] = useState<string>('Chat App');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -94,9 +93,6 @@ export const Chatapp = () => {
         return history.push('/');
       }
       switch (type) {
-        case ChatAppSlice.actions.removeUploadAWS3Success.type:
-          setFromDataUploadAWS3(undefined);
-          break;
         case AuthSlice.actions.updateInfoSuccess.type:
           dispatch(AuthSlice.actions.getUserById({ id: _.get(userInfor, 'id') }));
           setIsModalOpen(false);
@@ -115,10 +111,7 @@ export const Chatapp = () => {
         case ChatAppSlice.actions.postUploadAWS3Fail.type:
         case AuthSlice.actions.updateInfoFail.type:
         case AuthSlice.actions.pairAuthFail.type:
-          openNotifi(400, payload);
-          break;
-        case ChatAppSlice.actions.removeUploadAWS3Fail.type:
-          setFromDataUploadAWS3(undefined);
+          openNotifi(400, message);
           break;
         default:
           break;
@@ -226,6 +219,8 @@ export const Chatapp = () => {
     if (!_.isEmpty(myRow) && type) {
       setTimeout(() => {
         myRow.scrollTop = myRow?.scrollHeight;
+        console.log(myRow.scrollTop);
+        console.log(myRow.scrollHeight);
       }, 200);
     }
   };
@@ -250,19 +245,22 @@ export const Chatapp = () => {
 
   const resetFromChat = () => {
     setSendMessage('');
-    setFromDataUploadAWS3(undefined);
-    dispatch(ChatAppSlice.actions.clearUploadAWS3());
+    dispatch(ChatAppSlice.actions.clearUploadAWS3(false));
   };
 
-  const handleUploadAWS3 = (file: RcFile) => {
-    const fromData = new FormData();
-    fromData.append('file', file);
-    let reader = new FileReader();
-    reader.addEventListener('load', () => {
-      setFromDataUploadAWS3(reader.result as string);
-    });
-    reader.readAsDataURL(file);
-    dispatch(ChatAppSlice.actions.postUploadAWS3(fromData));
+  const handleUploadAWS3 = (files: any) => {
+    if (!files.length || files.length === 1) {
+      const formData = new FormData();
+      formData.append('file', files.length === 1 ? files[0] : files);
+      dispatch(ChatAppSlice.actions.postUploadAWS3(formData));
+    }
+    if (files.length > 1) {
+      const formData = new FormData();
+      Object.values(files).forEach(item => {
+        formData.append('file', item as any);
+      });
+      return dispatch(ChatAppSlice.actions.postUploadAWS3(formData));
+    }
   };
 
   const handlePasteImage = (evt: ClipboardEvent) => {
@@ -359,7 +357,6 @@ export const Chatapp = () => {
               notiFyTitleRef={notiFyTitleRef}
               notiFyTitle={notiFyTitle}
               sendMessage={sendMessage}
-              formDataUploadAWS3={formDataUploadAWS3}
               isModalOpen={isModalOpen}
               handleUploadAWS3={handleUploadAWS3}
               handleScrollListMessages={handleScrollListMessages}
@@ -390,12 +387,15 @@ export const Chatapp = () => {
         handleCancel={() => {
           setIsModalOpen(false);
           setQrCode(false);
-          if (!_.isEmpty(uploadAWS)) {
-            dispatch(
-              ChatAppSlice.actions.removeUploadAWS3({
-                idImage: uploadAWS,
-              }),
-            );
+          if (uploadAWS.length) {
+            uploadAWS.forEach(item => {
+              dispatch(
+                ChatAppSlice.actions.removeUploadAWS3({
+                  idImage: item,
+                }),
+              );
+            });
+            dispatch(ChatAppSlice.actions.clearUploadAWS3(false));
           }
         }}
         handleUploadAWS3Modal={handleUploadAWS3}

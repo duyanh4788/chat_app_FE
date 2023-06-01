@@ -103,14 +103,22 @@ export class AppHelper {
 
   static checkLinkHttp(text: string) {
     if (_.isEmpty(text)) return null;
+    if (text.length) {
+      for (let item of text) {
+        if (item.indexOf('http://') === 0 || item.indexOf('https://') === 0) return true;
+      }
+    } else return false;
     if (text.indexOf('http://') === 0 || text.indexOf('https://') === 0) return true;
     else return false;
   }
 
-  static checkLinkAWS(text: string) {
+  static checkLinkAWS(text: any) {
     if (_.isEmpty(text)) return null;
-    if (text.includes('cloudfront.net') || text.includes('/public/images/')) return true;
-    else return false;
+    if (text.length) {
+      for (let item of text) {
+        if (item.includes('cloudfront.net') || item.includes('/public/images/')) return true;
+      }
+    } else return false;
   }
 
   /**

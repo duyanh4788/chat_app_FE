@@ -9,7 +9,7 @@ export interface ChatAppState {
   listUsers: Users[];
   convertStation: ConvertStations | undefined;
   getListMessages: ListMessages | any;
-  uploadAWS: any;
+  uploadAWS: any[];
 }
 
 export const initialState: ChatAppState = {
@@ -19,7 +19,7 @@ export const initialState: ChatAppState = {
   listUsers: [],
   convertStation: undefined,
   getListMessages: {},
-  uploadAWS: {},
+  uploadAWS: [],
 };
 
 const ChatAppSlice = createSlice({
@@ -100,8 +100,13 @@ const ChatAppSlice = createSlice({
       state.loading = false;
     },
 
-    clearUploadAWS3(state) {
-      state.uploadAWS = {};
+    clearUploadAWS3(state, action) {
+      if (state.uploadAWS.length === 1 || action.payload === false) {
+        state.uploadAWS = [];
+      }
+      if (state.uploadAWS.length > 1) {
+        state.uploadAWS.splice(action.payload, 1);
+      }
     },
 
     clearData(state) {
@@ -110,7 +115,7 @@ const ChatAppSlice = createSlice({
       state.listUsers = [];
       state.convertStation = undefined;
       state.getListMessages = {};
-      state.uploadAWS = {};
+      state.uploadAWS = [];
     },
   },
 });

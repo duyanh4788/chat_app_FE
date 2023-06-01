@@ -50,20 +50,21 @@ export function ModalUpdateUser(props: Props) {
 
   useEffect(() => {
     function initInfoUser(data: any) {
+      if (!isModalOpen) return;
       if (!data) return;
       setAccount(data.account);
       setEmail(data.email);
       setFullName(data.fullName);
       setAvatar(data.avatar);
-      setTwoFA(data.twoFA);
+      setTwoFA(data.twofa);
       if (data.type2FA === 'PASSPORT') {
         setType2FA(2);
       }
       if (data.type2FA === 'AUTH_CODE' || data.type2FA === '') {
         setType2FA(1);
       }
-      if (!_.isEmpty(uploadAWS)) {
-        setAvatar(uploadAWS);
+      if (uploadAWS.length) {
+        setAvatar(uploadAWS[0]);
       }
     }
     setTimeout(() => initInfoUser(userInfor));
@@ -76,7 +77,7 @@ export function ModalUpdateUser(props: Props) {
       setTwoFA(false);
       setType2FA(1);
     };
-  }, [userInfor, uploadAWS]);
+  }, [userInfor, uploadAWS, isModalOpen]);
 
   const handleType2FaApp = e => {
     setType2FA(e.target.value);
@@ -100,7 +101,7 @@ export function ModalUpdateUser(props: Props) {
           <Avatar
             shape="square"
             size={140}
-            src={!_.isEmpty(uploadAWS) ? uploadAWS : avatar}
+            src={uploadAWS.length ? uploadAWS[0] : avatar}
             style={{ fontSize: '100px', marginBottom: '10px' }}>
             {AppHelper.convertFullName(fullName)}
           </Avatar>
@@ -136,7 +137,7 @@ export function ModalUpdateUser(props: Props) {
           <Switch
             checkedChildren="TWO 2FA"
             unCheckedChildren="twoFA"
-            defaultChecked={twoFA}
+            checked={twoFA}
             onChange={isChecked => setTwoFA(isChecked)}
           />
           {twoFA && (

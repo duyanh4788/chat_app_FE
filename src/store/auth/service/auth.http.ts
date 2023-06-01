@@ -32,7 +32,7 @@ export class AuthHttp {
       avatar: user.avatar,
       _id: user._id,
       type2FA: user.type2FA,
-      twoFA: user.twoFA,
+      twofa: user.twoFA,
     };
   };
 

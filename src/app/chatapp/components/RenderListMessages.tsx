@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable no-useless-concat */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import * as ChatAppSlice from 'store/chatApp/shared/slice';
 import * as ChatAppSelector from 'store/chatApp/shared/selectors';
@@ -32,9 +37,8 @@ interface Props {
   notiFyTitleRef: any;
   notiFyTitle: string;
   sendMessage: string | undefined;
-  formDataUploadAWS3: string | undefined;
   isModalOpen: boolean;
-  handleUploadAWS3: (file: RcFile) => void;
+  handleUploadAWS3: (file: RcFile[]) => void;
   handleScrollListMessages: () => void;
   setSendMessage: (msg: string | undefined) => void;
   setNotiFyTitle: (title: string) => void;
@@ -53,7 +57,6 @@ export function RenderListMessages(props: Props) {
     notiFyTitleRef,
     notiFyTitle,
     sendMessage,
-    formDataUploadAWS3,
     isModalOpen,
     handleUploadAWS3,
     handleScrollListMessages,
@@ -65,9 +68,26 @@ export function RenderListMessages(props: Props) {
     myRow,
   } = props;
   const [errorAcknow, setErrorAcknow] = useState<string | undefined>(undefined);
+  const [fileUpload, setFileUpload] = useState<any[]>([]);
   const loadingPaging = useSelector(ChatAppSelector.selectLoadingPaging);
   const uploadAWS = useSelector(ChatAppSelector.selectUploadAWS);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    function initUpload(file: any[]) {
+      if (file.length > 5) {
+        setFileUpload([]);
+        return openNotifi(400, 'you can upload maximum 5 images');
+      }
+      if (file.length) {
+        handleUploadAWS3(file);
+      }
+      if (uploadAWS.length && file.length) {
+        return setFileUpload([]);
+      }
+    }
+    initUpload(fileUpload);
+  }, [fileUpload, uploadAWS]);
 
   useEffect(() => {
     if (errorAcknow) {
@@ -81,8 +101,10 @@ export function RenderListMessages(props: Props) {
   const propsDrag: UploadProps = {
     listType: 'picture',
     openFileDialogOnClick: false,
-    beforeUpload: file => {
-      handleUploadAWS3(file);
+    multiple: true,
+    beforeUpload: (file, fileList) => {
+      setFileUpload(fileList);
+      handleUploadAWS3(fileList);
       return false;
     },
   };
@@ -97,7 +119,7 @@ export function RenderListMessages(props: Props) {
         acknowLedGements,
       );
     }
-    if (!_.isEmpty(uploadAWS)) {
+    if (uploadAWS.length) {
       socket.current.emit(
         SOCKET_COMMIT.SEND_MESSAGE,
         userAuthContext,
@@ -143,7 +165,7 @@ export function RenderListMessages(props: Props) {
     };
   };
 
-  const renderCheckTypeMessages = (text: string) => {
+  const renderCheckTypeMessages = (text: any) => {
     if (!_.isEmpty(text) && !AppHelper.checkLinkHttp(text)) {
       return <p className="message_text">{text}</p>;
     } else if (!AppHelper.checkLinkAWS(text)) {
@@ -152,6 +174,10 @@ export function RenderListMessages(props: Props) {
           {text}
         </a>
       );
+    } else if (text.length) {
+      return text.map((item, idx) => {
+        return <Image src={item} key={idx} className="images_text" />;
+      });
     } else {
       return <Image src={text} className="images_text" />;
     }
@@ -220,7 +246,6 @@ export function RenderListMessages(props: Props) {
           alt="new messages"
           className="new_chat new_chat_animation"
           onClick={() => {
-            console.log(123);
             handleAutoScroll(true);
             setNotiFyTitle('Chat App');
           }}
@@ -246,8 +271,9 @@ export function RenderListMessages(props: Props) {
                 <Upload
                   action=""
                   listType="picture"
-                  beforeUpload={file => {
-                    handleUploadAWS3(file);
+                  multiple={true}
+                  beforeUpload={(file, fileList) => {
+                    setFileUpload(fileList);
                     return false;
                   }}>
                   <UploadOutlined style={{ cursor: 'pointer', marginRight: '10px' }} />
@@ -265,23 +291,28 @@ export function RenderListMessages(props: Props) {
               </React.Fragment>
             }
           />
-          {formDataUploadAWS3 && !isModalOpen && (
-            <div className="images_review">
-              <Image src={formDataUploadAWS3} width={200} style={{ borderRadius: '10px' }} />
-              <CloseCircleTwoTone
-                style={{ marginLeft: '5px' }}
-                twoToneColor="#00152900"
-                onClick={() => {
-                  setSendMessage(undefined);
-                  dispatch(
-                    ChatAppSlice.actions.removeUploadAWS3({
-                      idImage: uploadAWS,
-                    }),
-                  );
-                }}
-              />
-            </div>
-          )}
+          {uploadAWS.length && !isModalOpen
+            ? uploadAWS.map((item, idx) => {
+                return (
+                  <div className="images_review" key={idx}>
+                    <Image src={item} width={200} style={{ borderRadius: '10px' }} />
+                    <CloseCircleTwoTone
+                      style={{ marginLeft: '5px' }}
+                      twoToneColor="#00152900"
+                      onClick={() => {
+                        setSendMessage(undefined);
+                        dispatch(
+                          ChatAppSlice.actions.removeUploadAWS3({
+                            idImage: item,
+                          }),
+                        );
+                        dispatch(ChatAppSlice.actions.clearUploadAWS3(idx));
+                      }}
+                    />
+                  </div>
+                );
+              })
+            : null}
         </Dragger>
       </div>
     </React.Fragment>

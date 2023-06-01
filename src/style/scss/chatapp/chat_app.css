@@ -104,6 +104,9 @@
 
 .ant-layout .site_layout .member_chat .message_box .images_text {
   max-width: 200px;
+  padding: 5px;
+  border: 1px solid #00152917;
+  border-radius: 5px;
 }
 
 .ant-layout .site_layout .member_chat .message_box .message_text {
@@ -154,6 +157,9 @@
 
 .ant-layout .site_layout .my_chat .message_box .images_text {
   max-width: 200px;
+  padding: 5px;
+  border: 1px solid #00152917;
+  border-radius: 5px;
 }
 
 .ant-layout .site_layout .my_chat .message_box .message_text {
