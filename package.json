@@ -43,6 +43,7 @@
   "scripts": {
     "start": "react-scripts start --openssl-legacy-provider",
     "build": "react-scripts build",
+    "prod": "git fetch && git reset --hard origin/main && npm run build && cp web.config build/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eslint": "eslint --ext js,ts,tsx",
