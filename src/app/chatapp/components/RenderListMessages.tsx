@@ -75,19 +75,18 @@ export function RenderListMessages(props: Props) {
 
   useEffect(() => {
     function initUpload(file: any[]) {
+      if (!file.length) return;
       if (file.length > 5) {
         setFileUpload([]);
         return openNotifi(400, 'you can upload maximum 5 images');
       }
       if (file.length) {
         handleUploadAWS3(file);
-      }
-      if (uploadAWS.length && file.length) {
-        return setFileUpload([]);
+        setFileUpload([]);
       }
     }
     initUpload(fileUpload);
-  }, [fileUpload, uploadAWS]);
+  }, [fileUpload]);
 
   useEffect(() => {
     if (errorAcknow) {
@@ -104,7 +103,6 @@ export function RenderListMessages(props: Props) {
     multiple: true,
     beforeUpload: (file, fileList) => {
       setFileUpload(fileList);
-      handleUploadAWS3(fileList);
       return false;
     },
   };
@@ -176,6 +174,15 @@ export function RenderListMessages(props: Props) {
       );
     } else if (text.length) {
       return text.map((item, idx) => {
+        if (item.includes('videos')) {
+          return (
+            <div>
+              <video width="200" controls>
+                <source src={item} type="video/mp4" />
+              </video>
+            </div>
+          );
+        }
         return <Image src={item} key={idx} className="images_text" />;
       });
     } else {
@@ -295,7 +302,13 @@ export function RenderListMessages(props: Props) {
             ? uploadAWS.map((item, idx) => {
                 return (
                   <div className="images_review" key={idx}>
-                    <Image src={item} width={200} style={{ borderRadius: '10px' }} />
+                    {item.includes('videos') ? (
+                      <video width="200" controls>
+                        <source src={item} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <Image src={item} width={200} style={{ borderRadius: '10px' }} />
+                    )}
                     <CloseCircleTwoTone
                       style={{ marginLeft: '5px' }}
                       twoToneColor="#00152900"

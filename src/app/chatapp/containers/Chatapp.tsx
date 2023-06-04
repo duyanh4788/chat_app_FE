@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState, useContext, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import * as _ from 'lodash';

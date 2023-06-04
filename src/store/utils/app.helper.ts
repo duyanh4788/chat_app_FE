@@ -116,7 +116,12 @@ export class AppHelper {
     if (_.isEmpty(text)) return null;
     if (text.length) {
       for (let item of text) {
-        if (item.includes('cloudfront.net') || item.includes('/public/images/')) return true;
+        if (
+          item.includes('cloudfront.net') ||
+          item.includes('/data_publish/images/') ||
+          item.includes('/data_publish/videos/')
+        )
+          return true;
       }
     } else return false;
   }

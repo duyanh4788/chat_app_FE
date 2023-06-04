@@ -59,6 +59,9 @@ export const Home = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       const { data, message, code } = payload;
+      if (code === 401) {
+        window.location.reload();
+      }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
