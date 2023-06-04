@@ -149,9 +149,9 @@ export const Chatapp = () => {
       },
     });
     socket.current.emit(SOCKET_COMMIT.JOIN_ROOM, userAuthContext);
-    // socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (message: string) => {
-    //   return openNotifi(200, message);
-    // });
+    socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_NOTIFY, (response: any) => {
+      return openNotifi(response.code || 400, response.messages || 'please try again later');
+    });
     socket.current.on(SOCKET_COMMIT.SEND_MESSAGE_SENDER, (obJectNotify: any) => {
       notiFyTitleRef.current = obJectNotify;
       if (obJectNotify.reciverId === _.get(userAuthContext, '_id')) {
