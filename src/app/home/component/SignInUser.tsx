@@ -32,7 +32,6 @@ export function SignInUser({ setFromAuth }: Props) {
 
   const onFinish = (values: any) => {
     checkLocalStorage('CA', values);
-    local.clearLocalStorage();
   };
 
   const checkLocalStorage = (type: string, values?: any) => {

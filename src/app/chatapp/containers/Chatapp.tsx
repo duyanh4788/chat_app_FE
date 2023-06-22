@@ -98,11 +98,6 @@ export const Chatapp = () => {
           setIsModalOpen(false);
           resetFromChat();
           break;
-        case AuthSlice.actions.getUserByIdFail.type:
-          openNotifi(400, payload);
-          local.clearLocalStorage();
-          history.push('/');
-          break;
         case AuthSlice.actions.pairAuthSuccess.type:
           setQrCode(false);
           break;
