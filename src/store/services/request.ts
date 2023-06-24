@@ -2,6 +2,7 @@
 import apisauce, { ApiResponse, ApisauceInstance } from 'apisauce';
 import { get, snakeCase } from 'lodash';
 import { LocalStorageService, LocalStorageKey } from './localStorage';
+import { ApiRouter } from './request.constants';
 
 export class HttpRequest {
   request: ApisauceInstance;
@@ -26,6 +27,27 @@ export class HttpRequest {
     }
   }
 }
+
+export const httpRequest = () => {
+  const localService = new LocalStorageService();
+  const request: ApisauceInstance = apisauce.create({
+    baseURL: ApiRouter.CHAT_APP_API,
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Access-Control-Allow-Origin': '***',
+      Accept: '*/*',
+    },
+    timeout: 25000,
+  });
+  const infoUser = localService.getItem(LocalStorageKey.info);
+  const token = get(infoUser, 'toKen');
+  if (token) {
+    request.setHeaders({
+      Authorization: token,
+    });
+  }
+  return request;
+};
 
 export function configRequest(request: any): any {
   const typeRequest = typeof request;

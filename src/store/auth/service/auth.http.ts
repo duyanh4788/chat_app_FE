@@ -1,15 +1,8 @@
-import { ApisauceInstance } from 'apisauce';
 import { AuthApi } from 'store/auth/constants/auth.constant';
 import { Users } from 'store/model/Users.model';
-import { HttpRequest } from 'store/services/request';
-import { ApiRouter } from 'store/services/request.constants';
+import { httpRequest } from 'store/services/request';
 
 export class AuthHttp {
-  request: ApisauceInstance;
-  constructor(endPoint = ApiRouter.CHAT_APP_API) {
-    this.request = new HttpRequest(endPoint).request;
-  }
-
   private configSingIn = (user: Users) => {
     return {
       account: user.account,
@@ -45,83 +38,68 @@ export class AuthHttp {
   };
 
   public signInUser = (data: Users): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_IN, {
+    return httpRequest().post(AuthApi.SIGN_IN, {
       ...this.configSingIn(data),
     });
   };
 
   public sigInUserWithCode = (authCode: string): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_IN_WITH_CODE, authCode);
+    return httpRequest().post(AuthApi.SIGN_IN_WITH_CODE, authCode);
   };
 
   public sigInUserWithApp = (otp: number): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_IN_WITH_APP, otp);
+    return httpRequest().post(AuthApi.SIGN_IN_WITH_APP, otp);
   };
 
   public signUpUser = (data: Users): Promise<any> => {
-    return this.request.post(AuthApi.SIGN_UP, {
+    return httpRequest().post(AuthApi.SIGN_UP, {
       ...this.configSignUp(data),
     });
   };
 
   public signUpWithFB = (data: any): Promise<any> => {
-    return this.request.post(AuthApi.LOGIN_FB, {});
+    return httpRequest().post(AuthApi.LOGIN_FB, {});
   };
 
   public signUpWithGG = (data: any): Promise<any> => {
-    return this.request.post(AuthApi.LOGIN_GG, {});
+    return httpRequest().post(AuthApi.LOGIN_GG, {});
   };
 
-  public getUserById = ({ id, toKen }): Promise<any> => {
-    if (toKen) {
-      this.request.setHeaders({
-        Authorization: toKen,
-      });
-    }
-    return this.request.get(AuthApi.GET_USER_BY_ID + id);
+  public getUserById = ({ id }): Promise<any> => {
+    return httpRequest().get(AuthApi.GET_USER_BY_ID + id);
   };
 
   public changeStatusOnline = (id: string): Promise<any> => {
-    return this.request.post(AuthApi.CHANGE_STATUS_IS_ONLINE, id);
+    return httpRequest().post(AuthApi.CHANGE_STATUS_IS_ONLINE, id);
   };
 
   public updateInfo = (body: any): Promise<any> => {
     const config = this.configUpdateInfor(body);
-    return this.request.put(AuthApi.UPDATE_INFOR, config);
+    return httpRequest().put(AuthApi.UPDATE_INFOR, config);
   };
 
   public activeAuthCode = (code: string): Promise<any> => {
-    return this.request.get(`${AuthApi.ACTIVE_AUTH_CODE}/${code}`);
+    return httpRequest().get(`${AuthApi.ACTIVE_AUTH_CODE}/${code}`);
   };
 
   public forgotPassword = (email: any): Promise<any> => {
-    return this.request.post(AuthApi.FORGOT_PW, email);
+    return httpRequest().post(AuthApi.FORGOT_PW, email);
   };
 
   public resendOrderForgotPassword = (email: any): Promise<any> => {
-    return this.request.post(AuthApi.RESEND_ORDER_RESET_PASSWORD, email);
+    return httpRequest().post(AuthApi.RESEND_ORDER_RESET_PASSWORD, email);
   };
 
   public resetPassword = (body: any): Promise<any> => {
-    return this.request.post(AuthApi.RESET_PASSWORD, this.configResetPassWord(body));
+    return httpRequest().post(AuthApi.RESET_PASSWORD, this.configResetPassWord(body));
   };
 
-  public getAuthPair = (toKen: string): Promise<any> => {
-    if (toKen) {
-      this.request.setHeaders({
-        Authorization: toKen,
-      });
-    }
-    return this.request.get(AuthApi.GET_AUTH_PAIR);
+  public getAuthPair = (): Promise<any> => {
+    return httpRequest().get(AuthApi.GET_AUTH_PAIR);
   };
 
   public pairAuth = (payload): Promise<any> => {
-    const { token, tokenUser } = payload;
-    if (tokenUser) {
-      this.request.setHeaders({
-        Authorization: tokenUser,
-      });
-    }
-    return this.request.post(AuthApi.PAIR_AUTH, token);
+    const { token } = payload;
+    return httpRequest().post(AuthApi.PAIR_AUTH, token);
   };
 }

@@ -132,7 +132,7 @@ export const PassWord = () => {
               <Form.Item
                 name="re_newPassWord"
                 rules={[
-                  { required: true, message: 'please input password.' },
+                  { required: true, message: 'please input confirm password.' },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue('newPassWord') === value) {
@@ -146,7 +146,7 @@ export const PassWord = () => {
                 ]}>
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}
-                  placeholder="input password."
+                  placeholder="please input confirm password."
                 />
               </Form.Item>
             </React.Fragment>

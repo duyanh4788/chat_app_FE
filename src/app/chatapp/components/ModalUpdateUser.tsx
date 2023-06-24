@@ -83,7 +83,7 @@ export function ModalUpdateUser(props: Props) {
     setType2FA(e.target.value);
     if (e.target.value === 2) {
       handleQrCode(true);
-      dispatch(AuthSlice.actions.getAuthPair(userInfor.toKen));
+      dispatch(AuthSlice.actions.getAuthPair());
     }
   };
 

@@ -37,7 +37,7 @@ export const Home = () => {
         const id = getUrlToken?.split('?_id=')[1];
         if (toKen && id) {
           local.setAuth({ toKen, id });
-          dispatch(AuthSlice.actions.getUserById({ id, toKen }));
+          dispatch(AuthSlice.actions.getUserById({ id }));
           history.push('/chatApp');
         }
         return;
@@ -59,9 +59,6 @@ export const Home = () => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
       const { data, message, code } = payload;
-      if (code === 401) {
-        window.location.reload();
-      }
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
           setTabsPanel('1');
