@@ -32,7 +32,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     function handleUser(user) {
       if (_.isEmpty(user) && location.pathname === '/chatApp') {
-        openNotifi(400, 'Vui lòng đăng nhập');
+        openNotifi(400, 'Login again, please.');
         return history.push('/');
       }
       if (!_.isEmpty(user)) {
