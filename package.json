@@ -42,8 +42,8 @@
   },
   "scripts": {
     "start": "react-scripts start --openssl-legacy-provider",
-    "prod": "git fetch && git reset --hard origin/main && npm run deploy",
-    "deploy": "react-scripts build && cp web.config build/",
+    "prod": "git fetch && git reset --hard origin/main && sudo rm -rf build && sudo rm -rf /var/www/chatapp_fe/build && npm run deploy",
+    "deploy": "react-scripts build  && sudo cp -r build /var/www/chatapp_fe/ && sudo systemctl restart nginx",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

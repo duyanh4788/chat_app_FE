@@ -156,9 +156,11 @@ export const Chatapp = () => {
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: Messages) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
+    console.log(process.env.NODE_ENV, isDeveloperment);
     if (!isDeveloperment) {
       socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
         local.clearLocalStorage();
+        console.log('CONNECT_ERROR', err);
         return history.push('/');
       });
     }
@@ -214,8 +216,6 @@ export const Chatapp = () => {
     if (!_.isEmpty(myRow) && type) {
       setTimeout(() => {
         myRow.scrollTop = myRow?.scrollHeight;
-        console.log(myRow.scrollTop);
-        console.log(myRow.scrollHeight);
       }, 200);
     }
   };
