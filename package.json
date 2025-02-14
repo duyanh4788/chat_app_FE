@@ -1,5 +1,6 @@
 {
   "name": "chat_socket_id",
+  "homepage": "/chatapp-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

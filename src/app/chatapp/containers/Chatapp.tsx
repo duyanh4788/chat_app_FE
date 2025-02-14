@@ -156,7 +156,6 @@ export const Chatapp = () => {
     socket.current.on(SOCKET_COMMIT.SEND_LIST_MESSAGE, (dataMessage: Messages) => {
       return setListMessages(oldMessages => [...oldMessages, dataMessage]);
     });
-    console.log(process.env.NODE_ENV, isDeveloperment);
     if (!isDeveloperment) {
       socket.current.on(SOCKET_COMMIT.CONNECT_ERROR, (err: Error) => {
         local.clearLocalStorage();
