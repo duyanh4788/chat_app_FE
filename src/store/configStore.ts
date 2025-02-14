@@ -2,6 +2,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from './rootReducer';
+import { config } from 'config';
 
 export function configureAppstore() {
   const reduxSagaMonitorOptions = {};
@@ -9,7 +10,7 @@ export function configureAppstore() {
   const { run: runSaga } = sagaMiddleware;
 
   let middlewares = [sagaMiddleware];
-  if (process.env.NODE_ENV === 'development') {
+  if (config.NODE_ENV === 'development') {
     middlewares = [...middlewares];
   }
   const enhancers = [
@@ -28,7 +29,7 @@ export function configureAppstore() {
     middleware: [...defaultMiddelWare, ...middlewares],
     devTools:
       /* istanbul ignore next line */
-      process.env.NODE_ENV !== 'production' || process.env.PUBLIC_URL.length > 0,
+      config.NODE_ENV === 'development',
     enhancers,
   });
   if (module.hot) {

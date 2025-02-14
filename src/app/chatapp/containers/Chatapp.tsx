@@ -19,7 +19,7 @@ import type { RcFile } from 'antd/es/upload';
 import { useDispatch, useSelector } from 'react-redux';
 import { Unsubscribe } from 'redux';
 import { RootStore } from 'store/configStore';
-import { ApiRouter } from 'store/services/request.constants';
+import { config } from 'config';
 import { SOCKET_COMMIT } from 'store/commom/socket_commit';
 import { AppHelper } from 'store/utils/app.helper';
 import { AppLoading } from 'store/utils/Apploading';
@@ -67,7 +67,7 @@ export const Chatapp = () => {
   const [qrCode, setQrCode] = useState<boolean>(false);
   const socket: Socket | any = useRef<Socket>(null);
   const notiFyTitleRef: any = useRef();
-  const PORT_SOCKET: string = ApiRouter.SOCKET_URL as string;
+  const PORT_SOCKET: string = config.SOCKET_URL as string;
   let myRow: HTMLElement | any = document.querySelector('.site_layout');
 
   useEffect(() => {

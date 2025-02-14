@@ -58,6 +58,7 @@ export const Home = () => {
   useEffect(() => {
     const storeSub$: Unsubscribe = RootStore.subscribe(() => {
       const { type, payload } = RootStore.getState().lastAction;
+      if (!payload) return;
       const { data, message, code } = payload;
       switch (type) {
         case AuthSlice.actions.signUpUserSuccess.type:
@@ -106,11 +107,8 @@ export const Home = () => {
       case 203:
         openNotifi(code, message);
         setFromAuth(true);
-        if (201) {
-          setTypeAuth(201);
-        }
-        if (202) {
-          setTypeAuth(202);
+        if (code === 201 || code === 202) {
+          setTypeAuth(code);
         }
         break;
       default:

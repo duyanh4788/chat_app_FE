@@ -1,0 +1,16 @@
+.env
+node_modules/
+logs/
+*.log
+
+dist/
+build/
+
+docker-compose.override.yml
+
+.git
+.gitignore
+
+.vscode/
+.idea/
+*.swp

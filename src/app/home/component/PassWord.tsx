@@ -94,8 +94,8 @@ export const PassWord = () => {
           showFromPassWord
             ? 'form_input form_password'
             : fromPanel === TypeFromPassWord.PASSWORD
-              ? 'form_input form_password_2'
-              : 'form_input form_sign_in'
+            ? 'form_input form_password_2'
+            : 'form_input form_sign_in'
         }>
         <h1>Reset password</h1>
         <div className="logo">
