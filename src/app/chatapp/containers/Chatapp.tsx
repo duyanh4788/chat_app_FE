@@ -67,7 +67,7 @@ export const Chatapp = () => {
   const [qrCode, setQrCode] = useState<boolean>(false);
   const socket: Socket | any = useRef<Socket>(null);
   const notiFyTitleRef: any = useRef();
-  const PORT_SOCKET: string = config.SOCKET_URL as string;
+
   let myRow: HTMLElement | any = document.querySelector('.site_layout');
 
   useEffect(() => {
@@ -137,7 +137,8 @@ export const Chatapp = () => {
   }, [convertStation]);
 
   useEffect(() => {
-    socket.current = io(PORT_SOCKET, {
+    socket.current = io(config.DOMAIN_URL, {
+      path: config.PATH_SOCKET,
       transports: ['websocket'],
       auth: {
         Authorization: _.get(userInfor, 'toKen'),
@@ -170,7 +171,7 @@ export const Chatapp = () => {
       socket.current.emit(SOCKET_COMMIT.DISCONNECTED, userAuthContext);
       socket.current.disconnect();
     };
-  }, [PORT_SOCKET, userAuthContext]);
+  }, [config.DOMAIN_URL, userAuthContext]);
 
   useEffect(() => {
     if (!_.isEmpty(getListUsers)) {
